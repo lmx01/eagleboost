@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4515AA2F-B031-4018-AFE9-29FE3E34255F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>eagleboost.shell</RootNamespace>
+    <AssemblyName>eagleboost.shell</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\output\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\output\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Prism.Wpf.7.0.0.336-pre\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\BrowseForFile.xaml.cs">
+      <DependentUpon>BrowseForFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BrowseForFiles.xaml.cs">
+      <DependentUpon>BrowseForFiles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BrowseForFolder.xaml.cs">
+      <DependentUpon>BrowseForFolder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Options\SaveFileOptions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShellTreeView\Contracts\IShellItemsOperation.cs" />
+    <Compile Include="ShellTreeView\Contracts\IShellTreeItem.cs" />
+    <Compile Include="ShellTreeView\Data\ShellTreeContainerItem.cs" />
+    <Compile Include="ShellTreeView\Data\ShellTreeItem.cs" />
+    <Compile Include="ShellTreeView\Data\ShellTreeItemFilterDescription.cs" />
+    <Compile Include="ShellTreeView\Data\ShellTreeObjectItem.cs" />
+    <Compile Include="ShellTreeView\ViewModels\ShellTreeViewModel.cs" />
+    <Compile Include="ShellTreeView\ViewModels\ShellTreeViewModel.OptionsHandler.cs">
+      <DependentUpon>ShellTreeViewModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ShellTreeView\Views\ShellTreeView.xaml.cs">
+      <DependentUpon>ShellTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShellTreeView\ViewModels\ShellTreeViewOptions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\BrowseForFile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\BrowseForFiles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\BrowseForFolder.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShellTreeView\Views\ShellTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShellTreeView\Views\ShellTreeViewResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\eagleboost.core\eagleboost.core.csproj">
+      <Project>{5c4c4e80-3895-418c-aa33-440b9a817c82}</Project>
+      <Name>eagleboost.core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eagleboost.presentation\eagleboost.presentation.csproj">
+      <Project>{a118772d-121d-4ca3-b568-bcafaccae33f}</Project>
+      <Name>eagleboost.presentation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+</Project>

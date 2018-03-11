@@ -1,0 +1,99 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.core", "eagleboost.core\eagleboost.core.csproj", "{5C4C4E80-3895-418C-AA33-440B9A817C82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.presentation", "eagleboost.presentation\eagleboost.presentation.csproj", "{A118772D-121D-4CA3-B568-BCAFACCAE33F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.shell", "eagleboost.shell\eagleboost.shell.csproj", "{4515AA2F-B031-4018-AFE9-29FE3E34255F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.interaction", "eagleboost.interaction\eagleboost.interaction.csproj", "{464FB649-17F5-4A90-A8CA-26169BE8871C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.sampleapp", "eagleboost.sampleapp\eagleboost.sampleapp.csproj", "{EFAD0125-5E6F-4A65-B2C4-C406C300E542}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{B30ED3FA-B829-4F8D-B986-DCC8EECF01EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{0AEE1480-0DAB-481D-916D-7BAA1B163F6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.style", "eagleboost.style\eagleboost.style.csproj", "{E29930DC-F4EE-463E-9BD4-CC3652787460}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.component", "eagleboost.component\eagleboost.component.csproj", "{7445445B-EE2F-4569-BC14-302C5F40741A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.componentApp", "eagleboost.componentApp\eagleboost.componentApp.csproj", "{D7556D46-D137-442F-81EF-667A6C000844}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{FCA34F00-6EBD-40EB-86AD-623829B59138}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.core.test", "eagleboost.core.test\eagleboost.core.test.csproj", "{19AFB26B-C6B2-4610-9FC0-80C5324B17B5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{7DBE73BB-1ED2-4160-A4E0-197E058043D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.sharedcomponents", "eagleboost.sharedcomponents\eagleboost.sharedcomponents.csproj", "{2FE01131-FBCA-4F0A-88C6-A35E4900ECDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5C4C4E80-3895-418C-AA33-440B9A817C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C4C4E80-3895-418C-AA33-440B9A817C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C4C4E80-3895-418C-AA33-440B9A817C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C4C4E80-3895-418C-AA33-440B9A817C82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A118772D-121D-4CA3-B568-BCAFACCAE33F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A118772D-121D-4CA3-B568-BCAFACCAE33F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A118772D-121D-4CA3-B568-BCAFACCAE33F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A118772D-121D-4CA3-B568-BCAFACCAE33F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4515AA2F-B031-4018-AFE9-29FE3E34255F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4515AA2F-B031-4018-AFE9-29FE3E34255F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4515AA2F-B031-4018-AFE9-29FE3E34255F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4515AA2F-B031-4018-AFE9-29FE3E34255F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{464FB649-17F5-4A90-A8CA-26169BE8871C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{464FB649-17F5-4A90-A8CA-26169BE8871C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{464FB649-17F5-4A90-A8CA-26169BE8871C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{464FB649-17F5-4A90-A8CA-26169BE8871C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFAD0125-5E6F-4A65-B2C4-C406C300E542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFAD0125-5E6F-4A65-B2C4-C406C300E542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFAD0125-5E6F-4A65-B2C4-C406C300E542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFAD0125-5E6F-4A65-B2C4-C406C300E542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E29930DC-F4EE-463E-9BD4-CC3652787460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E29930DC-F4EE-463E-9BD4-CC3652787460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E29930DC-F4EE-463E-9BD4-CC3652787460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E29930DC-F4EE-463E-9BD4-CC3652787460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7445445B-EE2F-4569-BC14-302C5F40741A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7445445B-EE2F-4569-BC14-302C5F40741A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7445445B-EE2F-4569-BC14-302C5F40741A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7445445B-EE2F-4569-BC14-302C5F40741A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7556D46-D137-442F-81EF-667A6C000844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7556D46-D137-442F-81EF-667A6C000844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7556D46-D137-442F-81EF-667A6C000844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7556D46-D137-442F-81EF-667A6C000844}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19AFB26B-C6B2-4610-9FC0-80C5324B17B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19AFB26B-C6B2-4610-9FC0-80C5324B17B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19AFB26B-C6B2-4610-9FC0-80C5324B17B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19AFB26B-C6B2-4610-9FC0-80C5324B17B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FE01131-FBCA-4F0A-88C6-A35E4900ECDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE01131-FBCA-4F0A-88C6-A35E4900ECDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FE01131-FBCA-4F0A-88C6-A35E4900ECDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FE01131-FBCA-4F0A-88C6-A35E4900ECDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5C4C4E80-3895-418C-AA33-440B9A817C82} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
+		{A118772D-121D-4CA3-B568-BCAFACCAE33F} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
+		{4515AA2F-B031-4018-AFE9-29FE3E34255F} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
+		{464FB649-17F5-4A90-A8CA-26169BE8871C} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
+		{EFAD0125-5E6F-4A65-B2C4-C406C300E542} = {B30ED3FA-B829-4F8D-B986-DCC8EECF01EC}
+		{E29930DC-F4EE-463E-9BD4-CC3652787460} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
+		{7445445B-EE2F-4569-BC14-302C5F40741A} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
+		{D7556D46-D137-442F-81EF-667A6C000844} = {B30ED3FA-B829-4F8D-B986-DCC8EECF01EC}
+		{19AFB26B-C6B2-4610-9FC0-80C5324B17B5} = {FCA34F00-6EBD-40EB-86AD-623829B59138}
+		{2FE01131-FBCA-4F0A-88C6-A35E4900ECDC} = {7DBE73BB-1ED2-4160-A4E0-197E058043D8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE11B503-33AC-4696-AF2F-6E132C8EBE12}
+	EndGlobalSection
+EndGlobal

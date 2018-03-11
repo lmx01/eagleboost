@@ -1,0 +1,20 @@
+﻿<Window x:Class="eagleboost.sampleapp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:eagleboost.sampleapp"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance local:ViewModel}"
+        Title="MainWindow" Height="350" Width="525">
+
+  <Window.Resources>
+
+  </Window.Resources>
+  <StackPanel>
+    <TextBox Height="20" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"/>
+    <TextBox Height="20" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"/>
+    <TextBlock Text="{Binding FullName}"></TextBlock>
+    <TextBlock Text="{Binding Error}"></TextBlock>
+    <Button Command="{Binding OkCommand}">Ok</Button>
+  </StackPanel>
+</Window>

@@ -1,0 +1,243 @@
+﻿<ResourceDictionary 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:s="clr-namespace:System;assembly=mscorlib"
+  xmlns:local="clr-namespace:eagleboost.shell.ShellTreeView.Data"
+  xmlns:converters="clr-namespace:eagleboost.presentation.Converters;assembly=eagleboost.presentation">
+
+  <HierarchicalDataTemplate x:Key="ShellTreeItemDataTemplate" ItemsSource="{Binding ChildrenView}" DataType="{x:Type local:ShellTreeItem}">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Image Grid.Column="0" Height="16" Width="16" Source="{Binding ShellObject.Thumbnail.SmallBitmapSource}"></Image>
+      <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4"></TextBlock>
+    </Grid>
+  </HierarchicalDataTemplate>
+
+  <converters:LeftMarginMultiplierConverter Length="5" x:Key="IndentMarginConverter" />
+
+  <ControlTemplate x:Key="ShellTreeItemTemplate" TargetType="{x:Type TreeViewItem}">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
+      <Border Name="Bd">
+
+      </Border>
+      <Grid Margin="{Binding Converter={StaticResource IndentMarginConverter},
+                    RelativeSource={RelativeSource TemplatedParent}}">
+
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="19" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <ToggleButton Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" >
+          <ToggleButton.Style>
+            <Style TargetType="ToggleButton">
+              <Style.Resources>
+                <ResourceDictionary/>
+              </Style.Resources>
+              <Setter Property="UIElement.Focusable">
+                <Setter.Value>
+                  <s:Boolean>False
+                  </s:Boolean>
+                </Setter.Value>
+              </Setter>
+              <Setter Property="FrameworkElement.Width">
+                <Setter.Value>
+                  <s:Double>16
+                  </s:Double>
+                </Setter.Value>
+              </Setter>
+              <Setter Property="FrameworkElement.Height">
+                <Setter.Value>
+                  <s:Double>16
+                  </s:Double>
+                </Setter.Value>
+              </Setter>
+              <Setter Property="Control.Template">
+                <Setter.Value>
+                  <ControlTemplate TargetType="ToggleButton">
+                    <Border Width="16" Height="16" Background="#00FFFFFF" Padding="5,5,5,5">
+                      <Path Name="ExpandPath" Fill="#00FFFFFF" Stroke="#FF989898">
+                        <Path.Data>
+                          <PathGeometry Figures="M0,0L0,6L6,0z"/>
+                        </Path.Data>
+                        <Path.RenderTransform>
+                          <RotateTransform Angle="135" CenterX="3" CenterY="3"/>
+                        </Path.RenderTransform>
+                      </Path>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                      <Trigger Property="UIElement.IsMouseOver">
+                        <Setter TargetName="ExpandPath" Property="Shape.Stroke">
+                          <Setter.Value>
+                            <SolidColorBrush>#FF1BBBFA
+                            </SolidColorBrush>
+                          </Setter.Value>
+                        </Setter>
+                        <Setter TargetName="ExpandPath" Property="Shape.Fill">
+                          <Setter.Value>
+                            <SolidColorBrush>#00FFFFFF
+                            </SolidColorBrush>
+                          </Setter.Value>
+                        </Setter>
+                        <Trigger.Value>
+                          <s:Boolean>True
+                          </s:Boolean>
+                        </Trigger.Value>
+                      </Trigger>
+                      <Trigger Property="ToggleButton.IsChecked">
+                        <Setter TargetName="ExpandPath" Property="UIElement.RenderTransform">
+                          <Setter.Value>
+                            <RotateTransform Angle="180" CenterX="3" CenterY="3"/>
+                          </Setter.Value>
+                        </Setter>
+                        <Setter TargetName="ExpandPath" Property="Shape.Fill">
+                          <Setter.Value>
+                            <SolidColorBrush>#FF595959
+                            </SolidColorBrush>
+                          </Setter.Value>
+                        </Setter>
+                        <Setter TargetName="ExpandPath" Property="Shape.Stroke">
+                          <Setter.Value>
+                            <SolidColorBrush>#FF262626
+                            </SolidColorBrush>
+                          </Setter.Value>
+                        </Setter>
+                        <Trigger.Value>
+                          <s:Boolean>True
+                          </s:Boolean>
+                        </Trigger.Value>
+                      </Trigger>
+                    </ControlTemplate.Triggers>
+                  </ControlTemplate>
+                </Setter.Value>
+              </Setter>
+            </Style>
+          </ToggleButton.Style>
+        </ToggleButton>
+        <Border
+          Grid.Column="1"
+          Background="{TemplateBinding Panel.Background}"
+          BorderBrush="{TemplateBinding Border.BorderBrush}"
+          BorderThickness="{TemplateBinding Border.BorderThickness}"
+          Padding="{TemplateBinding Control.Padding}"
+          SnapsToDevicePixels="True">
+          <ContentPresenter
+            Name="PART_Header"
+            HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+            Content="{TemplateBinding HeaderedContentControl.Header}"
+            ContentSource="Header"
+            ContentStringFormat="{TemplateBinding HeaderedItemsControl.HeaderStringFormat}"
+            ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"
+            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+        </Border>
+      </Grid>
+      <ItemsPresenter Name="ItemsHost" Grid.Row="1"/>
+    </Grid>
+    <ControlTemplate.Triggers>
+      <Trigger Property="TreeViewItem.IsExpanded">
+        <Setter TargetName="ItemsHost" Property="UIElement.Visibility">
+          <Setter.Value>
+            <x:Static Member="Visibility.Collapsed"/>
+          </Setter.Value>
+        </Setter>
+        <Trigger.Value>
+          <s:Boolean>False
+          </s:Boolean>
+        </Trigger.Value>
+      </Trigger>
+      <Trigger Property="ItemsControl.HasItems">
+        <Setter TargetName="Expander" Property="UIElement.Visibility">
+          <Setter.Value>
+            <x:Static Member="Visibility.Hidden"/>
+          </Setter.Value>
+        </Setter>
+        <Trigger.Value>
+          <s:Boolean>False
+          </s:Boolean>
+        </Trigger.Value>
+      </Trigger>
+      <Trigger SourceName="PART_Header" Property="IsMouseOver">
+        <Setter TargetName="Bd" Property="Panel.Background">
+          <Setter.Value>
+            <DynamicResource ResourceKey="{x:Static SystemColors.HighlightBrushKey}"/>
+          </Setter.Value>
+        </Setter>
+        <Setter TargetName="Bd" Property="Opacity" Value="0.1">
+        </Setter>
+        <Trigger.Value>
+          <s:Boolean>True
+          </s:Boolean>
+        </Trigger.Value>
+      </Trigger>
+      <Trigger SourceName="Expander" Property="IsMouseOver">
+        <Setter TargetName="Bd" Property="Panel.Background">
+          <Setter.Value>
+            <DynamicResource ResourceKey="{x:Static SystemColors.HighlightBrushKey}"/>
+          </Setter.Value>
+        </Setter>
+        <Setter TargetName="Bd" Property="Opacity" Value="0.1">
+        </Setter>
+        <Trigger.Value>
+          <s:Boolean>True
+          </s:Boolean>
+        </Trigger.Value>
+      </Trigger>
+      <Trigger Property="TreeViewItem.IsSelected">
+        <Setter TargetName="Bd" Property="Panel.Background" Value="LightGray">
+        </Setter>
+        <Setter TargetName="Bd" Property="Opacity" Value="1">
+        </Setter>
+        <Trigger.Value>
+          <s:Boolean>True
+          </s:Boolean>
+        </Trigger.Value>
+      </Trigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="TreeViewItem.IsSelected">
+            <Condition.Value>
+              <s:Boolean>True
+              </s:Boolean>
+            </Condition.Value>
+          </Condition>
+          <Condition Property="Selector.IsSelectionActive">
+            <Condition.Value>
+              <s:Boolean>False
+              </s:Boolean>
+            </Condition.Value>
+          </Condition>
+        </MultiTrigger.Conditions>
+        <Setter TargetName="Bd" Property="Panel.Background">
+          <Setter.Value>
+            <DynamicResource ResourceKey="{x:Static SystemColors.ControlBrushKey}"/>
+          </Setter.Value>
+        </Setter>
+      </MultiTrigger>
+      <Trigger Property="UIElement.IsEnabled">
+        <Setter Property="TextElement.Foreground">
+          <Setter.Value>
+            <DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}"/>
+          </Setter.Value>
+        </Setter>
+        <Trigger.Value>
+          <s:Boolean>False
+          </s:Boolean>
+        </Trigger.Value>
+      </Trigger>
+    </ControlTemplate.Triggers>
+  </ControlTemplate>
+
+  <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+    <Setter Property="Template" Value="{StaticResource ShellTreeItemTemplate}" />
+  </Style>
+
+  </ResourceDictionary>
