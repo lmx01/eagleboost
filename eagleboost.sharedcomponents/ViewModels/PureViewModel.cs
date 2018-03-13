@@ -1,37 +1,21 @@
 ﻿// Author : Shuo Zhang
 // 
-// Creation :2018-03-05 22:49
+// Creation :2018-03-12 18:04
 
-namespace eagleboost.sharedcomponents
+namespace eagleboost.sharedcomponents.ViewModels
 {
-  using System;
-  using System.Linq.Expressions;
   using System.Windows.Input;
   using eagleboost.core.Commands;
   using eagleboost.core.ComponentModel;
   using eagleboost.core.ComponentModel.AutoNotify;
+  using eagleboost.core.Contracts.AutoNotify;
   using eagleboost.core.Extensions;
 
-  public class ViewModel : NotifyPropertyChangedBase<ViewModel>
+  public class PureViewModel : NotifyPropertyChangedBase, IAutoNotify, IMethodInvoked
   {
-    #region Statics
-    private static readonly Expression<Func<ViewModel, string>>[] NamesSelector = { v => v.FirstName, v => v.LastName };
-    #endregion Statics
-
     #region Declarations
     private ICommand _okCommand;
     #endregion Declarations
-
-    #region ctors
-    static ViewModel()
-    {
-      Invoke(v => v.OnAgeChanged).By(v => v.Age);
-      Invoke(v => v.OnAgeChanged2).By(v => v.Age);
-      Notify(v => v.FullName).By(NamesSelector);
-      Notify(v => v.Error).By(NamesSelector);
-      Invalidate(v => v.OkCommand).By(NamesSelector);
-    }
-    #endregion ctors
 
     #region Public Properties
     public virtual string FirstName { get; set; }
@@ -75,6 +59,18 @@ namespace eagleboost.sharedcomponents
 
     public void OnAgeChanged2()
     {
+    }
+
+    public IAutoNotifyConfig Config
+    {
+      get { return AutoNotifyConfig<PureViewModel>.Instance; }
+    }
+
+    public event MethodInvokedEventHandler MethodInvoked;
+
+    public void OnMethodInvoked(string name, InvokeContext context)
+    {
+      MethodInvoked?.Invoke(this, new MethodInvokedEventArgs(name, context));
     }
   }
 }

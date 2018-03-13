@@ -6,7 +6,7 @@ namespace eagleboost.core.Contracts
 {
   using System.Windows.Input;
 
-  public interface INotifiableCommand : ICommand
+  public interface IValidatableCommand : ICommand
   {
     #region Methods
     void Invalidate();

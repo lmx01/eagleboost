@@ -5,8 +5,8 @@
 namespace eagleboost.core.ComponentModel
 {
   using System;
+  using System.ComponentModel;
   using System.Linq.Expressions;
-  using System.Reflection;
   using eagleboost.core.ComponentModel.AutoNotify;
   using eagleboost.core.Contracts.AutoNotify;
 
@@ -21,40 +21,34 @@ namespace eagleboost.core.ComponentModel
     #endregion Declarations
 
     #region Protected Methods
+    protected static PropertyChangedEventArgs GetChangedArgs(string propertyName)
+    {
+      return PropertyChangeArgs<T>.Instance.GetChangedArgs(propertyName);
+    }
+
+    protected static PropertyChangingEventArgs GetChangingArgs(string propertyName)
+    {
+      return PropertyChangeArgs<T>.Instance.GetChangingArgs(propertyName);
+    }
+
     protected static NotifyBy<T> Notify<TProperty>(Expression<Func<T, TProperty>> selector)
     {
-      AutoNotifyConfig<T>.Instance.SetNotifyMap(NotifyBy<T>.NotifyMap);
-
-      return new NotifyBy<T>((MemberExpression)selector.Body);
+      return AutoNotifySetup<T>.Notify(selector);
     }
 
     protected static InvalidateBy<T> Invalidate<TProperty>(Expression<Func<T, TProperty>> selector)
     {
-      AutoNotifyConfig<T>.Instance.SetInvalidateMap(InvalidateBy<T>.NotifyMap);
-
-      return new InvalidateBy<T>((MemberExpression)selector.Body);
+      return AutoNotifySetup<T>.Invalidate(selector);
     }
 
     protected static InvokeBy<T> Invoke(Expression<Func<T, Action<InvokeContext>>> selector)
     {
-      AutoNotifyConfig<T>.Instance.SetInvokeMap(InvokeBy<T>.NotifyMap);
-
-      var unaryExpression = (UnaryExpression)selector.Body;
-      var methodCallExpression = (MethodCallExpression)unaryExpression.Operand;
-      var methodCallObject = (ConstantExpression)methodCallExpression.Object;
-      var methodInfo = (MethodInfo)methodCallObject.Value;
-      return new InvokeBy<T>(methodInfo);
+      return AutoNotifySetup<T>.Invoke(selector);
     }
 
     protected static InvokeBy<T> Invoke(Expression<Func<T, Action>> selector)
     {
-      AutoNotifyConfig<T>.Instance.SetInvokeMap(InvokeBy<T>.NotifyMap);
-
-      var unaryExpression = (UnaryExpression)selector.Body;
-      var methodCallExpression = (MethodCallExpression)unaryExpression.Operand;
-      var methodCallObject = (ConstantExpression)methodCallExpression.Object;
-      var methodInfo = (MethodInfo)methodCallObject.Value;
-      return new InvokeBy<T>(methodInfo);
+      return AutoNotifySetup<T>.Invoke(selector);
     }
     #endregion Protected Methods
 

@@ -11,11 +11,12 @@ namespace eagleboost.component.Interceptions
   using eagleboost.core.ComponentModel.AutoNotify;
   using eagleboost.core.Contracts;
   using eagleboost.core.Contracts.AutoNotify;
+  using eagleboost.core.Exceptions;
   using eagleboost.core.Extensions;
   using Unity.Interception.InterceptionBehaviors;
   using Unity.Interception.PolicyInjection.Pipeline;
 
-  public class NotifyPropertyChangedBehavior : IInterceptionBehavior
+  public class NotifyPropertyChangedBehavior<T> : IInterceptionBehavior where T : class
   {
     #region Statics
     private static readonly EventInfo PropertyChangingEventInfo = typeof(INotifyPropertyChanging).GetEvent("PropertyChanging");
@@ -32,12 +33,14 @@ namespace eagleboost.component.Interceptions
     private event PropertyChangedEventHandler PropertyChanged;
     private Dictionary<string, List<string>> _changeWithMap;
     private Dictionary<string, List<MethodInfo>> _invokeWithMap;
-    private Dictionary<string, List<INotifiableCommand>> _invalidateWithMap;
+    private Dictionary<string, List<IValidatableCommand>> _invalidateWithMap;
+    private IPropertyChangeArgs _propertyChangeArgs;
     #endregion Declarations
 
     #region IInterceptionBehavior
     public IMethodReturn Invoke(IMethodInvocation input, GetNextInterceptionBehaviorDelegate getNext)
     {
+      EnsureType(input);
       EnsureChangeWithMap(input);
       EnsureInvokeWithMap(input);
       EnsureInvalidateWithMap(input);
@@ -87,7 +90,7 @@ namespace eagleboost.component.Interceptions
     /// </returns>
     public IEnumerable<Type> GetRequiredInterfaces()
     {
-      return new[] { typeof(INotifyPropertyChanging), typeof(INotifyPropertyChanged), typeof(INotifyPropertyChangeEventArgsProvider), typeof(IAutoNotify), typeof(IMethodInvoked) };
+      return new[] { typeof(INotifyPropertyChanging), typeof(INotifyPropertyChanged), typeof(IAutoNotify) };
     }
     #endregion IInterceptionBehavior
 
@@ -133,6 +136,14 @@ namespace eagleboost.component.Interceptions
       return input.MethodBase.IsSpecialName && input.MethodBase.Name.StartsWith("set_");
     }
 
+    private void EnsureType(IMethodInvocation input)
+    {
+      if (!typeof(T).IsCompatiableWith<IAutoNotify>())
+      {
+        throw InvalidTypeException.Create<T>();
+      }
+    }
+
     private void EnsureChangeWithMap(IMethodInvocation input)
     {
       if (_changeWithMap != null)
@@ -141,7 +152,7 @@ namespace eagleboost.component.Interceptions
       }
 
       var autoNotify = (IAutoNotify)input.Target;
-      _changeWithMap = autoNotify.Config.NotifyMap;
+      _changeWithMap = autoNotify.Config.NotifyMap ?? new Dictionary<string, List<string>>();
     }
 
     private void EnsureInvokeWithMap(IMethodInvocation input)
@@ -152,7 +163,7 @@ namespace eagleboost.component.Interceptions
       }
 
       var autoNotify = (IAutoNotify)input.Target;
-      _invokeWithMap = autoNotify.Config.InvokeMap;
+      _invokeWithMap = autoNotify.Config.InvokeMap ?? new Dictionary<string, List<MethodInfo>>();
     }
 
     private void EnsureInvalidateWithMap(IMethodInvocation input)
@@ -162,20 +173,24 @@ namespace eagleboost.component.Interceptions
         return;
       }
 
-      _invalidateWithMap = new Dictionary<string, List<INotifiableCommand>>();
+      _invalidateWithMap = new Dictionary<string, List<IValidatableCommand>>();
 
       var autoNotify = (IAutoNotify)input.Target;
       var invalidateWithMap = autoNotify.Config.InvalidateMap;
-      foreach (var p in invalidateWithMap)
+
+      if (invalidateWithMap != null)
       {
-        var sourceProperty = p.Key;
-        var targetPrpoerties = p.Value;
-        foreach (var targetProperty in targetPrpoerties)
+        foreach (var p in invalidateWithMap)
         {
-          var chain = _invalidateWithMap.GetOrCreate(sourceProperty);
-          var property = input.Target.GetType().GetProperty(targetProperty);
-          var command = (INotifiableCommand)property.GetValue(input.Target);
-          chain.Add(command);
+          var sourceProperty = p.Key;
+          var targetPrpoerties = p.Value;
+          foreach (var targetProperty in targetPrpoerties)
+          {
+            var chain = _invalidateWithMap.GetOrCreate(sourceProperty);
+            var property = input.Target.GetType().GetProperty(targetProperty);
+            var command = (IValidatableCommand) property.GetValue(input.Target);
+            chain.Add(command);
+          }
         }
       }
     }
@@ -185,12 +200,11 @@ namespace eagleboost.component.Interceptions
       IMethodReturn result;
       var propertyName = input.MethodBase.Name.Substring(4);
       var objectType = input.MethodBase.DeclaringType;
-      var getMethod =  objectType.GetMethod(input.MethodBase.Name.Replace("set", "get"));
+      var getMethod =  objectType.GetMethod(input.MethodBase.Name.Replace("set_", "get_"));
       var oldValue = getMethod.Invoke(input.Target, null);
       var newVlaue = input.Arguments[0];
       if (!Equals(oldValue, newVlaue))
       {
-
         var changingHandler = PropertyChanging;
         if (changingHandler != null)
         {
@@ -198,17 +212,17 @@ namespace eagleboost.component.Interceptions
           changingHandler(input.Target, changingArgs);
         }
 
-        var changedNotifiable = input.Target as IPropertyChangedNotifiable;
-        if (changedNotifiable != null)
+        var extChangeNotify = input.Target as IExternalPropertyChangeNotify;
+        if (extChangeNotify != null)
         {
-          changedNotifiable.OnPropertyChanging(propertyName);
+          extChangeNotify.OnPropertyChanging(propertyName);
         }
 
         result = getNext()(input, getNext);
 
-        if (changedNotifiable != null)
+        if (extChangeNotify != null)
         {
-          changedNotifiable.OnPropertyChanged(propertyName);
+          extChangeNotify.OnPropertyChanged(propertyName);
         }
 
         var changedHandler = PropertyChanged;
@@ -230,25 +244,31 @@ namespace eagleboost.component.Interceptions
           List<MethodInfo> methodChain;
           if (_invokeWithMap.TryGetValue(propertyName, out methodChain))
           {
-            var methodInvoked = (IMethodInvoked) input.Target;
+            var methodInvoked = input.Target as IMethodInvoked;
             foreach (var method in methodChain)
             {
               var parameters = method.GetParameters();
               if (parameters.Length == 0)
               {
                 method.Invoke(input.Target, new object[0]);
-                methodInvoked.OnMethodInvoked(method.Name, null);
+                if (methodInvoked != null)
+                {
+                  methodInvoked.OnMethodInvoked(method.Name, null);
+                }
               }
               else if (parameters[0].ParameterType.IsCompatiableWith<InvokeContext>())
               {
                 var invokeContext = InvokeContext.Create(propertyName, oldValue, newVlaue);
                 method.Invoke(input.Target, new object[] {invokeContext});
-                methodInvoked.OnMethodInvoked(method.Name, invokeContext);
+                if (methodInvoked != null)
+                {
+                  methodInvoked.OnMethodInvoked(method.Name, invokeContext);
+                }
               }
             }
           }
 
-          List<INotifiableCommand> commandChain;
+          List<IValidatableCommand> commandChain;
           if (_invalidateWithMap.TryGetValue(propertyName, out commandChain))
           {
             foreach (var method in commandChain)
@@ -266,16 +286,29 @@ namespace eagleboost.component.Interceptions
       return result;
     }
 
+    private IPropertyChangeArgs PropertyChangeArgs
+    {
+      get
+      {
+        if (_propertyChangeArgs == null)
+        {
+          var type = typeof(PropertyChangeArgs<>).MakeGenericType(typeof(T));
+          var propertyChangeArgs = (IPropertyChangeArgs) Activator.CreateInstance(type);
+          _propertyChangeArgs = propertyChangeArgs;
+        }
+
+        return _propertyChangeArgs;
+      }
+    }
+
     private PropertyChangedEventArgs GetChangedArgs(IMethodInvocation input, string p)
     {
-      var provider = (INotifyPropertyChangeEventArgsProvider)input.Target;
-      return provider.GetPropertyChangedArgs(p);
+      return PropertyChangeArgs.GetChangedArgs(p);
     }
 
     private PropertyChangingEventArgs GetChangingArgs(IMethodInvocation input, string p)
     {
-      var provider = (INotifyPropertyChangeEventArgsProvider)input.Target;
-      return provider.GetPropertyChangingArgs(p);
+      return PropertyChangeArgs.GetChangingArgs(p);
     }
     #endregion Private Methods
   }

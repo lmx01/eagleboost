@@ -15,7 +15,7 @@ namespace eagleboost.core.Extensions
 
     public static bool IsCompatiableWith<T>(this Type type)
     {
-      return type == typeof(T) || type.IsSubclassOf(typeof(T));
+      return type == typeof(T) || typeof(T).IsAssignableFrom(type);
     }
   }
 }

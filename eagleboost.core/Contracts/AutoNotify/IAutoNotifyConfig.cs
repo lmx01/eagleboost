@@ -5,12 +5,18 @@
 namespace eagleboost.core.Contracts.AutoNotify
 {
   using System.Collections.Generic;
+  using System.ComponentModel;
   using System.Reflection;
 
   public interface IAutoNotifyConfig
   {
+    #region Properties
     Dictionary<string, List<string>> NotifyMap { get; }
+
     Dictionary<string, List<string>> InvalidateMap { get; }
+
     Dictionary<string, List<MethodInfo>> InvokeMap { get; }
+    #endregion Properties
+
   }
 }

@@ -4,9 +4,7 @@
 
 namespace eagleboost.core.Contracts
 {
-  using System.ComponentModel;
-
-  public interface IPropertyChangedNotifiable
+  public interface IExternalPropertyChangeNotify
   {
     #region Methods
     void OnPropertyChanging(string propertyName);

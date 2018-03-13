@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-
-namespace eagleboost.core.ComponentModel
+﻿namespace eagleboost.core.ComponentModel
 {
+  using System;
+  using System.Collections.Generic;
+  using System.ComponentModel;
+  using System.Linq.Expressions;
+  using System.Runtime.CompilerServices;
   using eagleboost.core.Contracts;
-  using eagleboost.core.Extensions;
 
-  public class NotifyPropertyChangedBase : ObjectBase, INotifyPropertyChanging, INotifyPropertyChanged, IPropertyChangedNotifiable, INotifyPropertyChangeEventArgsProvider
+  public class NotifyPropertyChangedBase : ObjectBase, INotifyPropertyChanging, INotifyPropertyChanged, IExternalPropertyChangeNotify
   {
-    #region Statics
-    private static readonly Dictionary<string, PropertyChangedEventArgs> PropertyChangedEventArgs = new Dictionary<string, PropertyChangedEventArgs>();
-    private static readonly Dictionary<string, PropertyChangingEventArgs> PropertyChangingEventArgs = new Dictionary<string, PropertyChangingEventArgs>();
-    #endregion Statics
-
     public virtual event PropertyChangedEventHandler PropertyChanged;
 
     protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
@@ -60,12 +53,12 @@ namespace eagleboost.core.ComponentModel
       OnPropertyChanged(property);
     }
 
-    void IPropertyChangedNotifiable.OnPropertyChanging(string propertyName)
+    void IExternalPropertyChangeNotify.OnPropertyChanging(string propertyName)
     {
       OnPropertyChanging(propertyName);
     }
 
-    void IPropertyChangedNotifiable.OnPropertyChanged(string propertyName)
+    void IExternalPropertyChangeNotify.OnPropertyChanged(string propertyName)
     {
       OnPropertyChanged(propertyName);
     }
@@ -81,33 +74,13 @@ namespace eagleboost.core.ComponentModel
     protected static PropertyChangedEventArgs GetChangedArgs<T>(Expression<Func<T, object>> expr)
     {
       var member = GetMember(expr);
-      return GetChangedArgs(member);
+      return new PropertyChangedEventArgs(member);
     }
 
     protected static PropertyChangingEventArgs GetChangingArgs<T>(Expression<Func<T, object>> expr)
     {
       var member = GetMember(expr);
-      return GetChangingArgs(member);
-    }
-
-    protected static PropertyChangedEventArgs GetChangedArgs(string propertyName)
-    {
-      return PropertyChangedEventArgs.GetOrCreate(propertyName, p => new PropertyChangedEventArgs(p));
-    }
-
-    protected static PropertyChangingEventArgs GetChangingArgs(string propertyName)
-    {
-      return PropertyChangingEventArgs.GetOrCreate(propertyName, p => new PropertyChangingEventArgs(p));
-    }
-
-    public PropertyChangedEventArgs GetPropertyChangedArgs(string propertyName)
-    {
-      return GetChangedArgs(propertyName);
-    }
-
-    public PropertyChangingEventArgs GetPropertyChangingArgs(string propertyName)
-    {
-      return GetChangingArgs(propertyName);
+      return new PropertyChangingEventArgs(member);
     }
   }
 }
