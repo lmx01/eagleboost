@@ -22,7 +22,7 @@ namespace eagleboost.core.test
       var container = new UnityContainer();
       container.AddNewExtension<Interception>();
 
-      container.RegisterNotifyPropertyChangedType<ViewModel>();
+      container.RegisterAutoNotifyType<ViewModel>();
 
       var viewModel = container.Resolve<ViewModel>();
       viewModel.FirstName.ShouldBeNull();
@@ -39,7 +39,7 @@ namespace eagleboost.core.test
       viewModel.OkCommand.CanExecute(null).ShouldBeTrue();
 
       var invokedLog = new List<MethodInvokedEventArgs>();
-      ((IAutoNotify) viewModel).MethodInvoked += (s, e) => invokedLog.Add(e);
+      ((IMethodAutoInvoked) viewModel).MethodInvoked += (s, e) => invokedLog.Add(e);
       viewModel.Age = viewModel.Age + 1;
       invokedLog.Count.ShouldBeEqualTo(2);
       invokedLog[0].Name.ShouldBeEqualTo("OnAgeChanged");
@@ -57,7 +57,7 @@ namespace eagleboost.core.test
       var container = new UnityContainer();
       container.AddNewExtension<Interception>();
 
-      container.RegisterNotifyPropertyChangedType<PureViewModel>();
+      container.RegisterAutoNotifyType<PureViewModel>();
 
       Expression<Func<PureViewModel, string>>[] namesSelector = {v => v.FirstName, v => v.LastName};
 
@@ -82,7 +82,7 @@ namespace eagleboost.core.test
       viewModel.OkCommand.CanExecute(null).ShouldBeTrue();
 
       var invokedLog = new List<MethodInvokedEventArgs>();
-      ((IAutoNotify) viewModel).MethodInvoked += (s, e) => invokedLog.Add(e);
+      ((IMethodAutoInvoked) viewModel).MethodInvoked += (s, e) => invokedLog.Add(e);
       viewModel.Age = viewModel.Age + 1;
       invokedLog.Count.ShouldBeEqualTo(2);
       invokedLog[0].Name.ShouldBeEqualTo("OnAgeChanged");

@@ -72,13 +72,14 @@
     <Compile Include="ComponentModel\AutoNotify\InvokeContext.cs" />
     <Compile Include="ComponentModel\AutoNotify\NotifyBy.cs" />
     <Compile Include="ComponentModel\AutoNotify\PropertyChangeArgs.cs" />
+    <Compile Include="Contracts\AutoNotify\IMethodAutoInvoked.cs" />
     <Compile Include="Contracts\AutoNotify\IAutoNotifyConfig.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedBase.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedBase.Generic.cs" />
     <Compile Include="ComponentModel\ObjectBase.cs" />
     <Compile Include="Contracts\AutoNotify\IAutoNotify.cs" />
     <Compile Include="Contracts\IPropertyChangeArgs.cs" />
-    <Compile Include="Contracts\IValidatableCommand.cs" />
+    <Compile Include="Contracts\IInvalidatableCommand.cs" />
     <Compile Include="Contracts\IExternalPropertyChangeNotify.cs" />
     <Compile Include="Contracts\IStartable.cs" />
     <Compile Include="Data\DisposeManager.cs" />

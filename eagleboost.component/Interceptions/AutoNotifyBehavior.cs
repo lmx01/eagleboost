@@ -16,7 +16,7 @@ namespace eagleboost.component.Interceptions
   using Unity.Interception.InterceptionBehaviors;
   using Unity.Interception.PolicyInjection.Pipeline;
 
-  public class NotifyPropertyChangedBehavior<T> : IInterceptionBehavior where T : class
+  public class AutoNotifyBehavior<T> : IInterceptionBehavior where T : class
   {
     #region Statics
     private static readonly EventInfo PropertyChangingEventInfo = typeof(INotifyPropertyChanging).GetEvent("PropertyChanging");
@@ -33,7 +33,7 @@ namespace eagleboost.component.Interceptions
     private event PropertyChangedEventHandler PropertyChanged;
     private Dictionary<string, List<string>> _changeWithMap;
     private Dictionary<string, List<MethodInfo>> _invokeWithMap;
-    private Dictionary<string, List<IValidatableCommand>> _invalidateWithMap;
+    private Dictionary<string, List<IInvalidatableCommand>> _invalidateWithMap;
     private IPropertyChangeArgs _propertyChangeArgs;
     #endregion Declarations
 
@@ -173,7 +173,7 @@ namespace eagleboost.component.Interceptions
         return;
       }
 
-      _invalidateWithMap = new Dictionary<string, List<IValidatableCommand>>();
+      _invalidateWithMap = new Dictionary<string, List<IInvalidatableCommand>>();
 
       var autoNotify = (IAutoNotify)input.Target;
       var invalidateWithMap = autoNotify.Config.InvalidateMap;
@@ -188,7 +188,7 @@ namespace eagleboost.component.Interceptions
           {
             var chain = _invalidateWithMap.GetOrCreate(sourceProperty);
             var property = input.Target.GetType().GetProperty(targetProperty);
-            var command = (IValidatableCommand) property.GetValue(input.Target);
+            var command = (IInvalidatableCommand) property.GetValue(input.Target);
             chain.Add(command);
           }
         }
@@ -244,7 +244,7 @@ namespace eagleboost.component.Interceptions
           List<MethodInfo> methodChain;
           if (_invokeWithMap.TryGetValue(propertyName, out methodChain))
           {
-            var methodInvoked = input.Target as IMethodInvoked;
+            var methodInvoked = input.Target as IMethodAutoInvoked;
             foreach (var method in methodChain)
             {
               var parameters = method.GetParameters();
@@ -268,7 +268,7 @@ namespace eagleboost.component.Interceptions
             }
           }
 
-          List<IValidatableCommand> commandChain;
+          List<IInvalidatableCommand> commandChain;
           if (_invalidateWithMap.TryGetValue(propertyName, out commandChain))
           {
             foreach (var method in commandChain)

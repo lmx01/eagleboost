@@ -8,7 +8,7 @@ namespace eagleboost.core.Commands
   using System.Linq.Expressions;
   using eagleboost.core.Contracts;
 
-  public class NotifiableCommand : IValidatableCommand
+  public class NotifiableCommand : IInvalidatableCommand
   {
     #region Declarations
     private readonly Action _execute;
@@ -35,7 +35,7 @@ namespace eagleboost.core.Commands
 
     public event EventHandler CanExecuteChanged;
 
-    void IValidatableCommand.Invalidate()
+    void IInvalidatableCommand.Invalidate()
     {
       CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }

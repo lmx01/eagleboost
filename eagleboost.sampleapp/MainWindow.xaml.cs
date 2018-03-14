@@ -38,7 +38,7 @@ namespace eagleboost.sampleapp
       container.AddNewExtension<Interception>();
 
       // todo: Register an interface instead of a type.
-      container.RegisterNotifyPropertyChangedType<PureViewModel>();
+      container.RegisterAutoNotifyType<PureViewModel>();
 
       Expression<Func<PureViewModel, string>>[] namesSelector = { v => v.FirstName, v => v.LastName };
 

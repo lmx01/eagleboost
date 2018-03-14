@@ -11,7 +11,7 @@ namespace eagleboost.sharedcomponents.ViewModels
   using eagleboost.core.Contracts.AutoNotify;
   using eagleboost.core.Extensions;
 
-  public class PureViewModel : NotifyPropertyChangedBase, IAutoNotify, IMethodInvoked
+  public class PureViewModel : NotifyPropertyChangedBase, IAutoNotify, IMethodAutoInvoked
   {
     #region Declarations
     private ICommand _okCommand;

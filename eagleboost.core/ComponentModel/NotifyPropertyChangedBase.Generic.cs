@@ -14,7 +14,7 @@ namespace eagleboost.core.ComponentModel
   /// NotifyPropertyChangedBase
   /// </summary>
   /// <typeparam name="T"></typeparam>
-  public class NotifyPropertyChangedBase<T> : NotifyPropertyChangedBase, IAutoNotify, IMethodInvoked where T : class
+  public class NotifyPropertyChangedBase<T> : NotifyPropertyChangedBase, IAutoNotify, IMethodAutoInvoked where T : class
   {
     #region Declarations
     private event MethodInvokedEventHandler MethodInvokedHandler;
@@ -57,17 +57,10 @@ namespace eagleboost.core.ComponentModel
     {
       get { return AutoNotifyConfig<T>.Instance; }
     }
-
-    event MethodInvokedEventHandler IAutoNotify.MethodInvoked
-    {
-      add { MethodInvokedHandler += value; }
-      remove { MethodInvokedHandler -= value; }
-    }
-
     #endregion IAutoNotify
 
-    #region IMethodInvoked
-    void IMethodInvoked.OnMethodInvoked(string name, InvokeContext context)
+    #region IMethodAutoInvoked
+    void IMethodAutoInvoked.OnMethodInvoked(string name, InvokeContext context)
     {
       var handler = MethodInvokedHandler;
       if (handler != null)
@@ -75,6 +68,12 @@ namespace eagleboost.core.ComponentModel
         handler(this, new MethodInvokedEventArgs(name, context));
       }
     }
-    #endregion IMethodInvoked
+
+    event MethodInvokedEventHandler IMethodAutoInvoked.MethodInvoked
+    {
+      add { MethodInvokedHandler += value; }
+      remove { MethodInvokedHandler -= value; }
+    }
+    #endregion IMethodAutoInvoked
   }
 }

@@ -14,22 +14,22 @@ namespace eagleboost.component.Extensions
 
   public static class UnityContainerExt
   {
-    public static IUnityContainer RegisterNotifyPropertyChangedType<T>(this IUnityContainer container, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers) where T : class
+    public static IUnityContainer RegisterAutoNotifyType<T>(this IUnityContainer container, LifetimeManager lifetimeManager, params InjectionMember[] injectionMembers) where T : class
     {
       var newInjectionMembers = new List<InjectionMember>(injectionMembers)
       {
         new Interceptor<VirtualMethodInterceptor>(),
-        new InterceptionBehavior<NotifyPropertyChangedBehavior<T>>()
+        new InterceptionBehavior<AutoNotifyBehavior<T>>()
       };
       return container.RegisterType(null, typeof(T), null, lifetimeManager, newInjectionMembers.ToArray());
     }
 
-    public static IUnityContainer RegisterNotifyPropertyChangedType<T>(this IUnityContainer container, params InjectionMember[] injectionMembers) where T : class
+    public static IUnityContainer RegisterAutoNotifyType<T>(this IUnityContainer container, params InjectionMember[] injectionMembers) where T : class
     {
       var newInjectionMembers = new List<InjectionMember>(injectionMembers)
       {
         new Interceptor<VirtualMethodInterceptor>(),
-        new InterceptionBehavior<NotifyPropertyChangedBehavior<T>>()
+        new InterceptionBehavior<AutoNotifyBehavior<T>>()
       };
       return container.RegisterType(null, typeof(T), null, null, newInjectionMembers.ToArray());
     }
