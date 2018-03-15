@@ -4,7 +4,9 @@
 
 namespace eagleboost.core.Contracts.AutoNotify
 {
-  public interface IAutoNotify
+  using System.ComponentModel;
+
+  public interface IAutoNotify : INotifyPropertyChanging, INotifyPropertyChanged
   {
     #region Properties
     IAutoNotifyConfig Config { get; }

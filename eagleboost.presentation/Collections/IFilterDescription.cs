@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
-using System.Linq.Expressions;
-
-namespace eagleboost.presentation.Collections
+﻿namespace eagleboost.presentation.Collections
 {
+  using System.ComponentModel;
+
   public interface IFilterDescription : INotifyPropertyChanged
   {
     #region Methods

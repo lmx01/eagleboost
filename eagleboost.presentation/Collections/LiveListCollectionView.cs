@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Windows.Data;
-
-namespace eagleboost.presentation.Collections
+﻿namespace eagleboost.presentation.Collections
 {
+  using System;
+  using System.Collections;
+  using System.Collections.Specialized;
+  using System.ComponentModel;
+  using System.Windows.Data;
+
   public class LiveListCollectionView : ListCollectionView
   {
     private FilterDescriptionCollection _filterDescriptionCollection;

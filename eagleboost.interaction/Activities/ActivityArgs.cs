@@ -22,7 +22,8 @@
 
       foreach (var arg in this)
       {
-        if (arg is T variable)
+        var variable = arg as T;
+        if (variable != null)
         {
           return variable;
         }

@@ -22,19 +22,25 @@
       var context = element.DataContext;
       if (context != null)
       {
-        action?.Invoke(context as T);
+        if (action != null)
+        {
+          action.Invoke(context as T);
+        }
         return;
       }
 
       var cleanup = new DisposeManager();
 
-      void Handler(object s, DependencyPropertyChangedEventArgs e)
+      DependencyPropertyChangedEventHandler handler = (s, e) =>
       {
         cleanup.Dispose();
-        action?.Invoke(e.NewValue as T);
-      }
+        if (action != null)
+        {
+          action.Invoke(e.NewValue as T);
+        }
+      };
 
-      cleanup.AddEvent(h => element.DataContextChanged += h, h => element.DataContextChanged -= h, (DependencyPropertyChangedEventHandler) Handler);
+      cleanup.AddEvent(h => element.DataContextChanged += h, h => element.DataContextChanged -= h, handler);
     }
   }
 }

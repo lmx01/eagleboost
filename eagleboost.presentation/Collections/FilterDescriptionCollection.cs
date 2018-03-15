@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using eagleboost.core.Collections;
-using eagleboost.core.Extensions;
-
-namespace eagleboost.presentation.Collections
+﻿namespace eagleboost.presentation.Collections
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Collections.Specialized;
+  using System.ComponentModel;
+  using eagleboost.core.Collections;
+  using eagleboost.core.Extensions;
+
   public class ItemPropertyChangedEventArgs : PropertyChangedEventArgs
   {
     public ItemPropertyChangedEventArgs(string propertyName) : base(propertyName)
@@ -39,7 +37,11 @@ namespace eagleboost.presentation.Collections
 
     private void RaiseItemPropertyChanged(ItemPropertyChangedEventArgs e)
     {
-      ItemPropertyChanged?.Invoke(this, e);
+      var handler = ItemPropertyChanged;
+      if (handler != null)
+      {
+        handler(this, e);
+      }
     }
 
     private void HookItemPropertyChanged(IReadOnlyCollection<IFilterDescription> items)

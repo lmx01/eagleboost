@@ -16,7 +16,7 @@ namespace eagleboost.component.Interceptions
   using Unity.Interception.InterceptionBehaviors;
   using Unity.Interception.PolicyInjection.Pipeline;
 
-  public class AutoNotifyBehavior<T> : IInterceptionBehavior where T : class
+  public class AutoNotifyBehavior<T> : IInterceptionBehavior where T : class, IAutoNotify
   {
     #region Statics
     private static readonly EventInfo PropertyChangingEventInfo = typeof(INotifyPropertyChanging).GetEvent("PropertyChanging");
@@ -90,7 +90,7 @@ namespace eagleboost.component.Interceptions
     /// </returns>
     public IEnumerable<Type> GetRequiredInterfaces()
     {
-      return new[] { typeof(INotifyPropertyChanging), typeof(INotifyPropertyChanged), typeof(IAutoNotify) };
+      return new[] { typeof(IAutoNotify) };
     }
     #endregion IInterceptionBehavior
 

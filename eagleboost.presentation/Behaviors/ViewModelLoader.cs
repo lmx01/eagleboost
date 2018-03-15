@@ -1,10 +1,10 @@
-﻿using System;
+﻿namespace eagleboost.presentation.Behaviors
+{
+using System;
 using System.Windows;
 using System.Windows.Interactivity;
 using eagleboost.core.Contracts;
 
-namespace eagleboost.presentation.Behaviors
-{
   public class ViewModelLoader : Behavior<FrameworkElement>
   {
     public static readonly DependencyProperty ViewModelTypeProperty = DependencyProperty.Register(

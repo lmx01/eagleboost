@@ -37,7 +37,11 @@ namespace eagleboost.core.Commands
 
     void IInvalidatableCommand.Invalidate()
     {
-      CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+      var handler = CanExecuteChanged;
+      if (handler != null)
+      {
+        handler(this, EventArgs.Empty);
+      }
     }
   }
 }

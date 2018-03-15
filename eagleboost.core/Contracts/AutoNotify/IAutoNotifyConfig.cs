@@ -5,7 +5,6 @@
 namespace eagleboost.core.Contracts.AutoNotify
 {
   using System.Collections.Generic;
-  using System.ComponentModel;
   using System.Reflection;
 
   public interface IAutoNotifyConfig

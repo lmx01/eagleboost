@@ -35,13 +35,20 @@ namespace eagleboost.presentation.Commands
 
     protected virtual void RaiseCanExecuteChanged()
     {
-      CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+      var handler = CanExecuteChanged;
+      if (handler != null)
+      {
+        handler(this, EventArgs.Empty);
+      }
     }
 
     public void Dispose()
     {
       var disposable = Interlocked.Exchange(ref _disposable, null);
-      disposable?.Dispose();
+      if (disposable != null)
+      {
+        disposable.Dispose();
+      }
     }
   }
 }

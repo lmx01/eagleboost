@@ -70,7 +70,11 @@ namespace eagleboost.sharedcomponents.ViewModels
 
     public void OnMethodInvoked(string name, InvokeContext context)
     {
-      MethodInvoked?.Invoke(this, new MethodInvokedEventArgs(name, context));
+      var handler = MethodInvoked;
+      if (handler != null)
+      {
+        handler(this, new MethodInvokedEventArgs(name, context));
+      }
     }
   }
 }

@@ -6,7 +6,7 @@ namespace eagleboost.core.ComponentModel.AutoNotify
 {
   using System.Diagnostics;
 
-  [DebuggerDisplay("{Property} : {_oldValue}=>{_newValue}")]
+  [DebuggerDisplay("{Property} : {_oldValue} => {_newValue}")]
   public class InvokeContext
   {
     #region Declarations
