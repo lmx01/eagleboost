@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace eagleboost.componentApp
 {
+  using System.Diagnostics;
   using System.Linq.Expressions;
+  using System.Reflection;
+  using System.Reflection.Emit;
+  using eagleboost.component.Extensions;
   using eagleboost.component.Interceptions;
+  using eagleboost.sharedcomponents.Contracts;
+  using eagleboost.sharedcomponents.ViewModels;
   using Unity;
   using Unity.Interception.ContainerIntegration;
   using Unity.Interception.Interceptors.TypeInterceptors.VirtualMethodInterception;
@@ -16,85 +22,109 @@ namespace eagleboost.componentApp
   {
     static void Main(string[] args)
     {
-      //OrderByDerivedProperty(new B(){M = "a"}, typeof(B), "M");
-      var param = Expression.Parameter(typeof(object), "x");
-      var compiled = Expression.Lambda<Func<object, bool>>(CreateExpression(param), param);
-      var func = compiled.Compile();
-      Console.WriteLine(func(new object()));
-      Console.WriteLine(func(new A()));
-    }
+      var container = new UnityContainer();
+      container.AddNewExtension<Interception>();
 
-    private static Expression CreateExpression(ParameterExpression param)
-    {
-      var result = Expression.Variable(typeof(bool));
-      var typeExpr = Expression.Variable(typeof(A));
-      var castType = Expression.Assign(typeExpr, Expression.TypeAs(param, typeof(A)));
-      return Expression.Block(new[] { result, typeExpr},
-        castType,
-        Expression.IfThenElse(Expression.NotEqual(typeExpr, Expression.Constant(null, typeof(A))), 
-          Expression.Assign(result, Expression.Constant(true)), 
-          Expression.Assign(result, Expression.Constant(false))),
-        result);
-    }
+      var source = new CompositeSource();
+      var param = Expression.Parameter(typeof(CompositeSource));
+      var lambda = Expression.Lambda<Func<CompositeSource, int>>(Expression.Convert(
+        Expression.Property(param, "Age"), typeof(int)), param).Compile();
 
-    public static object OrderByDerivedProperty<TSource>(TSource source, Type derivedType, string propertyOrFieldName)
-    {
-      if (!derivedType.IsClass)
+      var method = typeof(CompositeSource).GetProperty("Age",
+          BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        .GetGetMethod(true);
+      var func = (Func<CompositeSource, int>)
+        Delegate.CreateDelegate(typeof(Func<CompositeSource, int>), method);
+
+      var getMethod = typeof(CompositeSource).GetProperty("Age").GetMethod;
+
+      var propertyInfo = typeof(CompositeSource).GetProperty("Age");
+        var getMethodDynamicCall = new DynamicMethod(
+          string.Concat(getMethod.Name, "_DynamicGetter_", Guid.NewGuid().ToString("N").ToUpper()),
+          propertyInfo.PropertyType,
+          new[] { propertyInfo.DeclaringType },
+          propertyInfo.DeclaringType,
+          true
+        );
+        var il = getMethodDynamicCall.GetILGenerator();
+
+        if (!getMethod.IsStatic)
+        {
+          il.Emit(OpCodes.Ldarg_0);
+        }
+        il.EmitCall(OpCodes.Call, getMethod, null);
+        il.Emit(OpCodes.Ret);
+
+        var func2 = (Func<CompositeSource, int>)getMethodDynamicCall.CreateDelegate(typeof(Func<,>).MakeGenericType(propertyInfo.DeclaringType, typeof(int)));
+      var stopWatch = new Stopwatch();
+
+      stopWatch.Start();
+      for (int i = 0; i < 1000000; i++)
       {
-        throw new Exception("Derived type must be a class.");
+        if (source.Age == 0)
+        {
+
+        }
       }
-      ParameterExpression sourceParameter = Expression.Parameter(typeof(object), "source");
-      ParameterExpression typeAsVariable = Expression.Variable(derivedType);
-      ParameterExpression returnVariable = Expression.Variable(typeof(object));
-      BlockExpression block = Expression.Block(
-          new[] { typeAsVariable, returnVariable },
-          Expression.Assign(
-              typeAsVariable,
-              Expression.TypeAs(
-                  sourceParameter,
-                  derivedType
-              )
-          ),
-          Expression.Condition(
-              Expression.NotEqual(
-                  typeAsVariable,
-                  Expression.Constant(
-                      null,
-                      derivedType
-                  )
-              ),
-              Expression.Assign(
-                  returnVariable,
-                  Expression.Convert(
-                      Expression.PropertyOrField(
-                          typeAsVariable,
-                          propertyOrFieldName
-                      ),
-                      typeof(object)
-                  )
-              ),
-              Expression.Assign(
-                  returnVariable,
-                  Expression.Constant(
-                      null,
-                      typeof(object)
-                  )
-              )
-          ),
-          returnVariable
-      );
-      var lambda = Expression.Lambda<Func<object, object>>(block, new[] { sourceParameter });
-      return lambda.Compile().Invoke(source);
+      stopWatch.Stop();
+      Console.WriteLine(stopWatch.ElapsedTicks);
+
+      stopWatch.Start();
+      for (int i = 0; i < 1000000; i++)
+      {
+        if ((int)func(source) == 0)
+        {
+
+        }
+      }
+      stopWatch.Stop();
+      Console.WriteLine(stopWatch.ElapsedTicks);
+
+      stopWatch.Start();
+      for (int i = 0; i < 1000000; i++)
+      {
+        if ((int)func2(source) == 0)
+        {
+
+        }
+      }
+      stopWatch.Stop();
+      Console.WriteLine(stopWatch.ElapsedTicks);
+
+      stopWatch.Start();
+      for (int i = 0; i < 1000000; i++)
+      {
+        if ((int)lambda(source) == 0)
+        {
+
+        }
+      }
+      stopWatch.Stop();
+      Console.WriteLine(stopWatch.ElapsedTicks);
+
+      stopWatch = new Stopwatch();
+      stopWatch.Start();
+      for (int i = 0; i < 1000000; i++)
+      {
+        if ((int)getMethod.Invoke(source, null) == 0)
+        {
+
+        }
+      }
+      stopWatch.Stop();
+      Console.WriteLine(stopWatch.ElapsedTicks);
+      Console.ReadKey();
+
+      //var result = getter(source);
+
+
+      //// todo: Register an interface instead of a type.
+      //container.RegisterAutoCompositeType<IPersonInfo, AutoComposite>();
+      //var obj = container.Resolve<AutoComposite>();
+      //obj.CompositeSource = new CompositeSource();
+      //if (obj.FirstName == "Age")
+      //{
+      //}
     }
-  }
-
-  public class A
-  {
-
-  }
-
-  public class B : A
-  {
-    public string M { get; set; }
   }
 }

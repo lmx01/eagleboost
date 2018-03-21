@@ -8,6 +8,7 @@ namespace eagleboost.component.Interceptions
   using System.Collections.Generic;
   using System.ComponentModel;
   using System.Reflection;
+  using eagleboost.core.ComponentModel;
   using eagleboost.core.ComponentModel.AutoNotify;
   using eagleboost.core.Contracts;
   using eagleboost.core.Contracts.AutoNotify;
@@ -18,16 +19,6 @@ namespace eagleboost.component.Interceptions
 
   public class AutoNotifyBehavior<T> : IInterceptionBehavior where T : class, IAutoNotify
   {
-    #region Statics
-    private static readonly EventInfo PropertyChangingEventInfo = typeof(INotifyPropertyChanging).GetEvent("PropertyChanging");
-    private static readonly MethodInfo AddPropertyChangingMethodInfo = PropertyChangingEventInfo.GetAddMethod();
-    private static readonly MethodInfo RemovePropertyChangingMethodInfo = PropertyChangingEventInfo.GetRemoveMethod();
-
-    private static readonly EventInfo PropertyChangedEventInfo = typeof(INotifyPropertyChanged).GetEvent("PropertyChanged");
-    private static readonly MethodInfo AddPropertyChangedMethodInfo =PropertyChangedEventInfo.GetAddMethod();
-    private static readonly MethodInfo RemovePropertyChangedMethodInfo = PropertyChangedEventInfo.GetRemoveMethod();
-    #endregion Statics
-
     #region Declarations
     private event PropertyChangingEventHandler PropertyChanging;
     private event PropertyChangedEventHandler PropertyChanged;
@@ -45,22 +36,22 @@ namespace eagleboost.component.Interceptions
       EnsureInvokeWithMap(input);
       EnsureInvalidateWithMap(input);
 
-      if (input.MethodBase.Name == AddPropertyChangingMethodInfo.Name)
+      if (input.MethodBase.Name == NotifyPropertyChangeInfo.AddPropertyChangingMethodName)
       {
         return AddPropertyChangingHandler(input);
       }
 
-      if (input.MethodBase.Name == RemovePropertyChangingMethodInfo.Name)
+      if (input.MethodBase.Name == NotifyPropertyChangeInfo.RemovePropertyChangingMethodName)
       {
         return RemovePropertyChangingHandler(input);
       }
 
-      if (input.MethodBase.Name== AddPropertyChangedMethodInfo.Name)
+      if (input.MethodBase.Name== NotifyPropertyChangeInfo.AddPropertyChangedMethodName)
       {
         return AddPropertyChangedHandler(input);
       }
 
-      if (input.MethodBase.Name == RemovePropertyChangedMethodInfo.Name)
+      if (input.MethodBase.Name == NotifyPropertyChangeInfo.RemovePropertyChangedMethodName)
       {
         return RemovePropertyChangedHandler(input);
       }

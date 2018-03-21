@@ -31,6 +31,16 @@ namespace eagleboost.core.ComponentModel
       return PropertyChangeArgs<T>.Instance.GetChangingArgs(propertyName);
     }
 
+    protected static PropertyChangedEventArgs GetChangedArgs(Expression<Func<T, object>> expr)
+    {
+      return PropertyChangeArgs<T>.Instance.GetChangedArgs(expr);
+    }
+
+    protected static PropertyChangingEventArgs GetChangingArgs(Expression<Func<T, object>> expr)
+    {
+      return PropertyChangeArgs<T>.Instance.GetChangingArgs(expr);
+    }
+
     protected static NotifyBy<T> Notify<TProperty>(Expression<Func<T, TProperty>> selector)
     {
       return AutoNotifySetup<T>.Notify(selector);

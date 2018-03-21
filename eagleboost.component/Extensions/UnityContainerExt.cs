@@ -7,6 +7,7 @@ namespace eagleboost.component.Extensions
   using System;
   using System.Collections.Generic;
   using eagleboost.component.Interceptions;
+  using eagleboost.core.Contracts.AutoComposite;
   using eagleboost.core.Contracts.AutoNotify;
   using Unity;
   using Unity.Interception.ContainerIntegration;
@@ -70,6 +71,21 @@ namespace eagleboost.component.Extensions
         new InterceptionBehavior<AutoNotifyBehavior<T>>()
       };
       return container.RegisterType(typeof(TFrom), typeof(T), null, null, newInjectionMembers.ToArray());
+    }
+
+    public static IUnityContainer RegisterAutoCompositeType<TIntf, T>(this IUnityContainer container, params InjectionMember[] injectionMembers) where T : class, TIntf, IAutoComposite<TIntf>
+    {
+      if (typeof(T).IsInterface)
+      {
+        throw new ArgumentException("TFrom is not interface or T is interface");
+      }
+
+      var newInjectionMembers = new List<InjectionMember>(injectionMembers)
+      {
+        new Interceptor<VirtualMethodInterceptor>(),
+        new InterceptionBehavior<AutoCompositeBehavior<TIntf, T>>()
+      };
+      return container.RegisterType(null, typeof(T), null, null, newInjectionMembers.ToArray());
     }
   }
 }

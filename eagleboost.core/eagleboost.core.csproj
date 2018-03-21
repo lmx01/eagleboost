@@ -72,6 +72,8 @@
     <Compile Include="ComponentModel\AutoNotify\InvokeContext.cs" />
     <Compile Include="ComponentModel\AutoNotify\NotifyBy.cs" />
     <Compile Include="ComponentModel\AutoNotify\PropertyChangeArgs.cs" />
+    <Compile Include="ComponentModel\NotifyPropertyChangeInfo.cs" />
+    <Compile Include="Contracts\AutoComposite\IAutoComposite.cs" />
     <Compile Include="Contracts\AutoNotify\IMethodAutoInvoked.cs" />
     <Compile Include="Contracts\AutoNotify\IAutoNotifyConfig.cs" />
     <Compile Include="ComponentModel\NotifyPropertyChangedBase.cs" />
