@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:eagleboost.sharedcomponents.ViewModels;assembly=eagleboost.sharedcomponents"
+        xmlns:controls="clr-namespace:eagleboost.UserExperience.Controls;assembly=eagleboost.UserExperience"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:ViewModel}"
         Title="MainWindow" Height="350" Width="525">
 
@@ -17,5 +18,6 @@
     <TextBlock Text="{Binding FullName}"></TextBlock>
     <TextBlock Text="{Binding Error}"></TextBlock>
     <Button Command="{Binding OkCommand}">Ok</Button>
+    <controls:StaThreadContainer ThreadName="ABC" DataContextType="{x:Type viewModels:ViewModel}" Height="100"/>
   </StackPanel>
 </Window>

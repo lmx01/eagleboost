@@ -140,6 +140,10 @@
       <Project>{e29930dc-f4ee-463e-9bd4-cc3652787460}</Project>
       <Name>eagleboost.style</Name>
     </ProjectReference>
+    <ProjectReference Include="..\eagleboost.UserExperience\eagleboost.userexperience.csproj">
+      <Project>{D4A1C4F6-833B-4F0E-9BD0-5DDE39F45C59}</Project>
+      <Name>eagleboost.userexperience</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
