@@ -8,6 +8,7 @@ namespace eagleboost.sampleapp
   using eagleboost.core.ComponentModel.AutoNotify;
   using eagleboost.presentation.Behaviors;
   using eagleboost.sharedcomponents.ViewModels;
+  using eagleboost.shell.Tools;
   using eagleboost.UserExperience.Threading;
   using Unity;
   using Unity.Interception.ContainerIntegration;
@@ -40,11 +41,24 @@ namespace eagleboost.sampleapp
       DataContext = viewModel;
       TextBoxSelectAll.Install();
 
+      ClipboardMonitor.Install();
+      ClipboardMonitor.ClipboardUpdated += ClipboardMonitor_ClipboardUpdated;
       DispatcherViewFactory.InvokeAsync("ABC", () =>
       {
         var w = new Window { Title = "ABC" ,Content = "I'm running on thead 'ABC'"};
         w.Show();
       });
+      Closed += MainWindow_Closed;
+    }
+
+    private void MainWindow_Closed(object sender, EventArgs e)
+    {
+      ClipboardMonitor.ClipboardUpdated -= ClipboardMonitor_ClipboardUpdated;
+      ClipboardMonitor.Uninstall();
+    }
+
+    private void ClipboardMonitor_ClipboardUpdated(object sender, ClipboardChangedEventArgs args)
+    {
     }
   }
 }
