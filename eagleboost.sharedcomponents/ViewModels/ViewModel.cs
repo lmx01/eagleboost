@@ -45,6 +45,11 @@ namespace eagleboost.sharedcomponents.ViewModels
       get { return string.Format("{0} {1}", FirstName, LastName); }
     }
 
+    public string FullNameSelfNotify
+    {
+      get { return FullName; }
+    }
+
     public string Error
     {
       get
@@ -75,6 +80,7 @@ namespace eagleboost.sharedcomponents.ViewModels
 
     public void OnAgeChanged2()
     {
+      NotifyPropertyChanged("FullNameSelfNotify");
     }
   }
 }

@@ -95,6 +95,27 @@ namespace eagleboost.core.test
     }
 
     [TestMethod]
+    public void SelfNotifyTest()
+    {
+      var container = new UnityContainer();
+      container.AddNewExtension<Interception>();
+
+      container.RegisterAutoNotifyType<ViewModel>();
+
+      var viewModel = container.Resolve<ViewModel>();
+      var changedLog = new List<string>();
+      var changingLog = new List<string>();
+      viewModel.PropertyChanged += (s, e) => changedLog.Add(e.PropertyName);
+      viewModel.PropertyChanging += (s, e) => changingLog.Add(e.PropertyName);
+      viewModel.Age = viewModel.Age + 1;
+      changedLog.Count.ShouldBeEqualTo(2);
+      changedLog[0].ShouldBeEqualTo("Age");
+      changedLog[1].ShouldBeEqualTo("FullNameSelfNotify");
+      changingLog.Count.ShouldBeEqualTo(1);
+      changingLog[0].ShouldBeEqualTo("Age");
+    }
+
+    [TestMethod]
     public void ChangeArgsTest()
     {
       var args = PropertyChangeArgs<ViewModel>.Instance;

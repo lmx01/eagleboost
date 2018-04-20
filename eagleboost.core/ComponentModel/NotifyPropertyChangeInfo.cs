@@ -21,6 +21,11 @@ namespace eagleboost.core.ComponentModel
     public static readonly string AddPropertyChangedMethodName = AddPropertyChangedMethodInfo.Name;
     public static readonly MethodInfo RemovePropertyChangedMethodInfo = PropertyChangedEventInfo.GetRemoveMethod();
     public static readonly string RemovePropertyChangedMethodName = RemovePropertyChangedMethodInfo.Name;
+
+    public static readonly MethodInfo NotifyPropertyChangedMethodInfo = typeof(NotifyPropertyChangedBase).GetMethod("NotifyPropertyChanged", BindingFlags.NonPublic|BindingFlags.Instance);
+    public static readonly string NotifyPropertyChangedMethodName = NotifyPropertyChangedMethodInfo.Name;
+    public static readonly MethodInfo NotifyPropertyChangingMethodInfo = typeof(NotifyPropertyChangedBase).GetMethod("NotifyPropertyChanging", BindingFlags.NonPublic | BindingFlags.Instance);
+    public static readonly string NotifyPropertyChangingMethodName = NotifyPropertyChangingMethodInfo.Name;
     #endregion Statics
   }
 }

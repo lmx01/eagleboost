@@ -56,6 +56,16 @@ namespace eagleboost.component.Interceptions
         return RemovePropertyChangedHandler(input);
       }
 
+      if (input.MethodBase.Name == NotifyPropertyChangeInfo.NotifyPropertyChangedMethodName)
+      {
+        return InterceptNotifyPropertyChanged(input, getNext);
+      }
+
+      if (input.MethodBase.Name == NotifyPropertyChangeInfo.NotifyPropertyChangingMethodName)
+      {
+        return InterceptNotifyPropertyChanging(input, getNext);
+      }
+
       if (IsPropertySetter(input))
       {
         return InterceptPropertySet(input, getNext);
@@ -274,6 +284,35 @@ namespace eagleboost.component.Interceptions
         result = getNext()(input, getNext);
       }
 
+      return result;
+    }
+
+    private IMethodReturn InterceptNotifyPropertyChanged(IMethodInvocation input, GetNextInterceptionBehaviorDelegate getNext)
+    {
+      var result = getNext()(input, getNext);
+
+      var changedHandler = PropertyChanged;
+      if (changedHandler != null)
+      {
+        var propertyName = (string) input.Arguments[0];
+        var changedArgs = GetChangedArgs(input, propertyName);
+        changedHandler(input.Target, changedArgs);
+      }
+
+      return result;
+    }
+
+    private IMethodReturn InterceptNotifyPropertyChanging(IMethodInvocation input, GetNextInterceptionBehaviorDelegate getNext)
+    {
+      var changingHandler = PropertyChanging;
+      if (changingHandler != null)
+      {
+        var propertyName = (string)input.Arguments[0];
+        var changingArgs = GetChangingArgs(input, propertyName);
+        changingHandler(input.Target, changingArgs);
+      }
+
+      var result = getNext()(input, getNext);
       return result;
     }
 
