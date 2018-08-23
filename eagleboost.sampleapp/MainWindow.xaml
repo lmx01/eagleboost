@@ -5,19 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:eagleboost.sharedcomponents.ViewModels;assembly=eagleboost.sharedcomponents"
         xmlns:controls="clr-namespace:eagleboost.UserExperience.Controls;assembly=eagleboost.UserExperience"
+        xmlns:indicators="clr-namespace:eagleboost.presentation.Controls.Indicators;assembly=eagleboost.presentation"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:ViewModel}"
         Title="MainWindow" Height="350" Width="525">
 
   <Window.Resources>
 
   </Window.Resources>
-  <StackPanel>
-    <TextBox Height="20" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"/>
-    <TextBox Height="20" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"/>
-    <TextBox Height="20" Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}"/>
-    <TextBlock Text="{Binding FullName}"></TextBlock>
-    <TextBlock Text="{Binding Error}"></TextBlock>
-    <Button Command="{Binding OkCommand}">Ok</Button>
-    <controls:StaThreadContainer ThreadName="ABC" DataContextType="{x:Type viewModels:ViewModel}" Height="100"/>
-  </StackPanel>
+  <TabControl SelectedIndex="1">
+    <TabControl.Items>
+      <TabItem Header="StaThreadContainer">
+        <StackPanel>
+          <TextBox Height="20" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBox Height="20" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBox Height="20" Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBlock Text="{Binding FullName}"></TextBlock>
+          <TextBlock Text="{Binding Error}"></TextBlock>
+          <Button Command="{Binding OkCommand}">Ok</Button>
+          <controls:StaThreadContainer ThreadName="ABC" DataContextType="{x:Type viewModels:ViewModel}" Height="100"/>
+        </StackPanel>
+      </TabItem>
+      
+      <TabItem Header="Busy Indicator">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+          </Grid.RowDefinitions>
+          <CheckBox x:Name="CheckBox" IsChecked="True">Is busy</CheckBox>
+          <indicators:BusyIndicator Grid.Row="1" IsBusy="{Binding IsChecked, ElementName=CheckBox}" BusyContent="dssLoading...">
+            <TextBox VerticalAlignment="Center" HorizontalAlignment="Center" Text="fjdkls;fjd"></TextBox>
+          </indicators:BusyIndicator>
+        </Grid>
+      </TabItem>
+    </TabControl.Items>
+  </TabControl>
 </Window>

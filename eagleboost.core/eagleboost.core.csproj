@@ -91,6 +91,7 @@
     <Compile Include="Extensions\EnumrableExt.cs" />
     <Compile Include="Extensions\ExpressionExt.cs" />
     <Compile Include="Extensions\ObjectExt.cs" />
+    <Compile Include="Extensions\ProgressExt.cs" />
     <Compile Include="Extensions\PropertyChangedEventArgsExt.cs" />
     <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Extensions\TypeExt.cs" />
@@ -100,9 +101,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tasks\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

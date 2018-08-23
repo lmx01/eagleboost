@@ -42,5 +42,24 @@
 
       cleanup.AddEvent(h => element.DataContextChanged += h, h => element.DataContextChanged -= h, handler);
     }
+
+    public static void SetupLoaded(this FrameworkElement element, Action action)
+    {
+      if (element.IsLoaded)
+      {
+        action();
+        return;
+      }
+
+      var cleanup = new DisposeManager();
+
+      RoutedEventHandler handler = (s, e) =>
+      {
+        cleanup.Dispose();
+        action();
+      };
+
+      cleanup.AddEvent(h => element.Loaded += h, h => element.Loaded -= h, handler);
+    }
   }
 }

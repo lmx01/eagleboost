@@ -83,13 +83,27 @@
     <Compile Include="Contracts\DispatcherProvider.Ext.cs">
       <DependentUpon>IDispatcherProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="Contracts\IBusyStatus.cs" />
     <Compile Include="Contracts\IDispatcherProvider.cs" />
     <Compile Include="Contracts\IPreviewSelectionChange.cs" />
+    <Compile Include="Controls\DataGrids\DataGridPrioritySorting.cs" />
+    <Compile Include="Controls\DataGrids\DataGridPrioritySortingItem.cs" />
+    <Compile Include="Controls\DataGrids\IColumnComparer.cs" />
+    <Compile Include="Controls\Indicators\BusyIndicator.cs" />
+    <Compile Include="Controls\Indicators\BusyIndicatorOverlay.xaml.cs">
+      <DependentUpon>BusyIndicatorOverlay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Indicators\BusyStatusReceiver.cs" />
+    <Compile Include="Controls\Indicators\CircularProgressBar.xaml.cs">
+      <DependentUpon>CircularProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OverlayAdorner.cs" />
     <Compile Include="Converters\ConverterMarkupExtension.cs" />
     <Compile Include="Converters\HasTextConverter.cs" />
     <Compile Include="Converters\LeftMarginMultiplierConverter .cs" />
     <Compile Include="Converters\StatefulConverterMarkupExtension.cs" />
     <Compile Include="Converters\ValueEqualityConverter.cs" />
+    <Compile Include="Extensions\BusyStatusExt.cs" />
     <Compile Include="Extensions\DependencyObjectExt.cs" />
     <Compile Include="Extensions\DispatcherExt.cs" />
     <Compile Include="Extensions\FrameworkElementExt.cs" />
@@ -101,6 +115,11 @@
     <Compile Include="Interactivity\ViewControllerBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\DispatcherProvider.cs" />
+    <Compile Include="TreeView\ITreeNode.cs" />
+    <Compile Include="TreeView\ITreeNodesOperation.cs" />
+    <Compile Include="TreeView\TreeNode.cs" />
+    <Compile Include="TreeView\TreeNodeContainer.cs" />
+    <Compile Include="TreeView\TreeNodeData.cs" />
     <Compile Include="Utils\ElementFromPoint.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +131,16 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\Indicators\BusyIndicatorOverlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Indicators\CircularProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
