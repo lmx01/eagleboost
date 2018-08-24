@@ -16,16 +16,6 @@
       <RowDefinition/>
       <RowDefinition/>
     </Grid.RowDefinitions>
-    <!--<Border Background="White" Grid.RowSpan="2">
-      <Border Opacity="0.5" >
-        <Border.Effect>
-          <BlurEffect Radius="3"/>
-        </Border.Effect>
-        <Border.Background>
-          <VisualBrush Visual="{Binding OverlaySource, RelativeSource={RelativeSource AncestorType=local:BusyIndicatorOverlay}}" Stretch="None" />
-        </Border.Background>
-      </Border>
-    </Border>-->
     <Rectangle Grid.RowSpan="2" Fill="Black" Opacity="0.5"/>
     <StackPanel Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center">
       <Viewbox Height="50" Width="50">

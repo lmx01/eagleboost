@@ -20,7 +20,7 @@ namespace eagleboost.presentation.TreeView
 
     #endregion Statics
 
-    protected static readonly TreeNode DummyChild = new TreeNode("Dummy");
+    protected static readonly DummyTreeNode DummyChild = new DummyTreeNode();
 
     private readonly object _dataItem;
     private readonly TreeNodeContainer _parent;
@@ -31,7 +31,7 @@ namespace eagleboost.presentation.TreeView
     private bool _isSelected;
     private bool _isExpanded;
 
-    private TreeNode(string name)
+    protected TreeNode(string name)
     {
       _name = name;
     }

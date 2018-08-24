@@ -115,6 +115,7 @@
     <Compile Include="Interactivity\ViewControllerBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\DispatcherProvider.cs" />
+    <Compile Include="TreeView\DummyTreeNode.cs" />
     <Compile Include="TreeView\ITreeNode.cs" />
     <Compile Include="TreeView\ITreeNodesOperation.cs" />
     <Compile Include="TreeView\TreeNode.cs" />
