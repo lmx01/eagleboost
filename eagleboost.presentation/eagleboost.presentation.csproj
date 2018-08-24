@@ -75,7 +75,9 @@
     <Compile Include="Behaviors\TextBoxSelectAll.cs" />
     <Compile Include="Behaviors\TreeViewSelectionChanging.cs" />
     <Compile Include="Behaviors\ViewModelLoader.cs" />
+    <Compile Include="Collections\CollectionViewModelBase.cs" />
     <Compile Include="Collections\FilterDescriptionCollection.cs" />
+    <Compile Include="Collections\ICollectionViewModel.cs" />
     <Compile Include="Collections\IFilterDescription.cs" />
     <Compile Include="Collections\LiveListCollectionView.cs" />
     <Compile Include="Commands\NotifiableCommand.cs" />
@@ -89,6 +91,8 @@
     <Compile Include="Controls\DataGrids\DataGridPrioritySorting.cs" />
     <Compile Include="Controls\DataGrids\DataGridPrioritySortingItem.cs" />
     <Compile Include="Controls\DataGrids\IColumnComparer.cs" />
+    <Compile Include="Contracts\ISelectedItemsSupport.cs" />
+    <Compile Include="Controls\DataGrids\DataGridSelectedItems.cs" />
     <Compile Include="Controls\Indicators\BusyIndicator.cs" />
     <Compile Include="Controls\Indicators\BusyIndicatorOverlay.xaml.cs">
       <DependentUpon>BusyIndicatorOverlay.xaml</DependentUpon>
@@ -115,13 +119,14 @@
     <Compile Include="Interactivity\ViewControllerBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\DispatcherProvider.cs" />
-    <Compile Include="TreeView\DummyTreeNode.cs" />
-    <Compile Include="TreeView\ITreeNode.cs" />
-    <Compile Include="TreeView\ITreeNodesOperation.cs" />
-    <Compile Include="TreeView\TreeNode.cs" />
-    <Compile Include="TreeView\TreeNodeContainer.cs" />
-    <Compile Include="TreeView\TreeNodeData.cs" />
+    <Compile Include="Controls\TreeView\DummyTreeNode.cs" />
+    <Compile Include="Controls\TreeView\ITreeNode.cs" />
+    <Compile Include="Controls\TreeView\ITreeNodesOperation.cs" />
+    <Compile Include="Controls\TreeView\TreeNode.cs" />
+    <Compile Include="Controls\TreeView\TreeNodeContainer.cs" />
+    <Compile Include="Controls\TreeView\TreeNodeData.cs" />
     <Compile Include="Utils\ElementFromPoint.cs" />
+    <Compile Include="Utils\MultiSelectorHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\eagleboost.core\eagleboost.core.csproj">

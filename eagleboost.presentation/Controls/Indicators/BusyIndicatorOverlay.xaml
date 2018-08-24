@@ -21,7 +21,10 @@
       <Viewbox Height="50" Width="50">
         <local:CircularProgressBar Visibility="{Binding IsBusy, Converter={StaticResource ToVisibilityConverter}, RelativeSource={RelativeSource AncestorType=local:BusyIndicatorOverlay}}"/>
       </Viewbox>
-      <ContentControl HorizontalAlignment="Center" Margin="0,10,0,0" Content="{Binding BusyContent, RelativeSource={RelativeSource AncestorType=local:BusyIndicatorOverlay}}"/>
+      <ContentControl HorizontalAlignment="Center" Margin="0,10,0,0" 
+                      Content="{Binding BusyContent, RelativeSource={RelativeSource AncestorType=local:BusyIndicatorOverlay}}"
+                      ContentTemplate="{Binding BusyContentTemplate, RelativeSource={RelativeSource AncestorType=local:BusyIndicatorOverlay}}"
+                      ContentTemplateSelector="{Binding BusyContentTemplateSelector, RelativeSource={RelativeSource AncestorType=local:BusyIndicatorOverlay}}"/>
     </StackPanel>
   </Grid>
 

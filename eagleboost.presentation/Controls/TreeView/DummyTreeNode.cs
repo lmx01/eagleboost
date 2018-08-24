@@ -2,7 +2,7 @@
 // E-MAIL : eagleboost@msn.com
 // Creation :2018-08-23 11:21 PM
 
-namespace eagleboost.presentation.TreeView
+namespace eagleboost.presentation.Controls.TreeView
 {
   public class DummyTreeNode : TreeNode
   {

@@ -19,7 +19,9 @@
     {
       _overlay = new BusyIndicatorOverlay();
       _overlay.SetBinding(BusyIndicatorOverlay.IsBusyProperty, new Binding(IsBusyProperty.Name) {Source = this});
-      _overlay.SetBinding(BusyIndicatorOverlay.BusyContentProperty, new Binding(BusyContentProperty.Name) {Source = this});
+      _overlay.SetBinding(BusyIndicatorOverlay.BusyContentProperty, new Binding(BusyContentProperty.Name) { Source = this });
+      _overlay.SetBinding(BusyIndicatorOverlay.BusyContentTemplateProperty, new Binding(BusyContentTemplateProperty.Name) { Source = this });
+      _overlay.SetBinding(BusyIndicatorOverlay.BusyContentTemplateSelectorProperty, new Binding(BusyContentTemplateSelectorProperty.Name) { Source = this });
       _overlay.SetBinding(BusyIndicatorOverlay.OverlaySourceProperty, new Binding(ContentProperty.Name) {Source = this});
 
       this.SetupDataContextChanged<BusyStatusReceiver>(OnDataContextChanged);
@@ -49,6 +51,23 @@
       set { SetValue(BusyContentProperty, value); }
     }
 
+    public static readonly DependencyProperty BusyContentTemplateProperty = DependencyProperty.Register(
+      "BusyContentTemplate", typeof(DataTemplate), typeof(BusyIndicator));
+
+    public DataTemplate BusyContentTemplate
+    {
+      get { return (DataTemplate)GetValue(BusyContentTemplateProperty); }
+      set { SetValue(BusyContentTemplateProperty, value); }
+    }
+
+    public static readonly DependencyProperty BusyContentTemplateSelectorProperty = DependencyProperty.Register(
+      "BusyContentTemplateSelector", typeof(DataTemplateSelector), typeof(BusyIndicator));
+
+    public DataTemplateSelector BusyContentTemplateSelector
+    {
+      get { return (DataTemplateSelector)GetValue(BusyContentTemplateSelectorProperty); }
+      set { SetValue(BusyContentTemplateSelectorProperty, value); }
+    }
     #region Private Methods
     private void OnIsBusyChanged()
     {

@@ -2,7 +2,7 @@
 // E-MAIL : eagleboost@msn.com
 // Creation :2018-08-19 11:51 PM
 
-namespace eagleboost.presentation.TreeView
+namespace eagleboost.presentation.Controls.TreeView
 {
   using System;
   using System.Collections.Generic;

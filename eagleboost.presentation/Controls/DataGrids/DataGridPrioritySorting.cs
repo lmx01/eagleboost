@@ -8,21 +8,37 @@ namespace eagleboost.presentation.Controls.DataGrids
   using System.Collections.ObjectModel;
   using System.ComponentModel;
   using System.Linq;
+  using System.Windows;
   using System.Windows.Controls;
   using System.Windows.Data;
   using System.Windows.Interactivity;
   using System.Windows.Markup;
   using eagleboost.core.Extensions;
+  using eagleboost.core.Reflection;
 
   [ContentProperty("Items")]
   public class DataGridPrioritySorting : Behavior<DataGrid>
   {
+    #region Statis
+    private static readonly Action<DataGrid, DataGridColumn> PerformSort =typeof(DataGrid).CreateAction<DataGrid, DataGridColumn>("PerformSort");
+    #endregion Statis
+
     #region ctors
     public DataGridPrioritySorting()
     {
       Items = new Collection<DataGridPrioritySortingItem>();
     }
     #endregion ctors
+
+    #region Dependency Properties
+    private static readonly DependencyProperty ItemsSourceProperty = ItemsControl.ItemsSourceProperty
+      .AddOwner(typeof(DataGridPrioritySorting), new PropertyMetadata(OnItemsSourceChanged));
+
+    private static void OnItemsSourceChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+    {
+      ((DataGridPrioritySorting)obj).OnItemsSourceChanged();
+    }
+    #endregion Dependency Properties
 
     #region Public Properties
     public Collection<DataGridPrioritySortingItem> Items { get; set; }
@@ -38,6 +54,19 @@ namespace eagleboost.presentation.Controls.DataGrids
 
       var grid = AssociatedObject;
       grid.Sorting += HandleGridSorting;
+
+      BindingOperations.SetBinding(this, ItemsSourceProperty, new Binding(ItemsControl.ItemsSourceProperty.Name) {Source = grid});
+    }
+
+    private void OnItemsSourceChanged()
+    {
+      var grid = AssociatedObject;
+      if (grid.ItemsSource != null && grid.Items.SortDescriptions.Count > 0)
+      {
+        var columnName = grid.Items.SortDescriptions[0].PropertyName;
+        var column = grid.Columns.First(i => i.SortMemberPath == columnName);
+        PerformSort(grid, column);
+      }
     }
 
     protected override void OnDetaching()
@@ -45,6 +74,7 @@ namespace eagleboost.presentation.Controls.DataGrids
       var grid = AssociatedObject;
       if (grid != null)
       {
+        BindingOperations.ClearBinding(this, ItemsSourceProperty);
         grid.Sorting -= HandleGridSorting;
       }
 

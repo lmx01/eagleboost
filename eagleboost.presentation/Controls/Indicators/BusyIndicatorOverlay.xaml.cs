@@ -1,6 +1,7 @@
 ﻿namespace eagleboost.presentation.Controls.Indicators
 {
   using System.Windows;
+  using System.Windows.Controls;
 
   /// <summary>
   /// Interaction logic for BusyIndicatorOverlay.xaml
@@ -28,6 +29,24 @@
     {
       get { return GetValue(BusyContentProperty); }
       set { SetValue(BusyContentProperty, value); }
+    }
+
+    public static readonly DependencyProperty BusyContentTemplateProperty = DependencyProperty.Register(
+      "BusyContentTemplate", typeof(DataTemplate), typeof(BusyIndicatorOverlay));
+
+    public DataTemplate BusyContentTemplate
+    {
+      get { return (DataTemplate)GetValue(BusyContentTemplateProperty); }
+      set { SetValue(BusyContentTemplateProperty, value); }
+    }
+
+    public static readonly DependencyProperty BusyContentTemplateSelectorProperty = DependencyProperty.Register(
+      "BusyContentTemplateSelector", typeof(DataTemplateSelector), typeof(BusyIndicatorOverlay));
+
+    public DataTemplateSelector BusyContentTemplateSelector
+    {
+      get { return (DataTemplateSelector)GetValue(BusyContentTemplateSelectorProperty); }
+      set { SetValue(BusyContentTemplateSelectorProperty, value); }
     }
 
     public static readonly DependencyProperty OverlaySourceProperty = DependencyProperty.Register(
