@@ -9,15 +9,16 @@ namespace eagleboost.presentation.Collections
   using System.Collections.ObjectModel;
   using System.ComponentModel;
   using System.Linq;
+  using System.Windows.Input;
   using eagleboost.core.ComponentModel;
   using eagleboost.presentation.Contracts;
-  using eagleboost.presentation.Controls.DataGrids;
+  using Prism.Commands;
 
   /// <summary>
   /// CollectionViewModelBase
   /// </summary>
   /// <typeparam name="T"></typeparam>
-  public abstract class CollectionViewModelBase<T> : NotifyPropertyChangedBase, ICollectionViewModel<T>, ISelectedItemsSupport<T> where T : class
+  public abstract class CollectionViewModelBase<T> : NotifyPropertyChangedBase, ICollectionViewModel<T>, ISelectedItemsSupport<T>, ISelectItemReceiver where T : class
   {
     #region Statics
     protected static readonly PropertyChangedEventArgs SelectedItemsArgs = GetChangedArgs<CollectionViewModelBase<T>>(o => o.SelectedItems);
@@ -28,6 +29,7 @@ namespace eagleboost.presentation.Collections
     private ObservableCollection<T> _selectedItems;
     private ObservableCollection<T> _items;
     private ICollectionView _itemsView;
+    private ICommand _itemSelectedCommand;
     #endregion Declarations
 
     #region ISelectedItemsSupport
@@ -94,14 +96,31 @@ namespace eagleboost.presentation.Collections
     }
     #endregion ICollectionViewModel
 
-    #region Virtuals
+    #region ISelectItemReceiver
+    public ICommand SelectItemCommand
+    {
+      get { return _itemSelectedCommand ?? (_itemSelectedCommand = new DelegateCommand<T>(HandleItemSelected)); }
+    }
+    #endregion ISelectItemReceiver
 
+    #region Virtuals
     protected virtual ObservableCollection<T> GetItemsCollection()
     {
       return new ObservableCollection<T>();
     }
 
     protected abstract ICollectionView CreateItemsView();
+
+    protected virtual void OnItemSelected(T item)
+    {
+    }
     #endregion Virtuals
+
+    #region Private Methods
+    private void HandleItemSelected(T item)
+    {
+      OnItemSelected(item);
+    }
+    #endregion Private Methods
   }
 }

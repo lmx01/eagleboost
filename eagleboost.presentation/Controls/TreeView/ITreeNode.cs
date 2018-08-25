@@ -14,6 +14,8 @@ namespace eagleboost.presentation.Controls.TreeView
 
     object DataItem { get; }
 
+    ITreeNode Parent { get; }
+
     IReadOnlyCollection<ITreeNode> Children { get; }
 
     bool IsExpanded { get; set; }
@@ -21,6 +23,8 @@ namespace eagleboost.presentation.Controls.TreeView
     bool IsBeingExpanded { get; }
 
     bool IsSelected { get; set; }
+
+    bool IsEmpty { get; }
     #endregion    
   }
 }

@@ -11,17 +11,16 @@ namespace eagleboost.presentation.Controls.TreeView
   using eagleboost.core.ComponentModel;
   using eagleboost.presentation.Collections;
 
+  /// <summary>
+  /// TreeNode
+  /// </summary>
   public class TreeNode : NotifyPropertyChangedBase, ITreeNode, IEquatable<TreeNode>
   {
     #region Statics
-
-    public static readonly PropertyChangedEventArgs IsExpandedArgs = GetChangedArgs<TreeNode>(o => o.IsExpanded);
-    public static readonly PropertyChangedEventArgs IsSelectedArgs = GetChangedArgs<TreeNode>(o => o.IsSelected);
-
+    protected static readonly DummyTreeNode DummyChild = new DummyTreeNode();
     #endregion Statics
 
-    protected static readonly DummyTreeNode DummyChild = new DummyTreeNode();
-
+    #region Declarations
     private readonly object _dataItem;
     private readonly TreeNodeContainer _parent;
     private readonly string _name;
@@ -31,7 +30,9 @@ namespace eagleboost.presentation.Controls.TreeView
     private bool _isSelected;
     private bool _isExpanded;
     private bool _isBeingExpanded;
+    #endregion Declarations
 
+    #region ctors
     protected TreeNode(string name)
     {
       _name = name;
@@ -45,17 +46,18 @@ namespace eagleboost.presentation.Controls.TreeView
       _childrenView = new LiveListCollectionView(_children) {Filter = o => treeNodesOperation.Filter((ITreeNode) o)};
       _childrenView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
-      if (_dataItem != null)
-      {
-        _name = _dataItem.ToString();// _dataItem.Name;
-      }
+      _name = _dataItem.ToString();
     }
+    #endregion ctors
 
+    #region Protected Properties
     protected ITreeNodesOperation TreeNodesOperation
     {
       get { return _treeNodesOperation; }
     }
+    #endregion Protected Properties
 
+    #region ITreeNode
     public string Name
     {
       get { return _name; }
@@ -94,15 +96,44 @@ namespace eagleboost.presentation.Controls.TreeView
       get { return _childrenView.Count == 0; }
     }
 
-    public virtual bool HasDummyChild
-    {
-      get { return false; }
-    }
-
     public bool IsSelected
     {
       get { return _isSelected; }
       set { SetValue(ref _isSelected, value); }
+    }
+
+    ITreeNode ITreeNode.Parent
+    {
+      get { return Parent; }
+    }
+
+    IReadOnlyCollection<ITreeNode> ITreeNode.Children
+    {
+      get { return Children; }
+    }
+    #endregion ITreeNode
+
+    #region IEquatable
+    public bool Equals(TreeNode other)
+    {
+      if (other == null)
+      {
+        return false;
+      }
+
+      return other.DataItem == DataItem;
+    }
+
+    public override int GetHashCode()
+    {
+      return _dataItem != null ? _dataItem.GetHashCode() ^ Name.GetHashCode() : Name.GetHashCode();
+    }
+    #endregion IEquatable
+
+    #region Public Properties
+    public virtual bool HasDummyChild
+    {
+      get { return false; }
     }
 
     public TreeNode Parent
@@ -119,36 +150,19 @@ namespace eagleboost.presentation.Controls.TreeView
     {
       get { return _childrenView; }
     }
-
-    IReadOnlyCollection<ITreeNode> ITreeNode.Children
-    {
-      get { return Children; }
-    }
-
-
-    public virtual void Refresh()
-    {
-    }
-
-    public bool Equals(TreeNode other)
-    {
-      if (other == null)
-      {
-        return false;
-      }
-
-      return other.DataItem == DataItem;
-    }
-
-    public override int GetHashCode()
-    {
-      return _dataItem != null ? _dataItem.GetHashCode() ^ Name.GetHashCode() : Name.GetHashCode();
-    }
+    #endregion Public Properties
 
     #region Virtuals
     protected virtual void OnIsExpandedChanged()
     {
     }
     #endregion Virtuals
+
+    #region Overrides
+    public override string ToString()
+    {
+      return Name;
+    }
+    #endregion Overrides
   }
 }

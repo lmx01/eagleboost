@@ -4,6 +4,9 @@
 
 namespace eagleboost.presentation.Controls.TreeView
 {
+  /// <summary>
+  /// DummyTreeNode
+  /// </summary>
   public class DummyTreeNode : TreeNode
   {
     public DummyTreeNode() : base("Dummy")

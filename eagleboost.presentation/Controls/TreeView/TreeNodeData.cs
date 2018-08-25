@@ -4,10 +4,15 @@
 
 namespace eagleboost.presentation.Controls.TreeView
 {
+  /// <summary>
+  /// TreeNodeData
+  /// </summary>
   public class TreeNodeData : TreeNode
   {
-    public TreeNodeData(object shellObj, TreeNodeContainer parent, ITreeNodesOperation shellItemsOperation) : base(shellObj, parent, shellItemsOperation)
+    #region ctors
+    public TreeNodeData(object dataItem, TreeNodeContainer parent, ITreeNodesOperation shellItemsOperation) : base(dataItem, parent, shellItemsOperation)
     {
     }
+    #endregion ctors
   }
 }

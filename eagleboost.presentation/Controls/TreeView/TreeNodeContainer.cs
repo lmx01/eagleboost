@@ -8,21 +8,33 @@ namespace eagleboost.presentation.Controls.TreeView
   using System.Collections.ObjectModel;
   using System.Threading.Tasks;
 
+  /// <summary>
+  /// TreeNodeContainer
+  /// </summary>
   public class TreeNodeContainer : TreeNode
   {
+    #region Declarations
     private TaskCompletionSource<IEnumerable<ITreeNode>> _childrenLoadedTcs;
+    #endregion Declarations
 
-    public TreeNodeContainer(object shellObj, TreeNodeContainer parent, ITreeNodesOperation shellItemsOperation) : base(shellObj, parent, shellItemsOperation)
+    #region ctors
+    public TreeNodeContainer(object dataItem, TreeNodeContainer parent, ITreeNodesOperation shellItemsOperation) : base(dataItem, parent, shellItemsOperation)
     {
       Children.Add(DummyChild);
     }
+    #endregion ctors
 
-    public override bool HasDummyChild
+    #region Public Methods
+    public async Task ExpandAsync()
     {
-      get { return Children.Count == 1 && Children[0] == DummyChild; }
+      if (!IsExpanded)
+      {
+        await LoadChildrenAsync().ConfigureAwait(true);
+        IsExpanded = true;
+      }
     }
 
-    protected override async void OnIsExpandedChanged()
+    public async Task LoadChildrenAsync()
     {
       if (HasDummyChild)
       {
@@ -30,7 +42,7 @@ namespace eagleboost.presentation.Controls.TreeView
         try
         {
           Children.Remove(DummyChild);
-          var items = await LoadChildrenAsync().ConfigureAwait(true);
+          var items = await DoLoadChildrenAsync().ConfigureAwait(true);
           Children.AddRange(items);
         }
         finally
@@ -39,13 +51,22 @@ namespace eagleboost.presentation.Controls.TreeView
         }
       }
     }
+    #endregion Public Methods
 
-    public override void Refresh()
+    #region Overrides
+    public override bool HasDummyChild
     {
-      ChildrenView.Refresh();
+      get { return Children.Count == 1 && Children[0] == DummyChild; }
     }
 
-    private Task<IEnumerable<ITreeNode>> LoadChildrenAsync()
+    protected override void OnIsExpandedChanged()
+    {
+      LoadChildrenAsync().ConfigureAwait(false);
+    }
+    #endregion Overrides
+
+    #region Private Methods
+    private Task<IEnumerable<ITreeNode>> DoLoadChildrenAsync()
     {
       if (_childrenLoadedTcs == null)
       {
@@ -59,5 +80,6 @@ namespace eagleboost.presentation.Controls.TreeView
 
       return _childrenLoadedTcs.Task;
     }
+    #endregion Private Methods
   }
 }
