@@ -30,6 +30,7 @@ namespace eagleboost.presentation.Controls.TreeView
     private readonly LiveListCollectionView _childrenView;
     private bool _isSelected;
     private bool _isExpanded;
+    private bool _isBeingExpanded;
 
     protected TreeNode(string name)
     {
@@ -80,6 +81,12 @@ namespace eagleboost.presentation.Controls.TreeView
 
         OnIsExpandedChanged();
       }
+    }
+
+    public bool IsBeingExpanded
+    {
+      get { return _isBeingExpanded; }
+      protected set { SetValue(ref _isBeingExpanded, value); }
     }
 
     public bool IsEmpty

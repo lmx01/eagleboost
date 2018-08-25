@@ -18,6 +18,8 @@ namespace eagleboost.presentation.Controls.TreeView
 
     bool IsExpanded { get; set; }
 
+    bool IsBeingExpanded { get; }
+
     bool IsSelected { get; set; }
     #endregion    
   }

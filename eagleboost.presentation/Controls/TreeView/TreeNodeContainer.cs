@@ -26,17 +26,23 @@ namespace eagleboost.presentation.Controls.TreeView
     {
       if (HasDummyChild)
       {
-        Children.Remove(DummyChild);
-        var items = await LoadChildrenAsync().ConfigureAwait(true);
-        Children.AddRange(items);
+        IsBeingExpanded = true;
+        try
+        {
+          Children.Remove(DummyChild);
+          var items = await LoadChildrenAsync().ConfigureAwait(true);
+          Children.AddRange(items);
+        }
+        finally
+        {
+          IsBeingExpanded = false;
+        }
       }
     }
 
     public override void Refresh()
     {
-      {
-        ChildrenView.Refresh();
-      }
+      ChildrenView.Refresh();
     }
 
     private Task<IEnumerable<ITreeNode>> LoadChildrenAsync()
