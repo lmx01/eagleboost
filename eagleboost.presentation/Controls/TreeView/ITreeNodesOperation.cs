@@ -10,7 +10,7 @@ namespace eagleboost.presentation.Controls.TreeView
   public interface ITreeNodesOperation
   {
     #region Methods
-    Task<IEnumerable<ITreeNode>> CreateChildrenAsync(object parentDataItem, TreeNodeContainer parent);
+    Task<IReadOnlyList<ITreeNode>> CreateChildrenAsync(object parentDataItem, TreeNodeContainer parent);
 
     bool Filter(ITreeNode item);
     #endregion Methods    

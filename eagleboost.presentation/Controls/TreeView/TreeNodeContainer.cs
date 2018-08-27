@@ -7,6 +7,8 @@ namespace eagleboost.presentation.Controls.TreeView
   using System.Collections.Generic;
   using System.Collections.ObjectModel;
   using System.Threading.Tasks;
+  using System.Windows.Threading;
+  using eagleboost.presentation.Extensions;
 
   /// <summary>
   /// TreeNodeContainer
@@ -14,7 +16,8 @@ namespace eagleboost.presentation.Controls.TreeView
   public class TreeNodeContainer : TreeNode
   {
     #region Declarations
-    private TaskCompletionSource<IEnumerable<ITreeNode>> _childrenLoadedTcs;
+    private TaskCompletionSource<IReadOnlyList<ITreeNode>> _childrenLoadedTcs;
+    private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
     #endregion Declarations
 
     #region ctors
@@ -34,22 +37,36 @@ namespace eagleboost.presentation.Controls.TreeView
       }
     }
 
-    public async Task LoadChildrenAsync()
+    public Task LoadChildrenAsync()
     {
+      _dispatcher.VerifyAccess();
+
+      if (_childrenLoadedTcs == null)
+      {
+        _childrenLoadedTcs = new TaskCompletionSource<IReadOnlyList<ITreeNode>>();
+        if (!HasDummyChild)
+        {
+          _childrenLoadedTcs.TrySetResult(new ITreeNode[0]);
+        }
+      }
+
       if (HasDummyChild)
       {
         IsBeingExpanded = true;
-        try
+        Children.Remove(DummyChild);
+        DoLoadChildrenAsync().ContinueWith(t =>
         {
-          Children.Remove(DummyChild);
-          var items = await DoLoadChildrenAsync().ConfigureAwait(true);
-          Children.AddRange(items);
-        }
-        finally
-        {
-          IsBeingExpanded = false;
-        }
+          var items = t.Result;
+          _dispatcher.BeginInvoke(() =>
+          {
+            Children.AddRange(items);
+            IsBeingExpanded = false;
+            _childrenLoadedTcs.TrySetResult(items);
+          });
+        });
       }
+
+      return _childrenLoadedTcs.Task;
     }
     #endregion Public Methods
 
@@ -61,24 +78,14 @@ namespace eagleboost.presentation.Controls.TreeView
 
     protected override void OnIsExpandedChanged()
     {
-      LoadChildrenAsync().ConfigureAwait(false);
+      LoadChildrenAsync().ConfigureAwait(true);
     }
     #endregion Overrides
 
     #region Private Methods
-    private Task<IEnumerable<ITreeNode>> DoLoadChildrenAsync()
+    private Task<IReadOnlyList<ITreeNode>> DoLoadChildrenAsync()
     {
-      if (_childrenLoadedTcs == null)
-      {
-        _childrenLoadedTcs = new TaskCompletionSource<IEnumerable<ITreeNode>>();
-        Task.Run(async () =>
-        {
-          var items = await TreeNodesOperation.CreateChildrenAsync(DataItem, this).ConfigureAwait(true);
-          _childrenLoadedTcs.TrySetResult(items);
-        });
-      }
-
-      return _childrenLoadedTcs.Task;
+      return TreeNodesOperation.CreateChildrenAsync(DataItem, this);
     }
     #endregion Private Methods
   }

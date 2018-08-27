@@ -14,5 +14,10 @@
     {
       return expr.GetMember();
     }
+
+    public static T CastTo<T>(this object obj) where T : class
+    {
+      return (T) obj;
+    }
   }
 }

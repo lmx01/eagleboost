@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\ClearButtonBehavior.cs" />
+    <Compile Include="Behaviors\ClosePopupButton.cs" />
     <Compile Include="Behaviors\SelectedItemSync.cs" />
     <Compile Include="Behaviors\TextBoxClearButtonBehavior.cs" />
     <Compile Include="Behaviors\TextboxEx.cs" />
@@ -111,11 +112,13 @@
     </Compile>
     <Compile Include="Controls\OverlayAdorner.cs" />
     <Compile Include="Controls\Selectors\SelectorItemDoubleClick.cs" />
+    <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
     <Compile Include="Converters\ConverterMarkupExtension.cs" />
     <Compile Include="Converters\HasTextConverter.cs" />
     <Compile Include="Converters\LeftMarginMultiplierConverter .cs" />
     <Compile Include="Converters\StatefulConverterMarkupExtension.cs" />
     <Compile Include="Converters\ValueEqualityConverter.cs" />
+    <Compile Include="Controls\NormalOrLastItemTemplateSelector.cs" />
     <Compile Include="Extensions\BusyStatusExt.cs" />
     <Compile Include="Extensions\CommandExt.cs" />
     <Compile Include="Extensions\DependencyObjectExt.cs" />

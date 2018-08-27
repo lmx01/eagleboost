@@ -46,7 +46,7 @@ namespace eagleboost.presentation.Controls.TreeView
       _childrenView = new LiveListCollectionView(_children) {Filter = o => treeNodesOperation.Filter((ITreeNode) o)};
       _childrenView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
-      _name = _dataItem.ToString();
+      _name = _dataItem is IDisplayItem ? ((IDisplayItem) _dataItem).DisplayName : _dataItem.ToString();
     }
     #endregion ctors
 
@@ -73,15 +73,16 @@ namespace eagleboost.presentation.Controls.TreeView
       get { return _isExpanded; }
       set
       {
-        SetValue(ref _isExpanded, value);
-
-        // Expand all the way up to the root.
-        if (_isExpanded && _parent != null)
+        if (SetValue(ref _isExpanded, value))
         {
-          _parent.IsExpanded = true;
-        }
+          // Expand all the way up to the root.
+          if (_isExpanded && _parent != null)
+          {
+            _parent.IsExpanded = true;
+          }
 
-        OnIsExpandedChanged();
+          OnIsExpandedChanged();
+        }
       }
     }
 
@@ -99,7 +100,17 @@ namespace eagleboost.presentation.Controls.TreeView
     public bool IsSelected
     {
       get { return _isSelected; }
-      set { SetValue(ref _isSelected, value); }
+      set
+      {
+        if (SetValue(ref _isSelected, value))
+        {
+          // Expand all the way up to the root.
+          if (_isSelected && _parent != null)
+          {
+            _parent.IsExpanded = true;
+          }
+        }
+      }
     }
 
     ITreeNode ITreeNode.Parent
