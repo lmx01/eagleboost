@@ -8,7 +8,7 @@ namespace eagleboost.core.Extensions
 
   public static class FileExt
   {
-    private static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB" };
+    private static readonly string[] SizeSuffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
 
     public static string ToReadableSize(this long byteSize)
     {
