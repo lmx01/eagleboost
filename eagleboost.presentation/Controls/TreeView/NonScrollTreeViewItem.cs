@@ -9,7 +9,8 @@ namespace eagleboost.presentation.Controls.TreeView
   using eagleboost.presentation.Extensions;
 
   /// <summary>
-  /// NonScrollTreeViewItem
+  /// NonScrollTreeViewItem - When click on a TreeViewItem to select it, if horizontal scroll bar is visible, the TreeView would automatically scroll to the right to
+  /// just show the left most of the selected item, we don't want that
   /// </summary>
   public static class NonScrollTreeViewItem
   {
@@ -47,14 +48,10 @@ namespace eagleboost.presentation.Controls.TreeView
       var treeViewItem = (TreeViewItem)sender;
       if (treeViewItem.Parent == null)
       {
-        var treeView = treeViewItem.FindParent<TreeView>();
-        if (treeView != null)
+        var scrollViewer = treeViewItem.FindParent<ScrollViewer>();
+        if (scrollViewer != null)
         {
-          var scrollViewer = treeView.Template.FindName("_tv_scrollviewer_", treeView) as ScrollViewer;
-          if (scrollViewer != null)
-          {
-            treeView.Dispatcher.BeginInvoke(() => scrollViewer.ScrollToLeftEnd());
-          }
+          treeViewItem.Dispatcher.BeginInvoke(() => scrollViewer.ScrollToLeftEnd());
         }
       }
     }

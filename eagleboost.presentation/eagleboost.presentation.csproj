@@ -112,6 +112,7 @@
     </Compile>
     <Compile Include="Controls\OverlayAdorner.cs" />
     <Compile Include="Controls\Selectors\SelectorItemDoubleClick.cs" />
+    <Compile Include="Controls\TreeView\BringSelectedTreeItemIntoView.cs" />
     <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
     <Compile Include="Converters\ConverterMarkupExtension.cs" />
     <Compile Include="Converters\HasTextConverter.cs" />

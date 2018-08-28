@@ -98,6 +98,7 @@
     <Compile Include="Extensions\PropertyChangedEventArgsExt.cs" />
     <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Extensions\TypeExt.cs" />
+    <Compile Include="Types\FileSize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\TypeExt.cs" />
     <Compile Include="Utils\EmbeddedResourceLoader.cs" />

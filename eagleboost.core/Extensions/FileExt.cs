@@ -9,7 +9,15 @@ namespace eagleboost.core.Extensions
   public static class FileExt
   {
     private static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB" };
+
     public static string ToReadableSize(this long byteSize)
+    {
+      string sizeStr;
+      string sizeUnit;
+      return byteSize.ToReadableSize(out sizeStr, out sizeUnit);
+    }
+
+    public static string ToReadableSize(this long byteSize, out string sizeStr, out string sizeUnit)
     {
       var order = 0;
       double size = byteSize;
@@ -24,7 +32,9 @@ namespace eagleboost.core.Extensions
         size = Math.Floor(size);
       }
 
-      return string.Format("{0:0.#} {1}", size, SizeSuffixes[order]);
+      sizeStr = string.Format("{0:0.#}", size);
+      sizeUnit = SizeSuffixes[order];
+      return sizeStr + " " + sizeUnit;
     }
   }
 }
