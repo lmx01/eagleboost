@@ -45,6 +45,7 @@ namespace eagleboost.presentation.Interactivity
       var window = AssociatedObject;
       if (window != null)
       {
+        window.DialogResult = confirmed;
         window.Close();
       }
     }

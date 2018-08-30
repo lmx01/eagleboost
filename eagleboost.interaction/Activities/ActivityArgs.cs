@@ -1,6 +1,7 @@
 ﻿namespace eagleboost.interaction.Activities
 {
   using System.Collections.Generic;
+
   public class ActivityArgs : List<object>
   {
     #region ctors

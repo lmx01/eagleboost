@@ -1,0 +1,40 @@
+﻿<UserControl 
+  x:Class="eagleboost.presentation.Controls.InputBoxes.InputBox"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:inputBoxes="clr-namespace:eagleboost.presentation.Controls.InputBoxes"
+  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+  xmlns:interactivity="clr-namespace:eagleboost.presentation.Interactivity"
+  mc:Ignorable="d" d:DesignHeight="450"  d:DesignWidth="757"
+  d:DataContext="{d:DesignInstance inputBoxes:InputBoxViewModel}">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Label Content="{Binding Description}"/>
+    <Grid Grid.Row="1" Grid.Column="0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Label Content="{Binding InputLabel}" Target="{Binding ElementName=TextBox}"/>
+      <TextBox x:Name="TextBox" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+    <Separator Grid.Row="2" Height="10"/>
+    <Grid Grid.Row="3" HorizontalAlignment="Right">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="74"/>
+        <ColumnDefinition Width="74"/>
+      </Grid.ColumnDefinitions>
+      <Button Content="{Binding OkText}" Command="{Binding OkCommand}"/>
+      <Button Grid.Column="1" Content="{Binding CancelText}" Command="{Binding CancelCommand}" Margin="4,0,0,0"/>
+    </Grid>
+  </Grid>
+
+</UserControl>

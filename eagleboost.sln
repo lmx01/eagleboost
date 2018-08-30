@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{84
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eagleboost.persistence", "eagleboost.persistence\eagleboost.persistence.csproj", "{CA821347-28A5-402E-BE78-3D2D8D4F79B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{F1C17A51-68AB-4440-956D-A1A43E9EC98D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1C17A51-68AB-4440-956D-A1A43E9EC98D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1C17A51-68AB-4440-956D-A1A43E9EC98D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA821347-28A5-402E-BE78-3D2D8D4F79B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA821347-28A5-402E-BE78-3D2D8D4F79B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA821347-28A5-402E-BE78-3D2D8D4F79B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA821347-28A5-402E-BE78-3D2D8D4F79B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +118,7 @@ Global
 		{2FE01131-FBCA-4F0A-88C6-A35E4900ECDC} = {7DBE73BB-1ED2-4160-A4E0-197E058043D8}
 		{D4A1C4F6-833B-4F0E-9BD0-5DDE39F45C59} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
 		{F1C17A51-68AB-4440-956D-A1A43E9EC98D} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
+		{CA821347-28A5-402E-BE78-3D2D8D4F79B6} = {0AEE1480-0DAB-481D-916D-7BAA1B163F6B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE11B503-33AC-4696-AF2F-6E132C8EBE12}

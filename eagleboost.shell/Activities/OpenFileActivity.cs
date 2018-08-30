@@ -1,4 +1,4 @@
-﻿namespace eagleboost.interaction.Shell.Activities
+﻿namespace eagleboost.shell.Activities
 {
   using eagleboost.interaction.Activities;
   using Microsoft.Win32;
