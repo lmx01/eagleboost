@@ -95,10 +95,6 @@
       <Project>{A118772D-121D-4CA3-B568-BCAFACCAE33F}</Project>
       <Name>eagleboost.presentation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\eagleboost.shell\eagleboost.shell.csproj">
-      <Project>{4515aa2f-b031-4018-afe9-29fe3e34255f}</Project>
-      <Name>eagleboost.shell</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

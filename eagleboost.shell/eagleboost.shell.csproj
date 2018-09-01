@@ -33,15 +33,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.10\lib\net45\CommonServiceLocator.dll</HintPath>
+    </Reference>
     <Reference Include="eagleboost.interaction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\output\Release\eagleboost.interaction.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Core.1.1.0.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -55,6 +62,27 @@
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.Abstractions, Version=3.3.1.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.10\lib\net45\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Configuration, Version=5.2.4.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.10\lib\net45\Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.8.10.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.10\lib\net45\Unity.Container.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception, Version=5.5.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.10\lib\net45\Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Interception.Configuration, Version=5.1.6.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.10\lib\net45\Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RegistrationByConvention, Version=2.1.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.10\lib\net45\Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ServiceLocation, Version=2.1.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.8.10\lib\net45\Unity.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -69,8 +97,14 @@
     <Compile Include="Controls\BrowseForFolder.xaml.cs">
       <DependentUpon>BrowseForFolder.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Options\SaveFileOptions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileSystems\Contracts\IFile.cs" />
+    <Compile Include="FileSystems\Contracts\IFileSystemTreeNodesOperation.cs" />
+    <Compile Include="FileSystems\Contracts\IFolder.cs" />
+    <Compile Include="FileSystems\Extensions\FileExt.cs" />
+    <Compile Include="FileSystems\Extensions\FileSystemTreeViewModelExt.cs" />
+    <Compile Include="FileSystems\Models\FileBase.cs" />
+    <Compile Include="FileSystems\TreeView\FileSystemTreeViewModel.cs" />
+    <Compile Include="FileSystems\TreeView\IFileSystemTreeViewModel.cs" />
     <Compile Include="ShellTreeView\Contracts\IShellItemsOperation.cs" />
     <Compile Include="ShellTreeView\Contracts\IShellTreeItem.cs" />
     <Compile Include="ShellTreeView\Data\ShellTreeContainerItem.cs" />
@@ -81,10 +115,23 @@
     <Compile Include="ShellTreeView\ViewModels\ShellTreeViewModel.OptionsHandler.cs">
       <DependentUpon>ShellTreeViewModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShellTreeView\ViewModels\ShellTreeViewOptions.cs" />
     <Compile Include="ShellTreeView\Views\ShellTreeView.xaml.cs">
       <DependentUpon>ShellTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ShellTreeView\ViewModels\ShellTreeViewOptions.cs" />
+    <Compile Include="Shell\Contracts\IWindowsShellFile.cs" />
+    <Compile Include="Shell\Contracts\IWindowsShellFolder.cs" />
+    <Compile Include="Shell\Models\WindowsShellRoot.cs" />
+    <Compile Include="Shell\Models\WindowsShellFile.cs" />
+    <Compile Include="Shell\ViewModels\WindowsShellTreeViewOptions.cs" />
+    <Compile Include="Shell\ViewModels\WindowsShellTreeViewModel.cs" />
+    <Compile Include="FileSystems\Types\FileType.cs" />
+    <Compile Include="Options\SaveFileOptions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Shell\Models\WindowsShellFolder.cs" />
+    <Compile Include="Shell\Views\WindowsShellTreeView.xaml.cs">
+      <DependentUpon>WindowsShellTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tools\ClipboardMonitor.cs" />
     <Compile Include="Tools\ShellIcon.cs" />
     <Compile Include="Tools\ShellIconManager.cs" />
@@ -104,10 +151,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ShellTreeView\Views\ShellTreeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="ShellTreeView\Views\ShellTreeViewResources.xaml">
+    <Page Include="Shell\Views\WindowsShellTreeView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -126,6 +173,7 @@
       <Name>eagleboost.presentation</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

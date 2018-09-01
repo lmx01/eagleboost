@@ -19,5 +19,10 @@
     {
       return (T) obj;
     }
+
+    public static bool IsNot<T>(this object obj)
+    {
+      return !(obj is T);
+    }
   }
 }
