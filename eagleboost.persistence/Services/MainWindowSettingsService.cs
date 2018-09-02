@@ -8,6 +8,7 @@ namespace eagleboost.persistence.Services
   using System.ComponentModel;
   using System.Windows;
   using eagleboost.persistence.Contracts;
+  using eagleboost.presentation.Win32;
 
   /// <summary>
   /// MainWindowSettingsService
@@ -54,15 +55,7 @@ namespace eagleboost.persistence.Services
     #region Private Methods
     private void SaveState(Window window)
     {
-      var state = new MainWindowState
-      {
-        WindowState = window.WindowState,
-        Top = window.Top,
-        Left = window.Left,
-        Width = window.Width,
-        Height = window.Height
-      };
-
+      var state = new MainWindowState {Placement = NativeMethods.GetPlacement(window) };
       _settingsService.Save("MainWindowState", state);
     }
 
@@ -71,12 +64,7 @@ namespace eagleboost.persistence.Services
       var state = _settingsService.Load<MainWindowState>("MainWindowState");
       if (state != null)
       {
-        window.Top = state.Top;
-        window.Left = state.Left;
-        window.Width = state.Width;
-        window.Height = state.Height;
-        window.WindowStartupLocation = WindowStartupLocation.Manual;
-        window.WindowState = state.WindowState;
+        NativeMethods.SetPlacement(window, state.Placement);
       }
       else
       {

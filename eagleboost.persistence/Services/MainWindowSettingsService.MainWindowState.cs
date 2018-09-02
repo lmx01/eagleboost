@@ -4,7 +4,7 @@
 
 namespace eagleboost.persistence.Services
 {
-  using System.Windows;
+  using eagleboost.presentation.Win32;
 
   /// <summary>
   /// MainWindowSettingsService
@@ -13,12 +13,7 @@ namespace eagleboost.persistence.Services
   {
     private class MainWindowState
     {
-      public WindowState WindowState { get; set; }
-      public double Top { get; set; }
-      public double Left { get; set; }
-      public double Width { get; set; }
-      public double Height { get; set; }
+      public NativeMethods.WINDOWPLACEMENT Placement { get; set; }
     }
   }
-
 }

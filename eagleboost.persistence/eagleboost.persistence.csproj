@@ -63,6 +63,10 @@
       <Project>{5C4C4E80-3895-418C-AA33-440B9A817C82}</Project>
       <Name>eagleboost.core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\eagleboost.presentation\eagleboost.presentation.csproj">
+      <Project>{A118772D-121D-4CA3-B568-BCAFACCAE33F}</Project>
+      <Name>eagleboost.presentation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
