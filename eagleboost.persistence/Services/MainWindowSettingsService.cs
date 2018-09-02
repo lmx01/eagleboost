@@ -5,6 +5,7 @@
 namespace eagleboost.persistence.Services
 {
   using System;
+  using System.ComponentModel;
   using System.Windows;
   using eagleboost.persistence.Contracts;
 
@@ -27,16 +28,24 @@ namespace eagleboost.persistence.Services
         throw new ApplicationException("Main window is not ready yet");
       }
 
-      LoadState(mainWindow);
-      mainWindow.Closed += HandleMainWindowClosed;
+      mainWindow.SourceInitialized += HandleMainWindowSourceInitialized;
+      mainWindow.Closing += HandleMainWindowClosing;
     }
     #endregion ctors
 
     #region Event Handlers
-    private void HandleMainWindowClosed(object sender, EventArgs e)
+    private void HandleMainWindowSourceInitialized(object sender, EventArgs e)
     {
       var window = (Window)sender;
-      window.Closed -= HandleMainWindowClosed;
+      window.SourceInitialized -= HandleMainWindowSourceInitialized;
+
+      LoadState(window);
+    }
+
+    private void HandleMainWindowClosing(object sender, CancelEventArgs e)
+    {
+      var window = (Window)sender;
+      window.Closing -= HandleMainWindowClosing;
 
       SaveState(window);
     }
@@ -62,11 +71,16 @@ namespace eagleboost.persistence.Services
       var state = _settingsService.Load<MainWindowState>("MainWindowState");
       if (state != null)
       {
-        window.WindowState = state.WindowState;
         window.Top = state.Top;
         window.Left = state.Left;
         window.Width = state.Width;
         window.Height = state.Height;
+        window.WindowStartupLocation = WindowStartupLocation.Manual;
+        window.WindowState = state.WindowState;
+      }
+      else
+      {
+        window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
       }
     }
     #endregion Private Methods
