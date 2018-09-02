@@ -2,13 +2,12 @@
 // E-MAIL : eagleboost@msn.com
 // Creation :2018-08-30 9:23 PM
 
-namespace eagleboost.shell.FileSystems.TreeView
+namespace eagleboost.shell.FileSystems.Contracts
 {
   using System.ComponentModel;
   using System.Threading.Tasks;
   using eagleboost.presentation.Collections;
   using eagleboost.presentation.Controls.TreeView;
-  using eagleboost.shell.FileSystems.Contracts;
 
   /// <summary>
   /// IFileSystemTreeViewModel

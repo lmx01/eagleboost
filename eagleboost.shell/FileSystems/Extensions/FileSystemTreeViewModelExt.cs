@@ -7,11 +7,11 @@ namespace eagleboost.shell.FileSystems.Extensions
   using System.Linq;
   using System.Threading.Tasks;
   using eagleboost.shell.FileSystems.Contracts;
-  using eagleboost.shell.FileSystems.TreeView;
+  using eagleboost.shell.FileSystems.ViewModels;
 
   public static class FileSystemTreeViewModelExt
   {
-    public static Task<bool> SelectAsync(this FileSystemTreeViewModel viewModel, IFolder toSelect)
+    public static Task<bool> SelectAsync(this IFileSystemTreeViewModel viewModel, IFolder toSelect)
     {
       var path = toSelect.FolderToRoot<IFolder>().Reverse().Select(i => i.Name).ToArray();
       return viewModel.SelectAsync(path);

@@ -82,7 +82,7 @@
 
     private void OnSelectedPathChanged()
     {
-      _viewModel.SelectAsync(SelectedPath.Split('\\'));
+      _viewModel.SelectAsync(SelectedPath.Split('\\')).ConfigureAwait(false);
     }
   }
 }

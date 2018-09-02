@@ -2,7 +2,7 @@
 // E-MAIL : eagleboost@msn.com
 // Creation :2018-08-30 9:24 PM
 
-namespace eagleboost.shell.FileSystems.TreeView
+namespace eagleboost.shell.FileSystems.ViewModels
 {
   using System;
   using System.Collections;

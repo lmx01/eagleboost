@@ -8,6 +8,7 @@ namespace eagleboost.interaction.Common
   using eagleboost.interaction.Activities;
   using eagleboost.presentation.Controls;
   using eagleboost.presentation.Controls.InputBoxes;
+  using eagleboost.presentation.Extensions;
 
   /// <summary>
   /// InputBoxActivity
@@ -21,9 +22,9 @@ namespace eagleboost.interaction.Common
       var window = new ViewControllerWindow
       {
         DataContext = viewModel,
-        Content = new InputBox {Width = 370, Margin = new Thickness(5, 0, 5, 5)},
+        Content = new InputBox {Width = 300, Margin = new Thickness(10,5,10,10)},
         Title = viewModel.Header,
-      };
+      }.RemoveIcon();
       var r = window.ShowDialog();
       var result = new AsyncActivityResult<InputBoxViewModel>(r.GetValueOrDefault(false), viewModel);
       Completion.TrySetResult(result);

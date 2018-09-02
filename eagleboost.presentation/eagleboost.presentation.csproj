@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Behaviors\ClearButtonBehavior.cs" />
     <Compile Include="Behaviors\ClosePopupButton.cs" />
+    <Compile Include="Behaviors\RemoveWindowIcon.cs" />
     <Compile Include="Behaviors\SelectedItemSync.cs" />
     <Compile Include="Behaviors\TextBoxClearButtonBehavior.cs" />
     <Compile Include="Behaviors\TextboxEx.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Extensions\FrameworkElementExt.cs" />
     <Compile Include="Extensions\TextBoxExt.cs" />
     <Compile Include="Extensions\TreeViewItemExt.cs" />
+    <Compile Include="Extensions\WindowExt.cs" />
     <Compile Include="ImageUtils\ImageSourceExt.cs" />
     <Compile Include="Interactivity\IViewController.cs" />
     <Compile Include="Interactivity\ViewController.cs" />
@@ -162,6 +164,8 @@
     <Compile Include="Controls\TreeView\TreeNodeData.cs" />
     <Compile Include="Utils\ElementFromPoint.cs" />
     <Compile Include="Utils\MultiSelectorHelper.cs" />
+    <Compile Include="Win32\NativeMethods.cs" />
+    <Compile Include="Win32\NativeMethods.Helpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\eagleboost.core\eagleboost.core.csproj">
@@ -193,5 +197,6 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,8 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:inputBoxes="clr-namespace:eagleboost.presentation.Controls.InputBoxes"
-  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-  xmlns:interactivity="clr-namespace:eagleboost.presentation.Interactivity"
+  xmlns:behaviors="clr-namespace:eagleboost.presentation.Behaviors"
   mc:Ignorable="d" d:DesignHeight="450"  d:DesignWidth="757"
   d:DataContext="{d:DesignInstance inputBoxes:InputBoxViewModel}">
 
@@ -14,11 +13,11 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="10"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
     <Label Content="{Binding Description}"/>
-    <Grid Grid.Row="1" Grid.Column="0">
+    <Grid Grid.Row="1" Grid.Column="0" FocusManager.FocusedElement="{Binding ElementName=TextBox}">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
@@ -26,7 +25,6 @@
       <Label Content="{Binding InputLabel}" Target="{Binding ElementName=TextBox}"/>
       <TextBox x:Name="TextBox" Grid.Column="1" VerticalAlignment="Center" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
-    <Separator Grid.Row="2" Height="10"/>
     <Grid Grid.Row="3" HorizontalAlignment="Right">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="74"/>

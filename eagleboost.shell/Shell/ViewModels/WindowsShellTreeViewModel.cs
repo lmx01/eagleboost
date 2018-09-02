@@ -8,7 +8,7 @@ namespace eagleboost.shell.Shell.ViewModels
   using System.Threading.Tasks;
   using eagleboost.core.Extensions;
   using eagleboost.presentation.Controls.TreeView;
-  using eagleboost.shell.FileSystems.TreeView;
+  using eagleboost.shell.FileSystems.ViewModels;
   using eagleboost.shell.Shell.Contracts;
   using eagleboost.shell.Shell.Models;
   using Microsoft.WindowsAPICodePack.Shell;

@@ -102,9 +102,12 @@
     <Compile Include="FileSystems\Contracts\IFolder.cs" />
     <Compile Include="FileSystems\Extensions\FileExt.cs" />
     <Compile Include="FileSystems\Extensions\FileSystemTreeViewModelExt.cs" />
+    <Compile Include="FileSystems\ViewModels\FileSystemCollectionViewModel.cs" />
+    <Compile Include="FileSystems\Contracts\IFileSystemCollectionViewModel.cs" />
     <Compile Include="FileSystems\Models\FileBase.cs" />
-    <Compile Include="FileSystems\TreeView\FileSystemTreeViewModel.cs" />
-    <Compile Include="FileSystems\TreeView\IFileSystemTreeViewModel.cs" />
+    <Compile Include="FileSystems\ViewModels\FileSystemTreeViewModel.cs" />
+    <Compile Include="FileSystems\Contracts\IFileSystemTreeViewModel.cs" />
+    <Compile Include="FileSystems\ViewModels\FileSystemViewHandler.cs" />
     <Compile Include="ShellTreeView\Contracts\IShellItemsOperation.cs" />
     <Compile Include="ShellTreeView\Contracts\IShellTreeItem.cs" />
     <Compile Include="ShellTreeView\Data\ShellTreeContainerItem.cs" />
