@@ -16,7 +16,7 @@ namespace eagleboost.shell.FileSystems.Models
   /// </summary>
   /// <typeparam name="T"></typeparam>
   /// <typeparam name="TFolder"></typeparam>
-  public abstract class FileBase<T, TFolder> : IFile, IComparer, IComparer<T>
+  public abstract class FileBase<T, TFolder> : IFile, IComparer, IComparer<T>, IEquatable<T>
     where T : FileBase<T, TFolder>
     where TFolder : class, IFolder
   {
@@ -80,6 +80,33 @@ namespace eagleboost.shell.FileSystems.Models
     {
       return Name;
     }
+
+    public override bool Equals(object obj)
+    {
+      return Equals(obj as T);
+    }
+
+    public override int GetHashCode()
+    {
+      return Id.GetHashCode();
+    }
     #endregion Overrides
+
+    #region IEquatable
+    public bool Equals(T other)
+    {
+      if (ReferenceEquals(null, other))
+      {
+        return false;
+      }
+
+      if (ReferenceEquals(this, other))
+      {
+        return true;
+      }
+
+      return Id == other.Id;
+    }
+    #endregion IEquatable
   }
 }

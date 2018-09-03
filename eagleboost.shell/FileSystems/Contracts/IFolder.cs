@@ -8,6 +8,9 @@ namespace eagleboost.shell.FileSystems.Contracts
   using System.Threading;
   using System.Threading.Tasks;
 
+  /// <summary>
+  /// IFolder
+  /// </summary>
   public interface IFolder : IFile
   {
     #region Methods

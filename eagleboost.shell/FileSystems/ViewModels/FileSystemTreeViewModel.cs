@@ -30,9 +30,10 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     #region Declarations
     private readonly ObservableCollection<ITreeNode> _items = new ObservableCollection<ITreeNode>();
+    private readonly Dictionary<IFile, ITreeNode> _itemsNodesMap = new Dictionary<IFile, ITreeNode>();
     private ICollectionView _itemsView;
     private ITreeNode _selectedItem;
-    private TreeNodeContainer _root;
+    private ITreeNodeContainer _root;
     #endregion Declarations
 
     #region IFileSystemTreeViewModel
@@ -78,7 +79,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     public async Task<bool> SelectAsync(params string[] path)
     {
-      var node = (TreeNodeContainer)Root;
+      var node = (ITreeNodeContainer)Root;
       var folderStack = new Stack<string>(path.Reverse());
       folderStack.Pop();
       while (folderStack.Count > 0)
@@ -89,7 +90,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
         var childNode = node.Children.FirstOrDefault(i => folder == i.DataItem.CastTo<IFile>().Name);
         if (childNode != null)
         {
-          node = (TreeNodeContainer)childNode;
+          node = (ITreeNodeContainer)childNode;
         }
       }
 
@@ -104,7 +105,12 @@ namespace eagleboost.shell.FileSystems.ViewModels
       return DoCreateRootAsync(isSingleRoot);
     }
 
-    public Task<IReadOnlyList<ITreeNode>> CreateChildrenAsync(object parentDataItem, TreeNodeContainer parent)
+    public Task<ITreeNode> CreateChildAsync(object childDataItem, ITreeNodeContainer parent)
+    {
+      return DoCreateChildAsync(childDataItem, parent);
+    }
+
+    public Task<IReadOnlyList<ITreeNode>> CreateChildrenAsync(object parentDataItem, ITreeNodeContainer parent)
     {
       return DoCreateChildrenAsync(parentDataItem, parent);
     }
@@ -118,7 +124,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #region Virtuals
     protected abstract bool DoFilter(ITreeNode item);
 
-    protected abstract TreeNodeContainer CreateRootNode();
+    protected abstract ITreeNodeContainer CreateRootNode();
 
     protected virtual ICollectionView CreateItemsView()
     {
@@ -133,7 +139,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
       if (SelectedItemArgs.Match(propertyName))
       {
-        var selected = (TreeNodeContainer)SelectedItem;
+        var selected = (ITreeNodeContainer)SelectedItem;
         if (selected != null)
         {
           selected.IsSelected = true;
@@ -142,6 +148,19 @@ namespace eagleboost.shell.FileSystems.ViewModels
       }
     }
     #endregion Overrides
+
+    #region Protected Methods
+    protected ITreeNode FindNode(IFile file)
+    {
+      ITreeNode result;
+      if (_itemsNodesMap.TryGetValue(file, out result))
+      {
+        return result;
+      }
+
+      return null;
+    }
+    #endregion Protected Methods
 
     #region Private Methods
     private async Task<ITreeNode> DoCreateRootAsync(bool isSingleRoot)
@@ -160,7 +179,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       return root;
     }
 
-    protected async Task<IReadOnlyList<ITreeNode>> DoCreateChildrenAsync(object parentItem, TreeNodeContainer parent)
+    protected async Task<IReadOnlyList<ITreeNode>> DoCreateChildrenAsync(object parentItem, ITreeNodeContainer parent)
     {
       var folder = parentItem as IFolder;
       if (folder != null)
@@ -172,14 +191,27 @@ namespace eagleboost.shell.FileSystems.ViewModels
       return new ITreeNode[0];
     }
 
-    private ITreeNode CreateTreeNode(IFile f, TreeNodeContainer parent)
+    protected Task<ITreeNode> DoCreateChildAsync(object childDataItem, ITreeNodeContainer parent)
     {
+      var file = (IFile)childDataItem;
+      return Task.FromResult(CreateTreeNode(file, parent));
+    }
+
+    private ITreeNode CreateTreeNode(IFile f, ITreeNodeContainer parent)
+    {
+      ITreeNode result;
       if (f is IFolder)
       {
-        return new TreeNodeContainer(f, parent, this);
+        result = new TreeNodeContainer(f, parent, this);
+      }
+      else
+      {
+        result = new TreeNodeData(f, parent, this);
       }
 
-      return new TreeNodeData(f, parent, this);
+      _itemsNodesMap.Add(f, result);
+
+      return result;
     }
     #endregion Private Methods
   }

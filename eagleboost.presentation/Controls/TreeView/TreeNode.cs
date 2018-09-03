@@ -22,7 +22,7 @@ namespace eagleboost.presentation.Controls.TreeView
 
     #region Declarations
     private readonly object _dataItem;
-    private readonly TreeNodeContainer _parent;
+    private readonly ITreeNodeContainer _parent;
     private readonly string _name;
     private readonly ITreeNodesOperation _treeNodesOperation;
     private readonly ObservableCollection<ITreeNode> _children = new ObservableCollection<ITreeNode>();
@@ -38,7 +38,7 @@ namespace eagleboost.presentation.Controls.TreeView
       _name = name;
     }
 
-    protected TreeNode(object dataItem, TreeNodeContainer parent, ITreeNodesOperation treeNodesOperation)
+    protected TreeNode(object dataItem, ITreeNodeContainer parent, ITreeNodesOperation treeNodesOperation)
     {
       _dataItem = dataItem;
       _parent = parent;
@@ -147,7 +147,7 @@ namespace eagleboost.presentation.Controls.TreeView
       get { return false; }
     }
 
-    public TreeNode Parent
+    public ITreeNodeContainer Parent
     {
       get { return _parent; }
     }

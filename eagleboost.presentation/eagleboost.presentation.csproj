@@ -137,6 +137,7 @@
     <Compile Include="Controls\OverlayAdorner.cs" />
     <Compile Include="Controls\Selectors\SelectorItemDoubleClick.cs" />
     <Compile Include="Controls\TreeView\BringSelectedTreeItemIntoView.cs" />
+    <Compile Include="Controls\TreeView\ITreeNodeContainer.cs" />
     <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
     <Compile Include="Controls\ViewControllerWindow.cs" />
     <Compile Include="Converters\ConverterMarkupExtension.cs" />

@@ -10,7 +10,7 @@ namespace eagleboost.presentation.Controls.TreeView
   public class TreeNodeData : TreeNode
   {
     #region ctors
-    public TreeNodeData(object dataItem, TreeNodeContainer parent, ITreeNodesOperation shellItemsOperation) : base(dataItem, parent, shellItemsOperation)
+    public TreeNodeData(object dataItem, ITreeNodeContainer parent, ITreeNodesOperation treeNodesOperation) : base(dataItem, parent, treeNodesOperation)
     {
     }
     #endregion ctors

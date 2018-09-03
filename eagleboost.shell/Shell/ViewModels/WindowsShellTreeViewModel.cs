@@ -33,7 +33,7 @@ namespace eagleboost.shell.Shell.ViewModels
       return node is DummyTreeNode || node.DataItem.CastTo<IWindowsShellFile>().ShellObject.IsNot<ShellFile>();
     }
 
-    protected override TreeNodeContainer CreateRootNode()
+    protected override ITreeNodeContainer CreateRootNode()
     {
       _rootFolder = new WindowsShellFolder(_shellRoot, null, f => GetFilesAsync(f, DesktopKnownFolder));
       return new TreeNodeContainer(_rootFolder, null, this);

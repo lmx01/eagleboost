@@ -48,7 +48,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       CurrentFolder = folder;
 
       Items.Clear();
-      var files = await folder.GetFilesAsync(ct: ct).ConfigureAwait(true);
+      var files = await folder.GetFilesAsync(ct:ct).ConfigureAwait(true);
       var result = files.Cast<TFile>().ToArray();
       Items.AddRange(result);
 

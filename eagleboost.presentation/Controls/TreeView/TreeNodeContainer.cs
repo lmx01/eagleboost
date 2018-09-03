@@ -6,6 +6,7 @@ namespace eagleboost.presentation.Controls.TreeView
 {
   using System.Collections.Generic;
   using System.Collections.ObjectModel;
+  using System.Linq;
   using System.Threading.Tasks;
   using System.Windows.Threading;
   using eagleboost.presentation.Extensions;
@@ -13,7 +14,7 @@ namespace eagleboost.presentation.Controls.TreeView
   /// <summary>
   /// TreeNodeContainer
   /// </summary>
-  public class TreeNodeContainer : TreeNode
+  public class TreeNodeContainer : TreeNode, ITreeNodeContainer
   {
     #region Declarations
     private TaskCompletionSource<IReadOnlyList<ITreeNode>> _childrenLoadedTcs;
@@ -21,11 +22,28 @@ namespace eagleboost.presentation.Controls.TreeView
     #endregion Declarations
 
     #region ctors
-    public TreeNodeContainer(object dataItem, TreeNodeContainer parent, ITreeNodesOperation shellItemsOperation) : base(dataItem, parent, shellItemsOperation)
+    public TreeNodeContainer(object dataItem, ITreeNodeContainer parent, ITreeNodesOperation shellItemsOperation) : base(dataItem, parent, shellItemsOperation)
     {
       Children.Add(DummyChild);
     }
     #endregion ctors
+
+    #region ITreeNodeContainer
+    public async void AddData(object dataItem)
+    {
+      var node = await TreeNodesOperation.CreateChildAsync(dataItem, this).ConfigureAwait(true);
+      Children.Add(node);
+    }
+
+    public void RemoveData(object dataItem)
+    {
+      var node = Children.SingleOrDefault(i => i.DataItem == dataItem);
+      if (node != null)
+      {
+        Children.Remove(node);
+      }
+    }
+    #endregion ITreeNodeContainer
 
     #region Public Methods
     public async Task ExpandAsync()
