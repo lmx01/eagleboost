@@ -11,6 +11,15 @@
   {
     public virtual event PropertyChangedEventHandler PropertyChanged;
 
+    protected virtual void NotifyPropertyChanged(PropertyChangedEventArgs args)
+    {
+      var handler = PropertyChanged;
+      if (handler != null)
+      {
+        handler(this, args);
+      }
+    }
+
     protected virtual void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
     {
       var handler = PropertyChanged;

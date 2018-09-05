@@ -19,7 +19,10 @@ namespace eagleboost.presentation.Controls
       ResizeMode = ResizeMode.NoResize;
       SizeToContent = SizeToContent.WidthAndHeight;
       ShowInTaskbar = false;
-      Owner = Application.Current.MainWindow;
+      if (Dispatcher == Application.Current.Dispatcher)
+      {
+        Owner = Application.Current.MainWindow;
+      }
       WindowStartupLocation = WindowStartupLocation.CenterOwner;
     }
     #endregion ctors

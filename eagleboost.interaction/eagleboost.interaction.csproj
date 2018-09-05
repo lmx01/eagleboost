@@ -84,6 +84,7 @@
     <Compile Include="Activities\IActivityLauncher.cs" />
     <Compile Include="Activities\IAsyncActivity.cs" />
     <Compile Include="Common\InputBoxActivity.cs" />
+    <Compile Include="Common\ProgressViewActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +95,10 @@
     <ProjectReference Include="..\eagleboost.presentation\eagleboost.presentation.csproj">
       <Project>{A118772D-121D-4CA3-B568-BCAFACCAE33F}</Project>
       <Name>eagleboost.presentation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eagleboost.UserExperience\eagleboost.userexperience.csproj">
+      <Project>{D4A1C4F6-833B-4F0E-9BD0-5DDE39F45C59}</Project>
+      <Name>eagleboost.userexperience</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

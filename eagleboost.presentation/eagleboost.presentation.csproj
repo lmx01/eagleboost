@@ -135,6 +135,10 @@
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OverlayAdorner.cs" />
+    <Compile Include="Controls\Progress\ProgressView.xaml.cs">
+      <DependentUpon>ProgressView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Progress\ProgressViewModel.cs" />
     <Compile Include="Controls\Selectors\SelectorItemDoubleClick.cs" />
     <Compile Include="Controls\TreeView\BringSelectedTreeItemIntoView.cs" />
     <Compile Include="Controls\TreeView\ITreeNodeContainer.cs" />
@@ -196,6 +200,10 @@
     <Page Include="Controls\InputBoxes\InputBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Progress\ProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TreeView\TreeViewResources.xaml">
       <Generator>MSBuild:Compile</Generator>

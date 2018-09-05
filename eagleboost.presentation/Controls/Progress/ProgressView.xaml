@@ -1,0 +1,38 @@
+﻿<UserControl 
+  x:Class="eagleboost.presentation.Controls.Progress.ProgressView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+  xmlns:local="clr-namespace:eagleboost.presentation.Controls.Progress"
+  mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
+  d:DataContext="{d:DesignInstance local:IProgressViewModel}">
+
+  <Grid IsSharedSizeScope="True">
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+    <Label Grid.Row="0" Content="{Binding Description}"/>
+    <ProgressBar Grid.Row="1" Value="{Binding Progress}" Maximum="1" Minimum="0" Height="10" Margin="5"/>
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Label Grid.Column="0" Content="Elapsed:" VerticalContentAlignment="Center"/>
+      <TextBlock Grid.Column="1" Text="{Binding TimeElapsed, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"/>
+    </Grid>
+    <Grid Grid.Row="3">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Label Grid.Column="0" Content="Remaining:" VerticalContentAlignment="Center"/>
+      <TextBlock Grid.Column="1" Text="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"/>
+    </Grid>
+  </Grid>
+
+</UserControl>
