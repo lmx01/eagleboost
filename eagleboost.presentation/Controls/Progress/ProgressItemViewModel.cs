@@ -67,6 +67,7 @@ namespace eagleboost.presentation.Controls.Progress
     #endregion Statics
 
     #region Declarations
+    private string _header;
     private string _desc;
     private double _progress;
     private TimeSpan? _remaining;
@@ -85,7 +86,11 @@ namespace eagleboost.presentation.Controls.Progress
     #endregion ctors
 
     #region IProgressItemViewModel
-    public string Header { get; set; }
+    public string Header
+    {
+      get { return _header; }
+      set { SetValue(ref _header, value); }
+    }
 
     public string Description
     {

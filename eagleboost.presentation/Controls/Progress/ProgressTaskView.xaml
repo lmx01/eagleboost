@@ -23,51 +23,60 @@
     </Style>
   </UserControl.Resources>
 
-  <Grid IsSharedSizeScope="True">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
-    <Grid>
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="Auto"/>
-      </Grid.ColumnDefinitions>
-      <TextBlock Grid.Column="0" Text="{Binding Description}" TextTrimming="CharacterEllipsis"/>
-      <Button Grid.Column="1" Command="{Binding DataContext.PauseTaskCommand,RelativeSource={RelativeSource AncestorType=local:ProgressView}}" 
-              CommandParameter="{Binding}" Margin="4,0,0,0" BorderBrush="Transparent">
-        <Image Source="../../Resources/pause.png"/>
-      </Button>
-      <Button Grid.Column="2" Command="{Binding DataContext.ResumeTaskCommand,RelativeSource={RelativeSource AncestorType=local:ProgressView}}" 
-              CommandParameter="{Binding}" Margin="4,0,0,0" BorderBrush="Transparent">
-        <Image Source="../../Resources/resume.png"/>
-      </Button>
-      <Button Grid.Column="3" Command="{Binding DataContext.CancelTaskCommand,RelativeSource={RelativeSource AncestorType=local:ProgressView}}" 
-              CommandParameter="{Binding}" Margin="10,0,0,0" BorderBrush="Transparent">
-        <Image Source="../../Resources/cancel.png"/>
-      </Button>
+  <GroupBox Padding="0,7,0,5">
+    <GroupBox.HeaderTemplate>
+      <DataTemplate>
+        <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=GroupBox}, Converter={converters:GroupBoxHeaderWidth Margin=20}}"
+              DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType=GroupBox}}">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Grid.Column="0" Text="{Binding Header}" TextTrimming="CharacterEllipsis"/>
+          <Button Grid.Column="1" Command="{Binding DataContext.PauseTaskCommand, RelativeSource={RelativeSource AncestorType=local:ProgressView}}" 
+                  CommandParameter="{Binding}" Margin="4,0,0,0">
+            <Image Source="../../Resources/pause.png"/>
+          </Button>
+          <Button Grid.Column="2" Command="{Binding DataContext.ResumeTaskCommand,RelativeSource={RelativeSource AncestorType=local:ProgressView}}" 
+                  CommandParameter="{Binding}" Margin="4,0,0,0">
+            <Image Source="../../Resources/resume.png"/>
+          </Button>
+          <Button Grid.Column="3" Command="{Binding DataContext.CancelTaskCommand,RelativeSource={RelativeSource AncestorType=local:ProgressView}}" 
+                  CommandParameter="{Binding}" Margin="10,0,0,0">
+            <Image Source="../../Resources/cancel.png"/>
+          </Button>
+        </Grid>
+      </DataTemplate>
+    </GroupBox.HeaderTemplate>
+
+    <Grid IsSharedSizeScope="True">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis"/>
+      <ProgressBar Grid.Row="1" Value="{Binding Progress}" Height="15" Maximum="1" Minimum="0" Margin="5" IsIndeterminate="{Binding HasRemaining, Converter={converters:BooleanInverse}}"/>
+      <Grid Grid.Row="2">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="Elapsed:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Text="{Binding TimeElapsed, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"/>
+      </Grid>
+      <Grid Grid.Row="3">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="Remaining:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Text="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"/>
+      </Grid>
     </Grid>
-    <ProgressBar Grid.Row="1" Value="{Binding Progress}" Height="15" Maximum="1" Minimum="0" Margin="5" IsIndeterminate="{Binding HasRemaining, Converter={converters:BooleanInverse}}"/>
-    <Grid Grid.Row="2">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      <TextBlock Grid.Column="0" Text="Elapsed:" VerticalAlignment="Center"/>
-      <TextBlock Grid.Column="1" Text="{Binding TimeElapsed, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"/>
-    </Grid>
-    <Grid Grid.Row="3">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
-      <TextBlock Grid.Column="0" Text="Remaining:" VerticalAlignment="Center"/>
-      <TextBlock Grid.Column="1" Text="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"/>
-    </Grid>
-  </Grid>
+  </GroupBox>
 
 </UserControl>
