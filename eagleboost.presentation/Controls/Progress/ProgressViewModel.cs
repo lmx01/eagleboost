@@ -23,9 +23,9 @@ namespace eagleboost.presentation.Controls.Progress
   public class ProgressViewModel : ViewController
   {
     #region Declarations
-    private IInvalidatableCommand _pauseCmd;
-    private IInvalidatableCommand _resumeCmd;
-    private IDispatcherProvider _dispatcher = new DispatcherProvider();
+    private readonly IInvalidatableCommand _pauseCmd;
+    private readonly IInvalidatableCommand _resumeCmd;
+    private readonly IDispatcherProvider _dispatcher = new DispatcherProvider();
     #endregion Declarations
 
     #region ctors
@@ -33,12 +33,8 @@ namespace eagleboost.presentation.Controls.Progress
     {
       ProgressItems = new ObservableCollection<IProgressItemViewModel>();
       ProgressItems.CollectionChanged += HandleProgressItemsChanged;
-      _pauseCmd = new NotifiableCommand<IProgressItemViewModel>(
-        i => i.PauseCommand.TryExecute(null),
-        i => i != null && i.PauseCommand.CanExecute(null));
-      _resumeCmd = new NotifiableCommand<IProgressItemViewModel>(
-        i => i.ResumeCommand.TryExecute(null),
-        i => i != null && i.ResumeCommand.CanExecute(null));
+      _pauseCmd = new NotifiableCommand<IProgressItemViewModel>(HandlePause, i => CanPause(i));
+      _resumeCmd = new NotifiableCommand<IProgressItemViewModel>(HandleResume, i => CanResume(i));
       CancelTaskCommand = new DelegateCommand<IProgressItemViewModel>(i => i.CancelCommand.TryExecute(null));
     }
     #endregion ctors
@@ -58,6 +54,28 @@ namespace eagleboost.presentation.Controls.Progress
 
     public ICommand CancelTaskCommand { get; private set; }
     #endregion Public Properties
+
+    #region Private Methods
+    private void HandlePause(IProgressItemViewModel item)
+    {
+      item.PauseCommand.TryExecute(null);
+    }
+
+    private bool CanPause(IProgressItemViewModel item)
+    {
+      return item != null && item.PauseCommand.CanExecute(null);
+    }
+
+    private void HandleResume(IProgressItemViewModel item)
+    {
+      item.ResumeCommand.TryExecute(null);
+    }
+
+    private bool CanResume(IProgressItemViewModel item)
+    {
+      return item != null && item.ResumeCommand.CanExecute(null);
+    }
+    #endregion Private Methods
 
     #region Event Handlers
     private void HandleProgressItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
