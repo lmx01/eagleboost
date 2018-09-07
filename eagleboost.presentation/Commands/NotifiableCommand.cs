@@ -2,6 +2,7 @@
 {
   using System;
   using System.ComponentModel;
+  using System.Windows.Threading;
 
   public class NotifiableCommand<T> : NotifiableCommandBase
   {

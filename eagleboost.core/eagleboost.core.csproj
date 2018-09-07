@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="Collections\CollectionViewExt.cs" />
     <Compile Include="Commands\NotifiableCommand.cs" />
+    <Compile Include="Commands\NotifiableCommand.Generic.cs" />
     <Compile Include="ComponentModel\ArgumentGuard.cs" />
     <Compile Include="ComponentModel\AutoNotify\AutoNotifyConfig.cs" />
     <Compile Include="ComponentModel\AutoNotify\AutoNotifyOperation.cs" />

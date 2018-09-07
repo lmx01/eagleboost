@@ -135,15 +135,21 @@
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OverlayAdorner.cs" />
+    <Compile Include="Controls\Progress\ProgressTaskView.xaml.cs">
+      <DependentUpon>ProgressTaskView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Progress\ProgressView.xaml.cs">
       <DependentUpon>ProgressView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Progress\ProgressItemViewModel.cs" />
     <Compile Include="Controls\Progress\ProgressViewModel.cs" />
+    <Compile Include="Controls\Progress\ProgressViewOptions.cs" />
     <Compile Include="Controls\Selectors\SelectorItemDoubleClick.cs" />
     <Compile Include="Controls\TreeView\BringSelectedTreeItemIntoView.cs" />
     <Compile Include="Controls\TreeView\ITreeNodeContainer.cs" />
     <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
     <Compile Include="Controls\ViewControllerWindow.cs" />
+    <Compile Include="Converters\BooleanInverse.cs" />
     <Compile Include="Converters\ConverterMarkupExtension.cs" />
     <Compile Include="Converters\HasTextConverter.cs" />
     <Compile Include="Converters\LeftMarginMultiplierConverter .cs" />
@@ -171,6 +177,7 @@
     <Compile Include="Controls\TreeView\TreeNodeContainer.cs" />
     <Compile Include="Controls\TreeView\TreeNodeData.cs" />
     <Compile Include="Utils\ElementFromPoint.cs" />
+    <Compile Include="Utils\InvertEffect.cs" />
     <Compile Include="Utils\MultiSelectorHelper.cs" />
     <Compile Include="Win32\NativeMethods.cs" />
     <Compile Include="Win32\NativeMethods.WindowStyle.cs" />
@@ -201,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\Progress\ProgressTaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Progress\ProgressView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -210,6 +221,10 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\cancel.png" />
+    <Resource Include="Resources\pause.png" />
+    <Resource Include="Resources\resume.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

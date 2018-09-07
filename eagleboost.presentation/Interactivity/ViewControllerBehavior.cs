@@ -3,6 +3,8 @@ using System.Windows.Interactivity;
 
 namespace eagleboost.presentation.Interactivity
 {
+  using System.Windows.Interop;
+
   public class ViewControllerBehavior : Behavior<Window>
   {
     protected override void OnAttached()
@@ -45,7 +47,10 @@ namespace eagleboost.presentation.Interactivity
       var window = AssociatedObject;
       if (window != null)
       {
-        window.DialogResult = confirmed;
+        if (ComponentDispatcher.IsThreadModal)
+        {
+          window.DialogResult = confirmed;
+        }
         window.Close();
       }
     }

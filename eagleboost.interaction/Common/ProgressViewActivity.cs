@@ -4,9 +4,11 @@
 
 namespace eagleboost.interaction.Common
 {
+  using System;
+  using System.ComponentModel;
   using System.Threading.Tasks;
   using System.Windows;
-  using System.Windows.Threading;
+  using eagleboost.core.Data;
   using eagleboost.interaction.Activities;
   using eagleboost.presentation.Controls;
   using eagleboost.presentation.Controls.Progress;
@@ -17,44 +19,94 @@ namespace eagleboost.interaction.Common
   /// ProgressViewActivity
   /// </summary>
   /// <typeparam name="T"></typeparam>
-  public class ProgressViewActivity<T> : DialogActivity<AsyncActivityResult<IProgressViewModel<T>>>
+  public class ProgressViewActivity<T> : DialogActivity<AsyncActivityResult<IProgressItemViewModel<T>>> where T : class
   {
     #region Declarations
-    private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+    private static Window _window;
     #endregion Declarations
 
     #region Overrides
     protected override void ShowDialog()
     {
-      DispatcherViewFactory.InvokeAsync("Secondary GUI", () =>
-      {
-        var viewModel = ActivityArgs.GetArgs<IProgressViewModel<T>>();
-        viewModel.Completed += HandleCompleted;
-        var window = new ViewControllerWindow
-        {
-          DataContext = viewModel,
-          Content = new ProgressView {Width = 300, Margin = new Thickness(10, 5, 10, 10)},
-          Title = viewModel.Header,
-        }.RemoveIcon();
-
-        var r = window.ShowDialog();
-        var result = new AsyncActivityResult<IProgressViewModel<T>>(r.GetValueOrDefault(false), viewModel);
-        Completion.TrySetResult(result);
-      }).ConfigureAwait(false);
+      var viewModel = ActivityArgs.GetArgs<IProgressItemViewModel<T>>();
+      StartDialog(viewModel);
     }
     #endregion Overrides
 
-    #region Event Handlers
-    private void HandleCompleted(object sender, System.EventArgs e)
+    #region Private Methods
+    private Window PrepareProgressView()
     {
-      var vm = (IProgressViewModel<T>)sender;
-      vm.Completed -= HandleCompleted;
+      var options = ActivityArgs.GetArgs<ProgressViewOptions>();
 
-      _dispatcher.CheckedInvoke(() =>
+      var window = new ViewControllerWindow
       {
-        Task.Delay(500);
-        vm.OkCommand.TryExecute(null);
-      });
+        DataContext = new ProgressViewModel(),
+        Content = new ProgressView {Width = 500, Margin = new Thickness(5)},
+        Title = options != null ? options.Header : "Copy",
+        ShowInTaskbar = true,
+        Topmost = true,
+      }.RemoveIcon();
+
+      return window;
+    }
+
+    private void AddProgressItem(Window window, IProgressItemViewModel<T> itemViewModel)
+    {
+      var viewModel = (ProgressViewModel)window.DataContext;
+      viewModel.ProgressItems.Add(itemViewModel);
+
+      var cleanup = new DisposeManager();
+      cleanup.AddEvent(h => itemViewModel.Completed += h, h => itemViewModel.Completed -= h, (EventHandler)((s, e) =>
+      {
+        cleanup.Dispose();
+        window.Dispatcher.CheckedInvoke(() =>
+        {
+          viewModel.ProgressItems.Remove(itemViewModel);
+          if (viewModel.ProgressItems.Count == 0)
+          {
+            Task.Delay(500);
+            viewModel.OkCommand.TryExecute(null);
+            _window = null;
+            var result = new AsyncActivityResult<IProgressItemViewModel<T>>(true, itemViewModel);
+            Completion.TrySetResult(result);
+          }
+        });
+      }));
+    }
+
+    private void StartDialog(IProgressItemViewModel<T> itemViewModel)
+    {
+      DispatcherViewFactory.InvokeAsync("Secondary GUI", () =>
+      {
+        var window = _window;
+        if (window == null)
+        {
+          window = _window = PrepareProgressView();
+          AddProgressItem(window, itemViewModel);
+          window.Closing += HandleWindowClosing;
+          window.Show();
+        }
+        else
+        {
+          AddProgressItem(window, itemViewModel);
+        }
+      }).ConfigureAwait(false);
+    }
+    #endregion Private Methods
+
+    #region Event Handlers
+    private void HandleWindowClosing(object sender, CancelEventArgs e)
+    {
+      var window = (Window) sender;
+      window.Closing -= HandleWindowClosing;
+
+      _window = null;
+
+      var vm = (ProgressViewModel) window.DataContext;
+      foreach (var item in vm.ProgressItems)
+      {
+        item.CancelCommand.TryExecute(null);
+      }
     }
     #endregion Event Handlers
   }

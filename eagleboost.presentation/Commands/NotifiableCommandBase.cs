@@ -7,10 +7,14 @@ using System.Windows.Input;
 
 namespace eagleboost.presentation.Commands
 {
+  using System.Windows.Threading;
+  using eagleboost.presentation.Extensions;
+
   public abstract class NotifiableCommandBase : ICommand, IDisposable
   {
     private IDisposable _disposable;
     private readonly string[] _properties;
+    private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
 
     protected NotifiableCommandBase(INotifyPropertyChanged notifier, params string[] properties)
     {
@@ -23,7 +27,7 @@ namespace eagleboost.presentation.Commands
     {
       if (_properties == null || _properties.Length == 0 || _properties.Contains(e.PropertyName))
       {
-        RaiseCanExecuteChanged();
+        _dispatcher.CheckedInvoke(RaiseCanExecuteChanged);
       }
     }
 
