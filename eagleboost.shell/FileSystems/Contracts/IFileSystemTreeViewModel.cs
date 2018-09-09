@@ -16,6 +16,11 @@ namespace eagleboost.shell.FileSystems.Contracts
   {
     #region Properties
     ITreeNode Root { get; }
+    
+    /// <summary>
+    /// When true, if a folder is selected, its children would be loaded
+    /// </summary>
+    bool LoadOnSelectionChange { get; }
     #endregion Properties
 
     #region Methods

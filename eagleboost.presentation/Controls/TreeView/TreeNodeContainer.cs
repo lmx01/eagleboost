@@ -91,7 +91,7 @@ namespace eagleboost.presentation.Controls.TreeView
     #region Overrides
     public override bool HasDummyChild
     {
-      get { return Children.Count == 1 && Children[0] == DummyChild; }
+      get { return Children.Count >= 1 && Children[0] == DummyChild; }
     }
 
     protected override void OnIsExpandedChanged()

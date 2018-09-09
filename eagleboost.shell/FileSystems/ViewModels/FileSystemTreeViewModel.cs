@@ -77,6 +77,8 @@ namespace eagleboost.shell.FileSystems.ViewModels
       get { return _root; }
     }
 
+    public bool LoadOnSelectionChange { get; set; }
+
     public async Task<bool> SelectAsync(params string[] path)
     {
       var node = (ITreeNodeContainer)Root;
@@ -143,7 +145,10 @@ namespace eagleboost.shell.FileSystems.ViewModels
         if (selected != null)
         {
           selected.IsSelected = true;
-          selected.LoadChildrenAsync().ConfigureAwait(false);
+          if (LoadOnSelectionChange)
+          {
+            selected.LoadChildrenAsync().ConfigureAwait(false);
+          }
         }
       }
     }
