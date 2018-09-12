@@ -8,6 +8,7 @@
         xmlns:indicators="clr-namespace:eagleboost.presentation.Controls.Indicators;assembly=eagleboost.presentation"
         xmlns:views="clr-namespace:eagleboost.shell.Shell.Views;assembly=eagleboost.shell"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:ViewModel}"
+        WindowStyle="SingleBorderWindow" ResizeMode="NoResize" SizeToContent="WidthAndHeight"
         Title="MainWindow" Height="350" Width="525">
 
   <Window.Resources>

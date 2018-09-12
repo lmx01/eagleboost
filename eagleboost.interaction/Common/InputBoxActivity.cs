@@ -24,7 +24,7 @@ namespace eagleboost.interaction.Common
         DataContext = viewModel,
         Content = new InputBox {Width = 300, Margin = new Thickness(10,5,10,10)},
         Title = viewModel.Header,
-      }.RemoveIcon();
+      }.RemoveIcon().HideMinMaxButton();
       var r = window.ShowDialog();
       var result = new AsyncActivityResult<InputBoxViewModel>(r.GetValueOrDefault(false), viewModel);
       Completion.TrySetResult(result);

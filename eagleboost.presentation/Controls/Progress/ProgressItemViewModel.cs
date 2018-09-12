@@ -26,7 +26,13 @@ namespace eagleboost.presentation.Controls.Progress
 
     TimeSpan? TimeRemaining { get; }
 
+    int? AverageSpeed { get; }
+
     bool HasRemaining { get; }
+
+    int Current { get; }
+
+    int? Total { get; }
 
     double Progress { get; }
 
@@ -41,6 +47,8 @@ namespace eagleboost.presentation.Controls.Progress
 
     #region Events
     event EventHandler Completed;
+
+    event EventHandler Canceled;
     #endregion Events
   }
 
@@ -64,12 +72,16 @@ namespace eagleboost.presentation.Controls.Progress
     protected static readonly PropertyChangedEventArgs ProgressArgs = GetChangedArgs<ProgressItemViewModel<T>>(o => o.Progress);
     protected static readonly PropertyChangedEventArgs DescriptionArgs = GetChangedArgs<ProgressItemViewModel<T>>(o => o.Description);
     protected static readonly PropertyChangedEventArgs TimeElapsedArgs = GetChangedArgs<ProgressItemViewModel<T>>(o => o.TimeElapsed);
+    protected static readonly PropertyChangedEventArgs HasRemainingArgs = GetChangedArgs<ProgressItemViewModel<T>>(o => o.HasRemaining);
+    protected static readonly PropertyChangedEventArgs AverageSpeedArgs = GetChangedArgs<ProgressItemViewModel<T>>(o => o.AverageSpeed);
     #endregion Statics
 
     #region Declarations
     private string _header;
     private string _desc;
     private double _progress;
+    private int _current;
+    private int? _total;
     private TimeSpan? _remaining;
     private DateTime? _startTime;
     private Timer _timer;
@@ -81,7 +93,7 @@ namespace eagleboost.presentation.Controls.Progress
     {
       PauseCommand = new DelegateCommand(() => pts.IsPaused = true, () => !pts.IsPaused);
       ResumeCommand = new DelegateCommand(() => pts.IsPaused = false, () => pts.IsPaused);
-      CancelCommand = new DelegateCommand(cts.Cancel);
+      CancelCommand = new DelegateCommand(() => HandleCancel(cts));
     }
     #endregion ctors
 
@@ -111,9 +123,34 @@ namespace eagleboost.presentation.Controls.Progress
       }
     }
 
+    public int? AverageSpeed
+    {
+      get
+      {
+        if (Current > 0)
+        {
+          return (int?) Math.Floor(Current / TimeElapsed.Value.TotalMinutes);
+        }
+
+        return null;
+      }
+    }
+
     public bool HasRemaining
     {
       get { return TimeRemaining.HasValue; }
+    }
+
+    public int Current
+    {
+      get { return _current; }
+      set { SetValue(ref _current, value); }
+    }
+
+    public int? Total
+    {
+      get { return _total; }
+      set { SetValue(ref _total, value); }
     }
 
     public TimeSpan? TimeRemaining
@@ -150,10 +187,21 @@ namespace eagleboost.presentation.Controls.Progress
       }
     }
 
+    public event EventHandler Canceled;
+
+    protected virtual void RaiseCanceled()
+    {
+      var handler = Canceled;
+      if (handler != null)
+      {
+        handler(this, EventArgs.Empty);
+      }
+    }
+
     public T State
     {
       get { return _state; }
-      private set { SetValue(ref _state, value); }
+      private set { Force(ref _state, value); }
     }
     #endregion IProgressItemViewModel
 
@@ -207,5 +255,13 @@ namespace eagleboost.presentation.Controls.Progress
       NotifyPropertyChanged(TimeElapsedArgs);
     }
     #endregion Event Handlers
+
+    #region Private Methods
+    public void HandleCancel(CancellationTokenSource cts)
+    {
+      cts.Cancel();
+      RaiseCanceled();
+    }
+    #endregion Private Methods
   }
 }

@@ -6,6 +6,7 @@ namespace eagleboost.interaction.Common
 {
   using System;
   using System.ComponentModel;
+  using System.Linq;
   using System.Threading.Tasks;
   using System.Windows;
   using eagleboost.core.Data;
@@ -45,7 +46,7 @@ namespace eagleboost.interaction.Common
         Title = options != null ? options.Header : "Copy",
         ShowInTaskbar = true,
         Topmost = true,
-      }.RemoveIcon();
+      }.RemoveIcon().HideMinMaxButton();
 
       return window;
     }
@@ -56,22 +57,30 @@ namespace eagleboost.interaction.Common
       viewModel.ProgressItems.Add(itemViewModel);
 
       var cleanup = new DisposeManager();
-      cleanup.AddEvent(h => itemViewModel.Completed += h, h => itemViewModel.Completed -= h, (EventHandler)((s, e) =>
+      cleanup.AddEvent(h => itemViewModel.Completed += h, h => itemViewModel.Completed -= h,
+        (EventHandler) ((s, e) => HandleCompletedOrCanceled(cleanup, window, viewModel, itemViewModel, true)));
+      cleanup.AddEvent(h => itemViewModel.Canceled += h, h => itemViewModel.Canceled -= h,
+        (EventHandler) ((s, e) => HandleCompletedOrCanceled(cleanup, window, viewModel, itemViewModel, false)));
+    }
+
+    private void HandleCompletedOrCanceled(DisposeManager cleanup, Window window, ProgressViewModel viewModel, IProgressItemViewModel<T> itemViewModel, bool isCompleted)
+    {
+      cleanup.Dispose();
+      window.Dispatcher.CheckedInvoke(() =>
       {
-        cleanup.Dispose();
-        window.Dispatcher.CheckedInvoke(() =>
+        viewModel.ProgressItems.Remove(itemViewModel);
+        if (viewModel.ProgressItems.Count == 0)
         {
-          viewModel.ProgressItems.Remove(itemViewModel);
-          if (viewModel.ProgressItems.Count == 0)
+          Task.Delay(500);
+          if (_window != null && _window.IsVisible)
           {
-            Task.Delay(500);
             viewModel.OkCommand.TryExecute(null);
-            _window = null;
-            var result = new AsyncActivityResult<IProgressItemViewModel<T>>(true, itemViewModel);
-            Completion.TrySetResult(result);
           }
-        });
-      }));
+          _window = null;
+          var result = new AsyncActivityResult<IProgressItemViewModel<T>>(isCompleted, itemViewModel);
+          Completion.TrySetResult(result);
+        }
+      });
     }
 
     private void StartDialog(IProgressItemViewModel<T> itemViewModel)
@@ -103,7 +112,7 @@ namespace eagleboost.interaction.Common
       _window = null;
 
       var vm = (ProgressViewModel) window.DataContext;
-      foreach (var item in vm.ProgressItems)
+      foreach (var item in vm.ProgressItems.ToArray())
       {
         item.CancelCommand.TryExecute(null);
       }

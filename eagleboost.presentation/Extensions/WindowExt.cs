@@ -14,5 +14,12 @@ namespace eagleboost.presentation.Extensions
       RemoveWindowIcon.SetRemoveIcon(window, true);
       return window;
     }
+
+    public static Window HideMinMaxButton(this Window window)
+    {
+      Behaviors.HideMinMaxButton.SetHideMinimizeButton(window, true);
+      Behaviors.HideMinMaxButton.SetHideMaximizeButton(window, true);
+      return window;
+    }
   }
 }

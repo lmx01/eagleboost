@@ -5,8 +5,9 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
   xmlns:local="clr-namespace:eagleboost.presentation.Controls.Progress"
-  xmlns:utils="clr-namespace:eagleboost.presentation.Utils"
   xmlns:converters="clr-namespace:eagleboost.presentation.Converters"
+  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+  xmlns:behaviors="clr-namespace:eagleboost.presentation.Behaviors"
   mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
   d:DataContext="{d:DesignInstance local:IProgressItemViewModel}">
 
@@ -15,6 +16,12 @@
       <Setter Property="Margin" Value="5,2,5,2"/>
       <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
+
+    <Style TargetType="TextBlock" x:Key="ValueTextBlock">
+      <Setter Property="Margin" Value="0"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
 
     <Style TargetType="Button">
       <Setter Property="Height" Value="16"/>
@@ -57,24 +64,63 @@
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
-      <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis"/>
+      <TextBlock Text="{Binding Description}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Description}"/>
       <ProgressBar Grid.Row="1" Value="{Binding Progress}" Height="15" Maximum="1" Minimum="0" Margin="5" IsIndeterminate="{Binding HasRemaining, Converter={converters:BooleanInverse}}"/>
       <Grid Grid.Row="2">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" Text="Elapsed:" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="1" Text="{Binding TimeElapsed, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Text="Elapsed:"/>
+        <TextBlock Grid.Column="1" Text="{Binding TimeElapsed, StringFormat={}{0:hh\\:mm\\:ss}}"/>
       </Grid>
       <Grid Grid.Row="3">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" Text="Remaining:" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="1" Text="{Binding TimeRemaining, StringFormat={}{0:hh\\:mm\\:ss}}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="0" Text="Remaining:"/>
+        <TextBlock Grid.Column="1">
+          <i:Interaction.Behaviors>
+            <behaviors:TextBlockDefault Source="{Binding TimeRemaining}" StringFormat="{}{0:hh\:mm\:ss}" DefaultText="Calculating..."/>
+          </i:Interaction.Behaviors>
+        </TextBlock>
+      </Grid>
+      <Grid Grid.Row="4">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="Speed:"/>
+        <TextBlock Grid.Column="1">
+          <i:Interaction.Behaviors>
+            <behaviors:TextBlockDefault Source="{Binding AverageSpeed}" StringFormat="{}{0} files/minute" DefaultText="Calculating..."/>
+          </i:Interaction.Behaviors>
+        </TextBlock>
+      </Grid>
+      <Grid Grid.Row="5">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="Progress:"/>
+        <Grid Grid.Column="1" Margin="5,0,0,0">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Grid.Column="0" Text="{Binding Current}" Style="{StaticResource ValueTextBlock}"/>
+          <TextBlock Grid.Column="1" Text="/" Style="{StaticResource ValueTextBlock}"/>
+          <TextBlock Grid.Column="2" Style="{StaticResource ValueTextBlock}">
+            <i:Interaction.Behaviors>
+              <behaviors:TextBlockDefault Source="{Binding Total}" DefaultText="Calculating..."/>
+            </i:Interaction.Behaviors>
+          </TextBlock>
+        </Grid>
       </Grid>
     </Grid>
   </GroupBox>

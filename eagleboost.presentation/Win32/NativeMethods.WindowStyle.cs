@@ -10,7 +10,7 @@ namespace eagleboost.presentation.Win32
 
   public partial class NativeMethods
   {
-    public static void RemoveIcon(Window window)
+    internal static void RemoveIcon(Window window)
     {
       // Get this window's handle
       IntPtr hwnd = new WindowInteropHelper(window).Handle;
@@ -21,6 +21,22 @@ namespace eagleboost.presentation.Win32
 
       // Update the window's non-client area to reflect the changes
       SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+    }
+
+    internal static void HideMinimizeButton(Window window)
+    {
+      IntPtr hwnd = new WindowInteropHelper(window).Handle;
+      var currentStyle = GetWindowLong(hwnd, GWL_STYLE);
+
+      SetWindowLong(hwnd, GWL_STYLE, currentStyle & ~WS_MINIMIZEBOX);
+    }
+
+    internal static void HideMaximizeButton(Window window)
+    {
+      IntPtr hwnd = new WindowInteropHelper(window).Handle;
+      var currentStyle = GetWindowLong(hwnd, GWL_STYLE);
+
+      SetWindowLong(hwnd, GWL_STYLE, currentStyle & ~WS_MAXIMIZEBOX);
     }
   }
 }
