@@ -71,7 +71,7 @@ namespace eagleboost.interaction.Common
         viewModel.ProgressItems.Remove(itemViewModel);
         if (viewModel.ProgressItems.Count == 0)
         {
-          Task.Delay(500);
+          Task.Delay(1000);
           if (_window != null && _window.IsVisible)
           {
             viewModel.OkCommand.TryExecute(null);

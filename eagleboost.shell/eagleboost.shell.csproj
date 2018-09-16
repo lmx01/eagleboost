@@ -36,10 +36,6 @@
     <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.8.10\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
-    <Reference Include="eagleboost.interaction, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\output\Release\eagleboost.interaction.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAPICodePack-Core.1.1.0.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -170,6 +166,10 @@
     <ProjectReference Include="..\eagleboost.core\eagleboost.core.csproj">
       <Project>{5c4c4e80-3895-418c-aa33-440b9a817c82}</Project>
       <Name>eagleboost.core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eagleboost.interaction\eagleboost.interaction.csproj">
+      <Project>{464fb649-17f5-4a90-a8ca-26169be8871c}</Project>
+      <Name>eagleboost.interaction</Name>
     </ProjectReference>
     <ProjectReference Include="..\eagleboost.presentation\eagleboost.presentation.csproj">
       <Project>{a118772d-121d-4ca3-b568-bcafaccae33f}</Project>

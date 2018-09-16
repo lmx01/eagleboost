@@ -7,7 +7,7 @@
 
   <converters:LeftMarginMultiplierConverter Length="5" x:Key="IndentMarginConverter" />
 
-  <ControlTemplate x:Key="ShellTreeItemTemplate" TargetType="{x:Type TreeViewItem}">
+  <ControlTemplate x:Key="TreeItemTemplate" TargetType="{x:Type TreeViewItem}">
     <Grid>
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
@@ -126,15 +126,41 @@
             SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
         </Border>
       </Grid>
-      <ItemsPresenter Name="ItemsHost" Grid.Row="1"/>
+      <ItemsPresenter Name="ItemsHost" Grid.Row="1">
+        <ItemsPresenter.LayoutTransform>
+          <ScaleTransform ScaleY="1" />
+        </ItemsPresenter.LayoutTransform>
+      </ItemsPresenter>
     </Grid>
     <ControlTemplate.Triggers>
       <Trigger Property="TreeViewItem.IsExpanded">
-        <Setter TargetName="ItemsHost" Property="UIElement.Visibility">
-          <Setter.Value>
-            <x:Static Member="Visibility.Collapsed"/>
-          </Setter.Value>
-        </Setter>
+        <Trigger.EnterActions>
+          <BeginStoryboard>
+            <Storyboard>
+              <DoubleAnimation Storyboard.TargetName="ItemsHost"
+                               Storyboard.TargetProperty="LayoutTransform.ScaleY"
+                               To="0"
+                               Duration="0:0:0.1" />
+              <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ItemsHost" Storyboard.TargetProperty = "Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Collapsed}" />
+              </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+          </BeginStoryboard>
+        </Trigger.EnterActions>
+
+        <Trigger.ExitActions>
+          <BeginStoryboard>
+            <Storyboard>
+              <DoubleAnimation Storyboard.TargetName="ItemsHost"
+                               Storyboard.TargetProperty="LayoutTransform.ScaleY"
+                               To="1"
+                               Duration="0:0:0.1" />
+              <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ItemsHost" Storyboard.TargetProperty = "Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}" />
+              </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+          </BeginStoryboard>
+        </Trigger.ExitActions>
         <Trigger.Value>
           <s:Boolean>False
           </s:Boolean>
@@ -226,7 +252,7 @@
     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-    <Setter Property="Template" Value="{StaticResource ShellTreeItemTemplate}" />
+    <Setter Property="Template" Value="{StaticResource TreeItemTemplate}" />
     <Setter Property="local:NonScrollTreeViewItem.IsEnabled" Value="True" />
   </Style>
 
