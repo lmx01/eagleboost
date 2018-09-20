@@ -47,7 +47,6 @@ namespace eagleboost.presentation.Controls.DataGrids
     #endregion Public Properties
 
     #region Overrides
-
     protected override void OnAttached()
     {
       base.OnAttached();

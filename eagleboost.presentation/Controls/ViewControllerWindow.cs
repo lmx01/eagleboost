@@ -15,10 +15,6 @@ namespace eagleboost.presentation.Controls
     {
       var behaviors = Interaction.GetBehaviors(this);
       behaviors.Add(new ViewControllerBehavior());
-      WindowStyle = WindowStyle.SingleBorderWindow;
-      ResizeMode = ResizeMode.NoResize;
-      SizeToContent = SizeToContent.WidthAndHeight;
-      ShowInTaskbar = false;
       if (Dispatcher == Application.Current.Dispatcher)
       {
         Owner = Application.Current.MainWindow;

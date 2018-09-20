@@ -15,6 +15,12 @@ namespace eagleboost.presentation.Extensions
       return window;
     }
 
+    public static Window HideMaxButton(this Window window)
+    {
+      Behaviors.HideMinMaxButton.SetHideMaximizeButton(window, true);
+      return window;
+    }
+
     public static Window HideMinMaxButton(this Window window)
     {
       Behaviors.HideMinMaxButton.SetHideMinimizeButton(window, true);

@@ -41,12 +41,15 @@ namespace eagleboost.interaction.Common
 
       var window = new ViewControllerWindow
       {
+        SizeToContent = SizeToContent.Height,
         DataContext = new ProgressViewModel(),
-        Content = new ProgressView {Width = 500, Margin = new Thickness(5)},
+        ResizeMode = ResizeMode.CanMinimize,
+        Content = new ProgressView {Margin = new Thickness(5)},
         Title = options != null ? options.Header : "Copy",
         ShowInTaskbar = true,
         Topmost = true,
-      }.RemoveIcon().HideMinMaxButton();
+        Width = 500,
+      }.RemoveIcon();
 
       return window;
     }
