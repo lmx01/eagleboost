@@ -1,0 +1,56 @@
+﻿<UserControl 
+  x:Class="eagleboost.googledrive.Views.GoogleDriveTreeView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+  xmlns:behaviors="clr-namespace:eagleboost.presentation.Behaviors;assembly=eagleboost.presentation"
+  xmlns:views="clr-namespace:eagleboost.googledrive.Views"
+  xmlns:treeView="clr-namespace:eagleboost.presentation.Controls.TreeView;assembly=eagleboost.presentation"
+  xmlns:indicators="clr-namespace:eagleboost.presentation.Controls.Indicators;assembly=eagleboost.presentation"
+  mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
+
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/eagleboost.presentation;component/Controls/TreeView/TreeViewResources.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+
+      <HierarchicalDataTemplate x:Key="TreeItemDataTemplate" ItemsSource="{Binding ChildrenView}" DataType="{x:Type treeView:TreeNode}">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Viewbox x:Name="BusyIndicator" Grid.Column="0" Height="16" Width="16" Visibility="Collapsed">
+            <indicators:CircularProgressBar/>
+          </Viewbox>
+          <Image x:Name="Thumbnail" Grid.Column="0" Height="16" Width="16" Source="..\Resources\Folder.png"/>
+          <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4" />
+        </Grid>
+        <HierarchicalDataTemplate.Triggers>
+          <DataTrigger Binding="{Binding DataItem.OwnedByMe}" Value="False">
+            <Setter TargetName="Thumbnail" Property="Source" Value="..\Resources\FolderLink.png"/>
+          </DataTrigger>
+          <DataTrigger Binding="{Binding IsBeingExpanded}" Value="True">
+            <Setter TargetName="BusyIndicator" Property="Visibility" Value="Visible"/>
+            <Setter TargetName="Thumbnail" Property="Visibility" Value="Collapsed"/>
+          </DataTrigger>
+        </HierarchicalDataTemplate.Triggers>
+      </HierarchicalDataTemplate>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Grid>
+    <TreeView x:Name="DriveTree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" 
+              ItemTemplate="{StaticResource TreeItemDataTemplate}"
+              ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=views:GoogleDriveTreeView}}">
+      <i:Interaction.Behaviors>
+        <behaviors:TreeViewSelectionChanging/>
+        <treeView:BringSelectedTreeItemIntoView/>
+      </i:Interaction.Behaviors>
+    </TreeView>
+  </Grid>
+  
+</UserControl>

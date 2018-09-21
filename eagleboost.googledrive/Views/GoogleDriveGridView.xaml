@@ -1,0 +1,80 @@
+﻿<UserControl 
+  x:Class="eagleboost.googledrive.Views.GoogleDriveGridView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+  xmlns:local="clr-namespace:eagleboost.googledrive.Views"
+  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+  xmlns:dataGrids="clr-namespace:eagleboost.presentation.Controls.DataGrids;assembly=eagleboost.presentation"
+  xmlns:contracts="clr-namespace:eagleboost.googledrive.Contracts"
+  xmlns:behaviors="clr-namespace:eagleboost.googledrive.Behaviors"
+  xmlns:viewModels="clr-namespace:eagleboost.googledrive.ViewModels"
+  xmlns:selectors="clr-namespace:eagleboost.presentation.Controls.Selectors;assembly=eagleboost.presentation"
+  xmlns:types="clr-namespace:eagleboost.core.Types;assembly=eagleboost.core"
+  mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
+  d:DataContext="{d:DesignInstance viewModels:IGoogleDriveGridViewModel}">
+
+  <UserControl.Resources>
+    <DataTemplate x:Key="NameTemplate">
+      <Grid d:DataContext="{d:DesignInstance contracts:IGoogleDriveFile}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image x:Name="Thumbnail" Grid.Column="0" Height="14" Width="14" Source="..\Resources\Folder.png" Margin="4,0,4,0">
+          <i:Interaction.Behaviors>
+            <behaviors:GoogleDriveFileIcon File="{Binding}"/>
+          </i:Interaction.Behaviors>
+        </Image>
+        <TextBlock Grid.Column="1" Text="{Binding Name, Mode=OneWay}"/>
+      </Grid>
+      <DataTemplate.Triggers>
+        <DataTrigger Binding="{Binding OwnedByMe}" Value="False">
+          <Setter TargetName="Thumbnail" Property="Source" Value="..\Resources\FolderLink.png"/>
+        </DataTrigger>
+      </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FileSizeTemplate">
+      <Grid d:DataContext="{d:DesignInstance types:FileSize}" DataContext="{Binding FileSize}">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" SharedSizeGroup="DisplaySize"/>
+            <ColumnDefinition Width="Auto" SharedSizeGroup="DisplaySizeUnit"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="{Binding DisplaySize}"/>
+          <TextBlock Grid.Column="1" Text="{Binding DisplaySizeUnit}" Margin="3,0,0,0" HorizontalAlignment="Right"/>
+        </Grid>
+        <TextBlock x:Name="NullTextBlock" Text="-" HorizontalAlignment="Center" Visibility="Collapsed"/>
+      </Grid>
+      <DataTemplate.Triggers>
+        <DataTrigger Binding="{Binding FileSize}" Value="{x:Null}">
+          <Setter TargetName="NullTextBlock" Property="Visibility" Value="Visible"/>
+        </DataTrigger>
+      </DataTemplate.Triggers>
+    </DataTemplate>
+  </UserControl.Resources>
+
+  <DataGrid ItemsSource="{Binding ItemsView}" SelectedItem="{Binding SelectedItem}" GridLinesVisibility="None" AutoGenerateColumns="False" RowHeight="20" Grid.IsSharedSizeScope="True">
+    <DataGrid.Columns>
+      <DataGridTemplateColumn Header="Name" CellTemplate="{StaticResource NameTemplate}" SortMemberPath="Name"/>
+      <DataGridTemplateColumn Header="Size" CellTemplate="{StaticResource FileSizeTemplate}" SortMemberPath="FileSize"/>
+      <DataGridTextColumn Header="Type" Binding="{Binding Type, Mode=OneWay}"/>
+      <DataGridCheckBoxColumn Header="Owned by me" Binding="{Binding OwnedByMe, Mode=OneWay}"/>
+      <DataGridTextColumn Header="Owners" Binding="{Binding Owners, Mode=OneWay}"/>
+      <DataGridTextColumn Header="Id" Binding="{Binding Id, Mode=OneWay}"/>
+    </DataGrid.Columns>
+    <i:Interaction.Behaviors>
+      <dataGrids:DataGridPrioritySorting>
+        <dataGrids:DataGridPrioritySorting.Items>
+          <dataGrids:DataGridPrioritySortingItem Column="Name" Comparer="{x:Type local:GoogleDriveFileComparer}"/>
+        </dataGrids:DataGridPrioritySorting.Items>
+      </dataGrids:DataGridPrioritySorting>
+      <dataGrids:DataGridSelectedItems SelectedItemsSupport="{Binding}"/>
+      <selectors:SelectorItemDoubleClick SelectItemReceiver="{Binding}"/>
+    </i:Interaction.Behaviors>
+  </DataGrid>
+
+</UserControl>
