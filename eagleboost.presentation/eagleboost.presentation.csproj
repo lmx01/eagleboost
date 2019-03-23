@@ -27,12 +27,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\output\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
@@ -43,6 +44,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Prism, Version=7.0.0.396, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.7.0.0.396\lib\net45\Prism.dll</HintPath>
     </Reference>
@@ -119,6 +121,10 @@
     <Compile Include="Contracts\IHeader.cs" />
     <Compile Include="Contracts\ISelectItemReceiver.cs" />
     <Compile Include="Contracts\IPreviewSelectionChange.cs" />
+    <Page Include="Controls\DataGrids\DataGridResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Compile Include="Controls\DataGrids\DataGridPrioritySorting.cs" />
     <Compile Include="Controls\DataGrids\DataGridPrioritySortingItem.cs" />
     <Compile Include="Controls\DataGrids\IColumnComparer.cs" />
@@ -171,6 +177,11 @@
     <Compile Include="Interactivity\IViewController.cs" />
     <Compile Include="Interactivity\ViewController.cs" />
     <Compile Include="Interactivity\ViewControllerBehavior.cs" />
+    <Compile Include="MarkupExtensions\ItemIndex\ItemIndexExtension.cs" />
+    <Compile Include="MarkupExtensions\ItemIndex\ItemIndexExtension.ItemTrack.cs">
+      <DependentUpon>ItemIndexExtension.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarkupExtensions\MarkupExtensionBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tasks\DispatcherProvider.cs" />
     <Compile Include="Controls\TreeView\DummyTreeNode.cs" />
@@ -236,5 +247,6 @@
     <Resource Include="Resources\pause.png" />
     <Resource Include="Resources\resume.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

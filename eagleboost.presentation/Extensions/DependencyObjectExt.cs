@@ -93,6 +93,35 @@
       return (T)dpo;
     }
 
+    public static DependencyObject FindParent(this DependencyObject d, Type type)
+    {
+      if (d == null)
+      {
+        throw new ArgumentNullException("d");
+      }
+
+      DependencyObject dpo = VisualTreeHelper.GetParent(d);
+
+      while (dpo != null && !type.IsInstanceOfType(dpo))
+      {
+        DependencyObject parent = VisualTreeHelper.GetParent(dpo);
+        if (parent != null)
+        {
+          dpo = parent;
+        }
+        else
+        {
+          if (!(dpo is FrameworkElement))
+          {
+            break;
+          }
+          dpo = (dpo as FrameworkElement).Parent;
+        }
+      }
+
+      return dpo;
+    }
+
     public static Binding GetBinding(this DependencyObject obj, DependencyProperty dp)
     {
       return BindingOperations.GetBinding(obj, dp);

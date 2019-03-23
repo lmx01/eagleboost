@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Windows.Markup;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -21,6 +22,12 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("a118772d-121d-4ca3-b568-bcafaccae33f")]
+
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Behaviors")]
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.DataGrids")]
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.Selectors")]
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.MarkupExtensions.ItemIndex")]
+[assembly: XmlnsPrefix("http://www.eagleboost.com/xaml/presentation", "ebui")]
 
 // Version information for an assembly consists of the following four values:
 //
