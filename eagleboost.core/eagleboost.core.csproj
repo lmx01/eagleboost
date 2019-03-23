@@ -99,6 +99,9 @@
     <Compile Include="Extensions\PropertyChangedEventArgsExt.cs" />
     <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Extensions\TypeExt.cs" />
+    <Compile Include="Threading\CancelationTokenTimeout\CancelationTokenExt.cs" />
+    <Compile Include="Threading\CancelationTokenTimeout\CancelationTokenExt.Exceptions.cs" />
+    <Compile Include="Threading\CancelationTokenTimeout\CanceledTaskExt.cs" />
     <Compile Include="Threading\PauseTokenSource.cs" />
     <Compile Include="Types\FileSize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
