@@ -31,5 +31,16 @@ namespace eagleboost.core.Extensions
 
       return value;
     }
+
+    public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dict, TKey key, TValue defaultValue = default(TValue))
+    {
+      TValue value;
+      if (!dict.TryGetValue(key, out value))
+      {
+        return defaultValue;
+      }
+
+      return value;
+    }
   }
 }
