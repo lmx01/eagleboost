@@ -12,7 +12,7 @@
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
-    <TextBox x:Name="FolderPathBox" Text="{Binding FolderPath, RelativeSource={RelativeSource AncestorType={x:Type controls:BrowseForFolder}}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+    <TextBox x:Name="FolderPathBox" VerticalContentAlignment="Stretch" Text="{Binding FolderPath, RelativeSource={RelativeSource AncestorType={x:Type controls:BrowseForFolder}}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
     <Button Grid.Column="1" Padding="5,0" Click="HandleBrowseButtonClick">_Browse</Button>
   </Grid>
 </UserControl>
