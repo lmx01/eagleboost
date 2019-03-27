@@ -34,6 +34,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework" />
+    <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -102,6 +105,13 @@
     <Compile Include="Threading\CancelationTokenTimeout\CancelationTokenExt.cs" />
     <Compile Include="Threading\CancelationTokenTimeout\CancelationTokenExt.Exceptions.cs" />
     <Compile Include="Threading\CancelationTokenTimeout\CanceledTaskExt.cs" />
+    <Compile Include="Threading\CancelationTokenTimeout\TaskExecutionLogger.cs" />
+    <Compile Include="Threading\CancelationTokenTimeout\TaskExecutionLogger.Generic.cs">
+      <DependentUpon>TaskExecutionLogger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Threading\CancelationTokenTimeout\TaskExecutionLogger.Void.cs">
+      <DependentUpon>TaskExecutionLogger.cs</DependentUpon>
+    </Compile>
     <Compile Include="Threading\PauseTokenSource.cs" />
     <Compile Include="Types\FileSize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

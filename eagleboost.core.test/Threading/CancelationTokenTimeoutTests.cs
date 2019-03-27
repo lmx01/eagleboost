@@ -13,69 +13,13 @@ namespace eagleboost.core.test.Threading
 
   public class CancelationTokenTimeoutTests
   {
-    private Task ServerNeverReturnsAsync(CancellationToken ct)
-    {
-      var tcs = new TaskCompletionSource<int>();
-
-      Task.Run(async () =>
-      {
-        while (true)
-        {
-          await Task.Delay(500);
-        }
-      });
-
-      return tcs.Task;
-    }
-
-    private Task ServerTimeoutEarlierAsync(CancellationToken ct)
-    {
-      var tcs = new TaskCompletionSource<int>();
-
-      Task.Run(async () =>
-      {
-        while (true)
-        {
-          await Task.Delay(500);
-          tcs.TrySetException(new TimeoutException());
-        }
-      });
-
-      return tcs.Task;
-    }
-
-    private Task ServerTimeoutLaterAsync(CancellationToken ct)
-    {
-      var tcs = new TaskCompletionSource<int>();
-
-      Task.Run(async () =>
-      {
-        while (true)
-        {
-          await Task.Delay(3000);
-          tcs.TrySetResult(0);
-        }
-      });
-
-      return tcs.Task;
-    }
-
-    private Task<bool> ServerReturnsFastAsync(CancellationToken ct)
-    {
-      return Task.Run(async () =>
-      {
-        await Task.Delay(50);
-        return true;
-      });
-    }
-
     [Test]
     public async Task Task_01_Server_01_Never_Returns_Timeout()
     {
       var cts = new CancellationTokenSource();
       try
       {
-        await cts.Token.Timeout(ServerNeverReturnsAsync, TimeSpan.FromMilliseconds(2000));
+        await cts.Token.TimeoutAsync(Helpers.ServerNeverReturnsAsync, TimeSpan.FromMilliseconds(2000));
       }
       catch (Exception e)
       {
@@ -89,7 +33,7 @@ namespace eagleboost.core.test.Threading
       var cts = new CancellationTokenSource();
       try
       {
-        await cts.Token.Timeout(ServerTimeoutEarlierAsync, TimeSpan.FromMilliseconds(2000));
+        await cts.Token.TimeoutAsync(Helpers.ServerTimeoutEarlierAsync, TimeSpan.FromMilliseconds(2000));
       }
       catch (Exception e)
       {
@@ -104,7 +48,7 @@ namespace eagleboost.core.test.Threading
       var cts = new CancellationTokenSource();
       try
       {
-        await cts.Token.Timeout(ServerTimeoutLaterAsync, TimeSpan.FromMilliseconds(2000));
+        await cts.Token.TimeoutAsync(Helpers.ServerTimeoutLaterAsync, TimeSpan.FromMilliseconds(2000));
       }
       catch (Exception e)
       {
@@ -118,7 +62,7 @@ namespace eagleboost.core.test.Threading
       var cts = new CancellationTokenSource();
       try
       {
-        var task = cts.Token.Timeout(ServerNeverReturnsAsync, TimeSpan.FromMilliseconds(2000));
+        var task = cts.Token.TimeoutAsync(Helpers.ServerNeverReturnsAsync, TimeSpan.FromMilliseconds(2000));
         cts.Cancel();
         await task;
       }
@@ -136,15 +80,15 @@ namespace eagleboost.core.test.Threading
       var isTimeout = false;
       var t = TimeSpan.FromMilliseconds(timeout);
 
-      await cts.Token.Timeout(ServerNeverReturnsAsync, t)
+      await cts.Token.TimeoutAsync(Helpers.ServerNeverReturnsAsync, t)
         .OnTimeout(e => isTimeout = true);
       isTimeout.Should().BeFalse();
 
-      await cts.Token.Timeout(ServerTimeoutLaterAsync, t)
+      await cts.Token.TimeoutAsync(Helpers.ServerTimeoutLaterAsync, t)
         .OnTimeout(e => isTimeout = true);
       isTimeout.Should().BeFalse();
 
-      await cts.Token.Timeout(ServerTimeoutEarlierAsync, t)
+      await cts.Token.TimeoutAsync(Helpers.ServerTimeoutEarlierAsync, t)
         .OnTimeout(e => isTimeout = true);
       isTimeout.Should().BeTrue();
     }
@@ -157,11 +101,11 @@ namespace eagleboost.core.test.Threading
       var isTimeout = false;
       var t = TimeSpan.FromMilliseconds(timeout);
 
-      await cts.Token.Timeout(ServerTimeoutEarlierAsync, t)
+      await cts.Token.TimeoutAsync(Helpers.ServerTimeoutEarlierAsync, t)
         .OnCallerTimeout(e => isTimeout = true);
       isTimeout.Should().BeFalse();
 
-      await cts.Token.Timeout(ServerNeverReturnsAsync, t)
+      await cts.Token.TimeoutAsync(Helpers.ServerNeverReturnsAsync, t)
         .OnCallerTimeout(e => isTimeout = true);
       isTimeout.Should().BeTrue();
     }
@@ -174,11 +118,11 @@ namespace eagleboost.core.test.Threading
       var isTimeout = false;
       var t = TimeSpan.FromMilliseconds(timeout);
 
-      await cts.Token.Timeout(ServerTimeoutEarlierAsync, t)
+      await cts.Token.TimeoutAsync(Helpers.ServerTimeoutEarlierAsync, t)
         .OnCallerTimeout(e => isTimeout = false);
       isTimeout.Should().BeFalse();
 
-      await cts.Token.Timeout(ServerTimeoutLaterAsync, t)
+      await cts.Token.TimeoutAsync(Helpers.ServerTimeoutLaterAsync, t)
         .OnCallerTimeout(e => isTimeout = true);
       isTimeout.Should().BeTrue();
     }
@@ -192,7 +136,7 @@ namespace eagleboost.core.test.Threading
       var isCalledCanceled = false;
       var t = TimeSpan.FromMilliseconds(timeout);
 
-      var task = cts.Token.Timeout(ServerNeverReturnsAsync, t);
+      var task = cts.Token.TimeoutAsync(Helpers.ServerNeverReturnsAsync, t);
       cts.Cancel();
       await task.OnCallerCancel(e => isCalledCanceled = true);
 
@@ -208,7 +152,7 @@ namespace eagleboost.core.test.Threading
       var isCalledCanceled = false;
       var t = TimeSpan.FromMilliseconds(timeout);
 
-      var task = cts.Token.Timeout(ServerTimeoutEarlierAsync, t);
+      var task = cts.Token.TimeoutAsync(Helpers.ServerTimeoutEarlierAsync, t);
       cts.Cancel();
       await task.OnCallerCancel(e => isCalledCanceled = true);
       isCalledCanceled.Should().BeTrue();
@@ -223,7 +167,7 @@ namespace eagleboost.core.test.Threading
       var isCalledCanceled = false;
       var t = TimeSpan.FromMilliseconds(timeout);
 
-      var task = cts.Token.Timeout(ServerTimeoutLaterAsync, t);
+      var task = cts.Token.TimeoutAsync(Helpers.ServerTimeoutLaterAsync, t);
       cts.Cancel();
       await task.OnCallerCancel(e => isCalledCanceled = true);
 
@@ -240,7 +184,7 @@ namespace eagleboost.core.test.Threading
       var t = TimeSpan.FromMilliseconds(timeout);
 
       Task<bool> task;
-      task = cts.Token.Timeout(ServerReturnsFastAsync, t);
+      task = cts.Token.TimeoutAsync(Helpers.ServerReturnsFastAsync, t);
       var timeoutTask = task.OnTimeout(e => isTimeout = true);
       await timeoutTask;
       isTimeout.Should().BeFalse();
@@ -259,7 +203,7 @@ namespace eagleboost.core.test.Threading
       var t = TimeSpan.FromMilliseconds(timeout);
 
       Task<bool> task;
-      task = cts.Token.Timeout(ServerReturnsFastAsync, t);
+      task = cts.Token.TimeoutAsync(Helpers.ServerReturnsFastAsync, t);
       var callerTimeoutTask = task.OnCallerTimeout(e => isCallerTimeout = true);
 
       await callerTimeoutTask;
@@ -279,7 +223,7 @@ namespace eagleboost.core.test.Threading
       var t = TimeSpan.FromMilliseconds(timeout);
 
       Task<bool> task;
-      task = cts.Token.Timeout(ServerReturnsFastAsync, t);
+      task = cts.Token.TimeoutAsync(Helpers.ServerReturnsFastAsync, t);
       var callerCancelTask = task.OnCallerCancel(e => isCallerCanceled = true);
 
       await callerCancelTask;

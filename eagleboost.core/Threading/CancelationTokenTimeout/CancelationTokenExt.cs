@@ -19,9 +19,9 @@ namespace System.Threading
     /// <param name="taskFunc"></param>
     /// <param name="millisecondsTimeout"></param>
     /// <returns></returns>
-    public static Task Timeout(this CancellationToken ct, Func<CancellationToken, Task> taskFunc, double millisecondsTimeout)
+    public static Task TimeoutAsync(this CancellationToken ct, Func<CancellationToken, Task> taskFunc, double millisecondsTimeout)
     {
-      return ct.Timeout(taskFunc, TimeSpan.FromMilliseconds(millisecondsTimeout));
+      return ct.TimeoutAsync(taskFunc, TimeSpan.FromMilliseconds(millisecondsTimeout));
     }
 
     /// <summary>
@@ -33,7 +33,7 @@ namespace System.Threading
     /// <param name="taskFunc"></param>
     /// <param name="timeout"></param>
     /// <returns></returns>
-    public static async Task Timeout(this CancellationToken ct, Func<CancellationToken, Task> taskFunc, TimeSpan timeout)
+    public static async Task TimeoutAsync(this CancellationToken ct, Func<CancellationToken, Task> taskFunc, TimeSpan timeout)
     {
       using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct))
       {
@@ -65,9 +65,9 @@ namespace System.Threading
     /// <param name="taskFunc"></param>
     /// <param name="millisecondsTimeout"></param>
     /// <returns></returns>
-    public static Task<T> Timeout<T>(this CancellationToken ct, Func<CancellationToken, Task<T>> taskFunc, double millisecondsTimeout)
+    public static Task<T> TimeoutAsync<T>(this CancellationToken ct, Func<CancellationToken, Task<T>> taskFunc, double millisecondsTimeout)
     {
-      return ct.Timeout(taskFunc, TimeSpan.FromMilliseconds(millisecondsTimeout));
+      return ct.TimeoutAsync(taskFunc, TimeSpan.FromMilliseconds(millisecondsTimeout));
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ namespace System.Threading
     /// <param name="taskFunc"></param>
     /// <param name="timeout"></param>
     /// <returns></returns>
-    public static async Task<T> Timeout<T>(this CancellationToken ct, Func<CancellationToken, Task<T>> taskFunc, TimeSpan timeout)
+    public static async Task<T> TimeoutAsync<T>(this CancellationToken ct, Func<CancellationToken, Task<T>> taskFunc, TimeSpan timeout)
     {
       using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct))
       {

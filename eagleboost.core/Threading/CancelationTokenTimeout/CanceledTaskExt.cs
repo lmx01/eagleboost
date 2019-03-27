@@ -39,5 +39,31 @@ namespace System.Threading
     {
       return task.HandleTask(action);
     }
+
+    private static bool CheckException<TException>(this Task task) where TException : Exception
+    {
+      var ex = task.Exception;
+      if (ex != null && ex.InnerException is TException)
+      {
+        return true;
+      }
+
+      return false;
+    }
+
+    public static bool IsTimeout(this Task task)
+    {
+      return task.CheckException<TimeoutException>();
+    }
+
+    public static bool IsCallerTimeout(this Task task)
+    {
+      return task.CheckException<CallerOperationTimeoutException>();
+    }
+
+    public static bool IsCallerCancel(this Task task)
+    {
+      return task.CheckException<OperationCanceledByCallerException>();
+    }
   }
 }
