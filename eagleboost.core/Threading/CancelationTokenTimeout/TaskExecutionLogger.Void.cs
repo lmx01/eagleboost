@@ -10,9 +10,21 @@ namespace eagleboost.core.Threading.CancelationTokenTimeout
   using Prism.Logging;
 
   /// <summary>
+  /// ITaskExecutionLogger
+  /// </summary>
+  public interface ITaskExecutionLogger
+  {
+    #region Methods
+    Task ExecuteAsync(string taskName, Func<CancellationToken, Task> taskFunc, ILoggerFacade logger, double millisecondsTimeout);
+
+    Task ExecuteAsync(string taskName, Func<CancellationToken, Task> taskFunc, ILoggerFacade logger, double millisecondsTimeout, out CancellationTokenSource cts);
+    #endregion Methods
+  }
+
+  /// <summary>
   /// TaskExecutionLogger
   /// </summary>
-  public class TaskExecutionLogger : TaskExecutionLoggerBase
+  public class TaskExecutionLogger : TaskExecutionLoggerBase, ITaskExecutionLogger
   {
     #region ITaskExecutionLogger
     public Task ExecuteAsync(string taskName, Func<CancellationToken, Task> taskFunc, ILoggerFacade logger, double millisecondsTimeout)
