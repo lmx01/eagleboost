@@ -131,6 +131,10 @@
     <Compile Include="Shell\Views\WindowsShellTreeView.xaml.cs">
       <DependentUpon>WindowsShellTreeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tools\ApplicationActivationTracker.cs" />
+    <Compile Include="Tools\ApplicationActivationTracker.Impl.cs">
+      <DependentUpon>ApplicationActivationTracker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\ClipboardMonitor.cs" />
     <Compile Include="Tools\ShellIcon.cs" />
     <Compile Include="Tools\ShellIconManager.cs" />
