@@ -47,6 +47,7 @@ namespace eagleboost.shell.Tools
       private static IntPtr _winEventHook;
       private static WinEventProc _winEventHookCallback;
       private static int _count;
+      private static uint? _prevProcessId;
       #endregion Declarations
 
       #region Public Properties
@@ -108,20 +109,28 @@ namespace eagleboost.shell.Tools
         GetWindowThreadProcessId(hwnd, out processId);
         if (processId == CurrentProcessId)
         {
-          var hwndSource = HwndSource.FromHwnd(hwnd);
-          if (hwndSource != null)
+          if (!_prevProcessId.HasValue)
           {
-            var window = (Window) hwndSource.RootVisual;
-            RaiseActivated(window);
-          }
-          else
-          {
-            RaiseActivated(null);
+            _prevProcessId = processId;
+            var hwndSource = HwndSource.FromHwnd(hwnd);
+            if (hwndSource != null)
+            {
+              var window = (Window) hwndSource.RootVisual;
+              RaiseActivated(window);
+            }
+            else
+            {
+              RaiseActivated(null);
+            }
           }
         }
         else
         {
-          RaiseDeactivated();
+          if (_prevProcessId == CurrentProcessId)
+          {
+            _prevProcessId = null;
+            RaiseDeactivated();
+          }
         }
       }
       #endregion Event Handlers
