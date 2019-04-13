@@ -51,5 +51,11 @@
     <Compile Include="Threading\DispatcherViewFactory.cs" />
     <Compile Include="Threading\UiThread.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\eagleboost.presentation\eagleboost.presentation.csproj">
+      <Project>{A118772D-121D-4CA3-B568-BCAFACCAE33F}</Project>
+      <Name>eagleboost.presentation</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

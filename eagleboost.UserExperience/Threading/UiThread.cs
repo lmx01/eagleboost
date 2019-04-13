@@ -11,6 +11,7 @@ namespace eagleboost.UserExperience.Threading
   using System.Threading;
   using System.Threading.Tasks;
   using System.Windows.Threading;
+  using eagleboost.presentation.Extensions;
 
   public class UiThread
   {
@@ -56,6 +57,15 @@ namespace eagleboost.UserExperience.Threading
     {
       var thread = AllThreads.FirstOrDefault(t => t.Thread.Name == threadName);
       return thread != null ? thread.Dispatcher : null;
+    }
+
+    public static async Task ShutdownAsync()
+    {
+      foreach (var uiThread in _allThreads.ToArray())
+      {
+        await uiThread.Dispatcher.ShutdownAsync();
+      }
+      _allThreads.Clear();
     }
     #endregion Public Methods
   }
