@@ -16,6 +16,10 @@ namespace eagleboost.googledrive.Contracts
 
     string Owners { get; }
 
+    string Parents { get; }
+
+    bool? IsChildrenCopied { get; }
+
     IDictionary<string, string> AppProperties { get; }
   }
 }

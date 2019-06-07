@@ -110,10 +110,14 @@
     <Compile Include="Models\GoogleDriveFolder.cs" />
     <Compile Include="Models\GoogleDriveProgress.cs" />
     <Compile Include="Models\GoogleDriveRoot.cs" />
+    <Compile Include="Models\GoogleMyDrive.cs" />
+    <Compile Include="Models\GoogleTeamDrive.cs" />
+    <Compile Include="Models\GoogleTeamDriveFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GoogleDriveService.cs" />
     <Compile Include="Services\GoogleDriveService.CommonQueries.cs" />
     <Compile Include="Services\UserCredentialProvider.cs" />
+    <Compile Include="Types\FolderProperties.cs" />
     <Compile Include="Types\MimeType.cs" />
     <Compile Include="ViewModels\GoogleDriveFolderOperations.cs" />
     <Compile Include="ViewModels\GoogleDriveFolderPathViewModel.cs" />

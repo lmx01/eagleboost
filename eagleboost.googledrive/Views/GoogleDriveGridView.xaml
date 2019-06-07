@@ -70,9 +70,11 @@
     <DataGrid.Columns>
       <DataGridTemplateColumn Header="Name" CellTemplate="{StaticResource NameTemplate}" SortMemberPath="Name"/>
       <DataGridTemplateColumn Header="Size" CellTemplate="{StaticResource FileSizeTemplate}" SortMemberPath="FileSize"/>
+      <DataGridCheckBoxColumn Header="Copied" Binding="{Binding IsChildrenCopied, Mode=OneWay}"/>
       <DataGridTextColumn Header="Type" Binding="{Binding Type, Mode=OneWay}"/>
       <DataGridCheckBoxColumn Header="Owned by me" Binding="{Binding OwnedByMe, Mode=OneWay}"/>
       <DataGridTextColumn Header="Owners" Binding="{Binding Owners, Mode=OneWay}"/>
+      <DataGridTextColumn Header="Parents" Binding="{Binding Parents, Mode=OneWay}"/>
       <DataGridTextColumn Header="Id" Binding="{Binding Id, Mode=OneWay}"/>
     </DataGrid.Columns>
     <i:Interaction.Behaviors>

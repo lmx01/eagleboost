@@ -13,11 +13,5 @@ namespace eagleboost.googledrive.Extensions
     {
       return file is IGoogleDriveFolder && file.Type == MimeType.Folder;
     }
-
-    public static bool HasChildrenCopied(this IGoogleDriveFolder folder)
-    {
-      string trueStr;
-      return folder.AppProperties != null && folder.AppProperties.TryGetValue("ChildrenCopied", out trueStr) && trueStr == "True";
-    }
   }
 }

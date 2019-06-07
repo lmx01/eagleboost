@@ -20,18 +20,26 @@ using eagleboost.core.Contracts;
     {
       base.OnAttached();
 
-      AssociatedObject.Loaded += HandleLoaded      ;
+      AssociatedObject.Loaded += HandleLoaded;
     }
 
     private void HandleLoaded(object sender, RoutedEventArgs e)
     {
-      AssociatedObject.Loaded -= HandleLoaded;
+      var element = (FrameworkElement) sender;
+      element.Loaded -= HandleLoaded;
 
-      var viewModel = Activator.CreateInstance(ViewModelType);
-      AssociatedObject.DataContext = viewModel;
+      var viewModel = element.DataContext;
+      if (viewModel == null && ViewModelType != null)
+      {
+        viewModel = Activator.CreateInstance(ViewModelType);
+        element.DataContext = viewModel;
+      }
 
       var startable = viewModel as IStartable;
-      startable?.Start();
+      if (startable != null)
+      {
+        startable.Start();
+      }
     }
   }
 }

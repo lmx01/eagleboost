@@ -7,7 +7,6 @@ namespace eagleboost.shell.FileSystems.Extensions
   using System.Linq;
   using System.Threading.Tasks;
   using eagleboost.shell.FileSystems.Contracts;
-  using eagleboost.shell.FileSystems.ViewModels;
 
   public static class FileSystemTreeViewModelExt
   {

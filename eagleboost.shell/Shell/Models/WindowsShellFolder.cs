@@ -22,7 +22,6 @@ namespace eagleboost.shell.Shell.Models
   {
     #region Declarations
     private readonly Func<WindowsShellFolder, Task<IReadOnlyList<IWindowsShellFile>>> _filesFunc;
-    private IReadOnlyList<IWindowsShellFile> _filesCache;
     private readonly ShellContainer _folder;
     #endregion Declarations
 
@@ -40,14 +39,9 @@ namespace eagleboost.shell.Shell.Models
       get { return _folder; }
     }
 
-    public async Task<IReadOnlyList<IFile>> GetFilesAsync(bool refresh = false, CancellationToken ct = default(CancellationToken))
+    public async Task<IReadOnlyList<IFile>> GetFilesAsync(CancellationToken ct = default(CancellationToken))
     {
-      if (!refresh && _filesCache != null)
-      {
-        return _filesCache;
-      }
-
-      return _filesCache = await _filesFunc(this).ConfigureAwait(false);
+      return await _filesFunc(this).ConfigureAwait(false);
     }
     #endregion IWindowsShellFolder
 

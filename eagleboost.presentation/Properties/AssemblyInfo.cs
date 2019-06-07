@@ -25,6 +25,7 @@ using System.Windows.Markup;
 
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Behaviors")]
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.DataGrids")]
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.Indicators")]
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.Selectors")]
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.MarkupExtensions.ItemIndex")]
 [assembly: XmlnsPrefix("http://www.eagleboost.com/xaml/presentation", "ebui")]

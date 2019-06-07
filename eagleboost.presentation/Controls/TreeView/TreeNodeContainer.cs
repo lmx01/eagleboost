@@ -29,6 +29,22 @@ namespace eagleboost.presentation.Controls.TreeView
     #endregion ctors
 
     #region ITreeNodeContainer
+    public async Task RefreshAsync()
+    {
+      if (IsExpanded || !HasDummyChild)
+      {
+        IsExpanded = false;
+        _childrenLoadedTcs = null;
+        Children.Clear();
+        Children.Add(DummyChild);
+        await ExpandAsync();
+        if (HasDummyChild)
+        {
+          IsExpanded = false;
+        }
+      }
+    }
+
     public async void AddData(object dataItem)
     {
       var node = await TreeNodesOperation.CreateChildAsync(dataItem, this).ConfigureAwait(true);

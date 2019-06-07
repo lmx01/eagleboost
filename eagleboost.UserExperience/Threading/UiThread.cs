@@ -63,7 +63,7 @@ namespace eagleboost.UserExperience.Threading
     {
       foreach (var uiThread in _allThreads.ToArray())
       {
-        await uiThread.Dispatcher.ShutdownAsync();
+        await uiThread.Dispatcher.ShutdownAsync().ConfigureAwait(false);
       }
       _allThreads.Clear();
     }

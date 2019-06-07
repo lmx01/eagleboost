@@ -205,6 +205,12 @@ namespace eagleboost.shell.FileSystems.ViewModels
     private ITreeNode CreateTreeNode(IFile f, ITreeNodeContainer parent)
     {
       ITreeNode result;
+      if (_itemsNodesMap.TryGetValue(f, out result))
+      {
+        Console.WriteLine("Node for " + f + "already exists");
+        return result;
+      }
+
       if (f is IFolder)
       {
         result = new TreeNodeContainer(f, parent, this);
@@ -215,6 +221,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       }
 
       _itemsNodesMap.Add(f, result);
+      Console.WriteLine("Create new node for " + f);
 
       return result;
     }

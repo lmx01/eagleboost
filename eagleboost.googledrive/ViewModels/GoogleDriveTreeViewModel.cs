@@ -33,7 +33,8 @@ namespace eagleboost.googledrive.ViewModels
 
     #region Declarations
     private IGoogleDriveFolder _rootFolder;
-    private readonly GoogleDriveRoot _rootFile = new GoogleDriveRoot();
+    private IGoogleDriveFolder _myDriveFolder;
+    private IGoogleDriveFolder _teamDriveFolder;
     private IGoogleDriveService _gService;
     private readonly IDispatcherProvider _dispatcher;
     #endregion Declarations
@@ -70,18 +71,34 @@ namespace eagleboost.googledrive.ViewModels
     {
       return node is DummyTreeNode || node.DataItem is IGoogleDriveFolder;
     }
-
     protected override ITreeNodeContainer CreateRootNode()
     {
-      _rootFolder = new GoogleDriveFolder(_rootFile, null, GetFilesAsync);
+      var root = new GoogleDriveRoot();
+      var myDrive = new GoogleMyDrive();
+      var teamDrive = new GoogleTeamDrive();
+
+      _rootFolder = new GoogleDriveFolder(root, null, GetRootsAsync);
+      _myDriveFolder = new GoogleDriveFolder(myDrive, _rootFolder, GetFilesAsync);
+      _teamDriveFolder = new GoogleDriveFolder(teamDrive, _rootFolder, GetTeamDrivesAsync);
       return new TreeNodeContainer(_rootFolder, null, this);
     }
     #endregion Overrides
 
     #region Private Methods
+    private Task<IReadOnlyList<IGoogleDriveFile>> GetRootsAsync(GoogleDriveFolder parent)
+    {
+      IReadOnlyList<IGoogleDriveFile> roots = new IGoogleDriveFile[] {_myDriveFolder, _teamDriveFolder};
+      return Task.FromResult(roots);
+    }
+
     private Task<IReadOnlyList<IGoogleDriveFile>> GetFilesAsync(GoogleDriveFolder parent)
     {
       return _gService.GetChildFilesAsync(parent, progress: BusyStatusReceiver);
+    }
+
+    private Task<IReadOnlyList<IGoogleDriveFile>> GetTeamDrivesAsync(GoogleDriveFolder parent)
+    {
+      return _gService.GetTeamDrivesAsync(parent, progress: BusyStatusReceiver);
     }
     #endregion Private Methods
 
@@ -93,7 +110,7 @@ namespace eagleboost.googledrive.ViewModels
       {
         var parentNode = (ITreeNodeContainer)FindNode(folder.Parent);
         ////Do nothing if we can't find the parent Node - it's not created yet so don't bother add data to its children
-        if (parentNode != null)
+        if (parentNode != null && parentNode.IsExpanded)
         {
           _dispatcher.BeginInvoke(() => parentNode.AddData(folder));
         }

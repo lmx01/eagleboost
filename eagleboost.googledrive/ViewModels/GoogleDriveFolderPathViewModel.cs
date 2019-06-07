@@ -4,10 +4,12 @@
 
 namespace eagleboost.googledrive.ViewModels
 {
+  using System;
   using System.Collections.Generic;
   using System.ComponentModel;
   using System.Linq;
   using eagleboost.core.ComponentModel;
+  using eagleboost.core.Data;
   using eagleboost.core.Extensions;
   using eagleboost.googledrive.Contracts;
   using eagleboost.presentation.Collections;
@@ -29,14 +31,17 @@ namespace eagleboost.googledrive.ViewModels
   {
     #region Declarations
     private readonly IGoogleDriveTreeViewModel _treeViewModel;
+    private readonly IGoogleDriveGridViewModel _gridViewModel;
     private IReadOnlyList<IGoogleDriveFolderOperations> _selectedFolders;
+    private DisposeManager _gridSelectionToken;
     #endregion Declarations
 
     #region ctors
-    public GoogleDriveFolderPathViewModel(IGoogleDriveTreeViewModel treeViewModel)
+    public GoogleDriveFolderPathViewModel(IGoogleDriveTreeViewModel treeViewModel, IGoogleDriveGridViewModel gridViewModel)
     {
       _treeViewModel = treeViewModel;
       _treeViewModel.PropertyChanged += HandleTreePropertyChanged;
+      _gridViewModel = gridViewModel;
     }
     #endregion ctors
 
@@ -70,17 +75,40 @@ namespace eagleboost.googledrive.ViewModels
     private void UpdateSelectedFolders(IGoogleDriveFolder folder)
     {
       var levels = new List<IGoogleDriveFolder>(folder.FolderToRoot<IGoogleDriveFolder>().Reverse());
-      var result = levels.Select(f => new GoogleDriveFolderOperations(f, HandleNavigateTo));
-      SelectedFolders = result.ToArray();
+      var result = new List<GoogleDriveFolderOperations>(levels.Count);
+      for (var i = 0; i < levels.Count; i++)
+      {
+        var f = levels[i];
+        var nextFolder = i < levels.Count - 1 ? levels[i + 1] : null;
+        var operation = new GoogleDriveFolderOperations(f, o => HandleNavigateTo(o, nextFolder));
+        result.Add(operation);
+      }
+
+      SelectedFolders = result;
     }
 
     private void UpdateEmptySelectedFolders()
     {
-      SelectedFolders = new []{ new GoogleDriveFolderOperations(_treeViewModel.Root.DataItem.CastTo<IGoogleDriveFolder>(), HandleNavigateTo) };
+      SelectedFolders = new[]
+      {
+        new GoogleDriveFolderOperations(_treeViewModel.Root.DataItem.CastTo<IGoogleDriveFolder>(), o => HandleNavigateTo(o, null))
+      };
     }
 
-    private void HandleNavigateTo(IGoogleDriveFolderOperations operation)
+    private void HandleNavigateTo(IGoogleDriveFolderOperations operation, IGoogleDriveFolder selected)
     {
+      if (_gridSelectionToken != null)
+      {
+        _gridSelectionToken.Dispose();
+      }
+
+      var gvm = _gridViewModel;
+
+      EventHandler handler = (s, e) => gvm.SetSelectedAsync(selected);
+
+      var token = _gridSelectionToken = new DisposeManager();
+      token.AddEvent(h => gvm.FilesPopulated += h, h => gvm.FilesPopulated -= h, handler);
+
       _treeViewModel.SelectAsync(operation.DriveFolder);
     }
     #endregion Private Methods

@@ -40,6 +40,8 @@ namespace eagleboost.sampleapp
       //AutoNotifySetup<PureViewModel>.Notify(v => v.Error).By(namesSelector);
       //AutoNotifySetup<PureViewModel>.Invalidate(v => v.OkCommand).By(namesSelector);
 
+      var a = new ApplicationActivationTracker();
+      a.Start();
       var viewModel = container.Resolve<PureViewModel>();
       DataContext = viewModel;
       TextBoxSelectAll.Install();

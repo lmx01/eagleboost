@@ -42,6 +42,11 @@ namespace eagleboost.googledrive.Services
     #endregion ctors
 
     #region IGoogleDriveService
+    public Task<IReadOnlyList<IGoogleDriveFile>> GetTeamDrivesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
+    {
+      return Task.Run(() => DoGetTeamDrivesAsync(parent, ct, progress), ct);
+    }
+
     public Task<IReadOnlyList<IGoogleDriveFile>> GetChildFilesAsync(IGoogleDriveFolder parent, string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
     {
       return Task.Run(() => DoGetChildFilesAsync(parent, query, ct, progress), ct);
@@ -123,6 +128,16 @@ namespace eagleboost.googledrive.Services
     private IGoogleDriveFile CreateDriveFile(File f, IGoogleDriveFolder parent, CancellationToken ct, IProgress<string> progress)
     {
       return f.IsFolder() ? (IGoogleDriveFile) new GoogleDriveFolder(f, parent, _ => DoGetChildFilesAsync(_, null, ct, progress)) : new GoogleDriveFile(f, parent);
+    }
+
+    private async Task<IReadOnlyList<IGoogleDriveFile>> DoGetTeamDrivesAsync(IGoogleDriveFolder parent, CancellationToken ct, IProgress<string> progress)
+    {
+      var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
+
+      var teamDrives = driveService.Teamdrives.List();
+      var t = await teamDrives.ExecuteAsync(ct);
+      var teamDriveFolders = t.TeamDrives.Select(i => new GoogleTeamDriveFolder(i, parent, _ => DoGetChildFilesAsync(_, null, ct, progress))).ToArray();
+      return teamDriveFolders;
     }
 
     private Task<IReadOnlyList<IGoogleDriveFile>> DoGetChildFilesAsync(IGoogleDriveFolder parent, string query, CancellationToken ct, IProgress<string> progress)
@@ -218,6 +233,7 @@ namespace eagleboost.googledrive.Services
       await pt.WaitWhilePausedAsync().ConfigureAwait(false);
       var toFile = new File { Parents = new List<string> { toFolder.Id } };
       var copyRequest = driveService.Files.Copy(toFile, from.Id);
+      copyRequest.SupportsTeamDrives = true;
       var resp = await copyRequest.ExecuteAsync(ct).ConfigureAwait(false);
       var result = new GoogleDriveFile(resp, toFolder);
       RaiseFileCreated(result);
@@ -229,7 +245,7 @@ namespace eagleboost.googledrive.Services
       await pt.WaitWhilePausedAsync().ConfigureAwait(false);
       var getOrCreateFolder = await GetOrCreateFolderAsync(from, toFolder, ct, progress, progressPayload).ConfigureAwait(false);
       var fromFolderCopy = getOrCreateFolder.Folder;
-      if (fromFolderCopy.HasChildrenCopied())
+      if (fromFolderCopy.IsChildrenCopied.GetValueOrDefault())
       {
         progressPayload.Status = string.Format("Folder '{0}' is already copied", fromFolderCopy.Name);
         progress.TryReport(() => progressPayload);
@@ -295,6 +311,7 @@ namespace eagleboost.googledrive.Services
         var appProperties = new Dictionary<string, string> { { "ChildrenCopied", "True" } };
         var updateFolder = new File { MimeType = MimeType.Folder, AppProperties = appProperties };
         var updateRequest = driveService.Files.Update(updateFolder, folder.Id);
+        updateRequest.SupportsTeamDrives = true;
         await updateRequest.ExecuteAsync(ct).ConfigureAwait(false);
       }
       catch (Exception ex)
@@ -348,6 +365,7 @@ namespace eagleboost.googledrive.Services
       var fromCopy = new File {Parents = new List<string> {toFolder.Id}, Name = from.Name, MimeType = MimeType.Folder};
       var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
       var createRequest = driveService.Files.Create(fromCopy);
+      createRequest.SupportsTeamDrives = true;
       var resp = await createRequest.ExecuteAsync(ct).ConfigureAwait(false);
       var result = new GoogleDriveFolder(resp, toFolder, _ => DoGetChildFilesAsync(_, null, ct, progress));
       RaiseFileCreated(result);
@@ -362,6 +380,7 @@ namespace eagleboost.googledrive.Services
       {
         var folder = new File { Name = name, MimeType = MimeType.Folder, Parents = new List<string> { parent.Id } };
         var createRequest = driveService.Files.Create(folder);
+        createRequest.SupportsTeamDrives = true;
         var resp = await createRequest.ExecuteAsync(ct).ConfigureAwait(false);
         var result = (IGoogleDriveFolder)CreateDriveFile(resp, parent, ct, progress);
         RaiseFileCreated(result);
@@ -380,6 +399,7 @@ namespace eagleboost.googledrive.Services
       try
       {
         var deleteRequest = driveService.Files.Delete(id);
+        deleteRequest.SupportsTeamDrives = true;
         await deleteRequest.ExecuteAsync(ct).ConfigureAwait(false);
       }
       catch (Exception ex)

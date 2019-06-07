@@ -14,6 +14,8 @@ namespace eagleboost.googledrive.Contracts
   public interface IGoogleDriveService
   {
     #region Methods
+    Task<IReadOnlyList<IGoogleDriveFile>> GetTeamDrivesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+
     Task<IReadOnlyList<IGoogleDriveFile>> GetChildFilesAsync(IGoogleDriveFolder parent, string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task<IDictionary<IGoogleDriveFile, int>> RecursiveGetChildFilesAsync(IGoogleDriveFolder parent, int start, CancellationToken ct = default(CancellationToken));

@@ -63,7 +63,17 @@ namespace eagleboost.googledrive.Models
 
     public string Owners
     {
-      get { return string.Join(",", _file.Owners.Select(i => i.DisplayName)); }
+      get { return _file.Owners != null ? string.Join(",", _file.Owners.Select(i => i.DisplayName)) : null; }
+    }
+
+    public string Parents
+    {
+      get { return _file.Parents != null ? string.Join(",", _file.Parents) : null; }
+    }
+
+    public bool? IsChildrenCopied
+    {
+      get { return null; }
     }
 
     public IDictionary<string, string> AppProperties

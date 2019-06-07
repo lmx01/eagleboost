@@ -121,10 +121,18 @@
     <Compile Include="Contracts\IHeader.cs" />
     <Compile Include="Contracts\ISelectItemReceiver.cs" />
     <Compile Include="Contracts\IPreviewSelectionChange.cs" />
+    <Page Include="Controls\Choosers\DataItemChooserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DataGrids\DataGridResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Compile Include="Controls\Choosers\DataItemChooserView.xaml.cs">
+      <DependentUpon>DataItemChooserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Choosers\DataItemChooserViewModel.cs" />
     <Compile Include="Controls\DataGrids\DataGridPrioritySorting.cs" />
     <Compile Include="Controls\DataGrids\DataGridPrioritySortingItem.cs" />
     <Compile Include="Controls\DataGrids\IColumnComparer.cs" />

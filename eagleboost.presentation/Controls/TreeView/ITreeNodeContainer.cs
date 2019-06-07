@@ -16,6 +16,8 @@ namespace eagleboost.presentation.Controls.TreeView
 
     Task LoadChildrenAsync();
 
+    Task RefreshAsync();
+
     void AddData(object dataItem);
 
     void RemoveData(object dataItem);

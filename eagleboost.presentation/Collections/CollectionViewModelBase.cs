@@ -85,7 +85,7 @@ namespace eagleboost.presentation.Collections
       set { SetValue(ref _selectedItem, value); }
     }
 
-    public virtual ObservableCollection<T> Items
+    public ObservableCollection<T> Items
     {
       get { return _items ?? (_items = GetItemsCollection()); }
     }

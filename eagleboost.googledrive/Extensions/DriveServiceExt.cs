@@ -12,9 +12,11 @@ namespace eagleboost.googledrive.Extensions
     {
       var request = driveService.Files.List();
       request.Q = query;
+      request.SupportsTeamDrives = true;
+      request.IncludeTeamDriveItems = true;
       request.Spaces = "drive";
       request.Corpora = "user";
-      request.Fields = "nextPageToken, files(id, name, mimeType, ownedByMe, owners, size, appProperties)";
+      request.Fields = "nextPageToken, files(id, name, mimeType, ownedByMe, owners, parents, size, appProperties)";
       request.OrderBy = "name";
       request.PageToken = pageToken;
 

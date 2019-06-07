@@ -30,17 +30,20 @@ namespace eagleboost.shell.FileSystems.Contracts
     where TFolder : IFolder
   {
     #region Properties
-
     TFolder CurrentFolder { get; }
 
     #endregion Properties
 
     #region Methods
     Task<IReadOnlyList<TFile>> SetFolderAsync(TFolder folder, CancellationToken ct = default(CancellationToken));
+
+    Task<TFile> SetSelectedAsync(TFile file, CancellationToken ct = default(CancellationToken));
     #endregion Methods
 
     #region Events
     event FileSelectedEventHandler<TFile> FileSelected;
+
+    event EventHandler FilesPopulated;
     #endregion Events
   }
 

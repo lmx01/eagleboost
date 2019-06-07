@@ -10,6 +10,7 @@ namespace eagleboost.googledrive.Models
   using System.Threading;
   using System.Threading.Tasks;
   using eagleboost.googledrive.Contracts;
+  using eagleboost.googledrive.Types;
   using eagleboost.shell.FileSystems.Contracts;
   using eagleboost.shell.FileSystems.Models;
   using Google.Apis.Drive.v3.Data;
@@ -21,7 +22,6 @@ namespace eagleboost.googledrive.Models
   {
     #region Declarations
     private readonly Func<GoogleDriveFolder, Task<IReadOnlyList<IGoogleDriveFile>>> _filesFunc;
-    private IReadOnlyList<IGoogleDriveFile> _filesCache;
     private readonly File _file;
     #endregion Declarations
 
@@ -70,7 +70,37 @@ namespace eagleboost.googledrive.Models
 
     public string Owners
     {
-      get { return string.Join(",", _file.Owners.Select(i => i.DisplayName)); }
+      get { return _file.Owners != null ? string.Join(",", _file.Owners.Select(i => i.DisplayName)) : null; }
+    }
+
+    public string Parents
+    {
+      get { return _file.Parents != null ? string.Join(",", _file.Parents) : null; }
+    }
+
+    public bool? IsChildrenCopied
+    {
+      get
+      {
+        var properties = AppProperties;
+        if (properties == null)
+        {
+          return null;
+        }
+
+        string trueStr;
+        if (properties.TryGetValue(FolderProperties.ChildrenCopied, out trueStr))
+        {
+          if (trueStr == "True")
+          {
+            return true;
+          }
+
+          throw new NotSupportedException("Unexpected value for App property: " + FolderProperties.ChildrenCopied + "=" + trueStr);
+        }
+
+        return null;
+      }
     }
 
     public IDictionary<string, string> AppProperties
@@ -80,14 +110,9 @@ namespace eagleboost.googledrive.Models
     #endregion IGoogleDriveFile
 
     #region IGoogleDriveFolder
-    public async Task<IReadOnlyList<IFile>> GetFilesAsync(bool refresh = false, CancellationToken ct = new CancellationToken())
+    public async Task<IReadOnlyList<IFile>> GetFilesAsync(CancellationToken ct = new CancellationToken())
     {
-      if (!refresh && _filesCache != null)
-      {
-        return _filesCache;
-      }
-
-      return _filesCache = await _filesFunc(this).ConfigureAwait(false);
+      return await _filesFunc(this).ConfigureAwait(false);
     }
     #endregion IGoogleDriveFolder
   }

@@ -68,7 +68,10 @@ namespace eagleboost.presentation.Controls
     public void Dispose()
     {
       RemoveVisualChild(_overlayElement);
-      _layer.Remove(this);
+      if (_layer != null)
+      {
+        _layer.Remove(this);
+      }
     }
   }
 }

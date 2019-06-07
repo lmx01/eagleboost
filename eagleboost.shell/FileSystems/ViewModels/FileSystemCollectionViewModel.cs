@@ -4,6 +4,7 @@
 
 namespace eagleboost.shell.FileSystems.ViewModels
 {
+  using System;
   using System.Collections.Generic;
   using System.ComponentModel;
   using System.Linq;
@@ -52,7 +53,21 @@ namespace eagleboost.shell.FileSystems.ViewModels
       var result = files.Cast<TFile>().ToArray();
       Items.AddRange(result);
 
+      RaiseFilesPopulated();
+
       return result;
+    }
+
+    public Task<TFile> SetSelectedAsync(TFile file, CancellationToken ct = default(CancellationToken))
+    {
+      var items = Items;
+      var item = items.FirstOrDefault(f => f.Id == file.Id);
+      if (item != null)
+      {
+        SelectedItem = item;
+      }
+
+      return Task.FromResult(item);
     }
 
     public event FileSelectedEventHandler<TFile> FileSelected;
@@ -65,6 +80,18 @@ namespace eagleboost.shell.FileSystems.ViewModels
         handler(this, new FileSelectedEventArgs<TFile>(file));
       }
     }
+
+    public event EventHandler FilesPopulated;
+
+    protected virtual void RaiseFilesPopulated()
+    {
+      var handler = FilesPopulated;
+      if (handler != null)
+      {
+        handler(this, EventArgs.Empty);
+      }
+    }
+
     #endregion IFileSystemCollectionViewModel
 
     #region Overrides
