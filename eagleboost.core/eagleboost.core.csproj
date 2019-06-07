@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
@@ -103,6 +106,12 @@
     <Compile Include="Extensions\PropertyChangedEventArgsExt.cs" />
     <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Extensions\TypeExt.cs" />
+    <Compile Include="Logging\ConsoleLogger.cs" />
+    <Compile Include="Logging\FileLogger.cs" />
+    <Compile Include="Logging\ILoggerFacadeEx.cs" />
+    <Compile Include="Logging\LoggerFacadeBase.cs" />
+    <Compile Include="Logging\LoggerFacadeExt.cs" />
+    <Compile Include="Logging\LoggerManager.cs" />
     <Compile Include="Threading\CancelationTokenTimeout\CancelationTokenExt.cs" />
     <Compile Include="Threading\CancelationTokenTimeout\CancelationTokenExt.Exceptions.cs" />
     <Compile Include="Threading\CancelationTokenTimeout\CanceledTaskExt.cs" />

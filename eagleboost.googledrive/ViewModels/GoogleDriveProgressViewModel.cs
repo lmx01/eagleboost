@@ -7,9 +7,9 @@ namespace eagleboost.googledrive.ViewModels
   using System;
   using System.Collections.Generic;
   using System.ComponentModel;
-  using System.Linq;
   using System.Threading;
   using eagleboost.core.Extensions;
+  using eagleboost.core.Logging;
   using eagleboost.core.Threading;
   using eagleboost.googledrive.Contracts;
   using eagleboost.googledrive.Models;
@@ -20,6 +20,8 @@ namespace eagleboost.googledrive.ViewModels
   /// </summary>
   public class GoogleDriveProgressViewModel : ProgressItemViewModel<GoogleDriveProgress>
   {
+    private static readonly ILoggerFacadeEx Logger = LoggerManager.GetLogger<GoogleDriveProgressViewModel>();
+
     #region ctors
     public GoogleDriveProgressViewModel(PauseTokenSource pts, CancellationTokenSource cts) : base(pts, cts)
     {
@@ -46,7 +48,7 @@ namespace eagleboost.googledrive.ViewModels
 
     protected override void DoReport(GoogleDriveProgress value)
     {
-      Console.WriteLine(value.Status);
+      Logger.Info(value.Status);
       Description = value.Status;
       Current = value.Count;
       if (TotalFiles != null)

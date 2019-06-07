@@ -316,3 +316,5 @@ __pycache__/
 /output/eagleboost.component.dll.config
 /output/eagleboost.component.dll
 /output/CommonServiceLocator.dll
+/output/log4net.xml
+/output/log4net.dll

@@ -10,6 +10,7 @@ namespace eagleboost.googledrive.Services
   using System.Threading;
   using System.Threading.Tasks;
   using eagleboost.core.Extensions;
+  using eagleboost.core.Logging;
   using eagleboost.core.Threading;
   using eagleboost.googledrive.Contracts;
   using eagleboost.googledrive.Extensions;
@@ -30,16 +31,29 @@ namespace eagleboost.googledrive.Services
     private readonly string _credentialTokenFile;
     private TaskCompletionSource<DriveService> _tcs;
     private readonly object _tcsLock = new object();
+    private readonly ILoggerFacadeEx _logger;
     #endregion Declarations
 
     #region ctors
-    public GoogleDriveService(string credentialsFile, string credentialTokenFile, string applicationName)
+    public GoogleDriveService(string credentialsFile, string credentialTokenFile, string applicationName) : this(null, credentialsFile, credentialTokenFile, applicationName)
     {
+    }
+
+    public GoogleDriveService(ILoggerFacadeEx logger, string credentialsFile, string credentialTokenFile, string applicationName)
+    {
+      _logger = logger ?? LoggerManager.GetLogger<GoogleDriveService>();
       _credentialsFile = credentialsFile;
       _credentialTokenFile = credentialTokenFile;
       _applicationName = applicationName;
     }
     #endregion ctors
+
+    #region Private Properties
+    private ILoggerFacadeEx Logger
+    {
+      get { return _logger; }
+    }
+    #endregion Private Properties
 
     #region IGoogleDriveService
     public Task<IReadOnlyList<IGoogleDriveFile>> GetTeamDrivesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
@@ -281,7 +295,7 @@ namespace eagleboost.googledrive.Services
             }
             catch (Exception ex)
             {
-              Console.WriteLine("Error copy file {0} - {1}", from.Name, ex);
+              Logger.Error("Error copy file {0} - {1}", from.Name, ex);
               hasErrors = true;
             }
           }
@@ -316,7 +330,7 @@ namespace eagleboost.googledrive.Services
       }
       catch (Exception ex)
       {
-        Console.WriteLine("Fail to update AppProperties for folder {0} - {1}", folder, ex);
+        Logger.Error("Fail to update AppProperties for folder {0} - {1}", folder, ex);
       }
     }
 
@@ -388,7 +402,7 @@ namespace eagleboost.googledrive.Services
       }
       catch (Exception ex)
       {
-        Console.WriteLine("Error creating folder {0} - {1}", name, ex);
+        Logger.Error("Error creating folder {0} - {1}", name, ex);
         return null;
       }
     }
@@ -404,7 +418,7 @@ namespace eagleboost.googledrive.Services
       }
       catch (Exception ex)
       {
-        Console.WriteLine("Error deleting file {0} - {1}", id, ex);
+        Logger.Error("Error deleting file {0} - {1}", id, ex);
       }
     }
     #endregion Private Methods

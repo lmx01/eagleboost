@@ -14,6 +14,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   using System.Windows.Data;
   using eagleboost.core.ComponentModel;
   using eagleboost.core.Extensions;
+  using eagleboost.core.Logging;
   using eagleboost.presentation.Collections;
   using eagleboost.presentation.Controls.TreeView;
   using eagleboost.shell.FileSystems.Contracts;
@@ -24,6 +25,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   public abstract class FileSystemTreeViewModel : NotifyPropertyChangedBase, IFileSystemTreeViewModel
   {
     #region Statics
+    private static readonly ILoggerFacadeEx Logger = LoggerManager.GetLogger<FileSystemTreeViewModel>();
     protected static readonly string Name = Property<IFile>(o => o.Name);
     protected static readonly PropertyChangedEventArgs SelectedItemArgs = GetChangedArgs<FileSystemTreeViewModel>(o => o.SelectedItem);
     #endregion Statics
@@ -207,7 +209,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       ITreeNode result;
       if (_itemsNodesMap.TryGetValue(f, out result))
       {
-        Console.WriteLine("Node for " + f + "already exists");
+        Logger.Info("Node for " + f + "already exists");
         return result;
       }
 
@@ -221,7 +223,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       }
 
       _itemsNodesMap.Add(f, result);
-      Console.WriteLine("Create new node for " + f);
+      Logger.Info("Create new node for " + f);
 
       return result;
     }
