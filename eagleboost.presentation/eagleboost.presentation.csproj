@@ -161,6 +161,7 @@
     <Compile Include="Controls\Progress\ProgressViewModel.cs" />
     <Compile Include="Controls\Progress\ProgressViewOptions.cs" />
     <Compile Include="Controls\Selectors\SelectorItemDoubleClick.cs" />
+    <Compile Include="Controls\TabContentPreservation.cs" />
     <Compile Include="Controls\TreeView\BringSelectedTreeItemIntoView.cs" />
     <Compile Include="Controls\TreeView\ITreeNodeContainer.cs" />
     <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
