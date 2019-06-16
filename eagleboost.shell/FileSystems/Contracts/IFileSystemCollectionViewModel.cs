@@ -6,6 +6,7 @@ namespace eagleboost.shell.FileSystems.Contracts
 {
   using System;
   using System.Collections.Generic;
+  using System.ComponentModel;
   using System.Threading;
   using System.Threading.Tasks;
   using eagleboost.presentation.Collections;
@@ -25,7 +26,7 @@ namespace eagleboost.shell.FileSystems.Contracts
   /// </summary>
   /// <typeparam name="TFile"></typeparam>
   /// <typeparam name="TFolder"></typeparam>
-  public interface IFileSystemCollectionViewModel<TFile, TFolder> : ICollectionViewModel<TFile>
+  public interface IFileSystemCollectionViewModel<TFile, TFolder> : ICollectionViewModel<TFile>, INotifyPropertyChanged
     where TFile : class, IFile
     where TFolder : IFolder
   {

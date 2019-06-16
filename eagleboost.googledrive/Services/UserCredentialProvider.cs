@@ -18,7 +18,7 @@ namespace eagleboost.googledrive.Services
 
   public class UserCredentialProvider
   {
-    private static readonly string[] Scopes = { DriveService.Scope.Drive };
+    private static readonly string[] Scopes = { DriveService.Scope.Drive, DriveService.Scope.DriveReadonly };
 
     public async Task<UserCredential> GetUserCredentialAsync(string credentialFile, string credPath)
     {

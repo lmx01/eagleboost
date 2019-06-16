@@ -6,6 +6,7 @@ namespace eagleboost.googledrive.Contracts
 {
   using System;
   using System.Collections.Generic;
+  using System.IO;
   using System.Threading;
   using System.Threading.Tasks;
   using eagleboost.core.Threading;
@@ -27,6 +28,8 @@ namespace eagleboost.googledrive.Contracts
     Task<IGoogleDriveFolder> CreateFolderAsync(string name, IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task DeleteAsync(string id, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+
+    Task DownloadAsync(string id, Stream stream, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
     #endregion Methods
 
     #region Events

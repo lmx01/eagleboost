@@ -107,7 +107,10 @@
     <Compile Include="Extensions\FileExt.cs" />
     <Compile Include="Extensions\GoogleDriveFileExt.cs" />
     <Compile Include="Models\GoogleDriveFile.cs" />
+    <Compile Include="Models\GoogleDriveFileInfoInvalid.cs" />
     <Compile Include="Models\GoogleDriveFolder.cs" />
+    <Compile Include="Models\GoogleDriveFileInfoModel.cs" />
+    <Compile Include="Models\GoogleDriveImageFileInfoModel.cs" />
     <Compile Include="Models\GoogleDriveProgress.cs" />
     <Compile Include="Models\GoogleDriveRoot.cs" />
     <Compile Include="Models\GoogleMyDrive.cs" />
@@ -119,12 +122,16 @@
     <Compile Include="Services\UserCredentialProvider.cs" />
     <Compile Include="Types\FolderProperties.cs" />
     <Compile Include="Types\MimeType.cs" />
+    <Compile Include="ViewModels\GoogleDriveFileInfoViewModel.cs" />
     <Compile Include="ViewModels\GoogleDriveFolderOperations.cs" />
     <Compile Include="ViewModels\GoogleDriveFolderPathViewModel.cs" />
     <Compile Include="ViewModels\GoogleDriveProgressItemViewModel.cs" />
     <Compile Include="ViewModels\GoogleDriveProgressViewModel.cs" />
     <Compile Include="ViewModels\GoogleDriveTreeViewModel.cs" />
     <Compile Include="Views\GoogleDriveFileComparer.cs" />
+    <Compile Include="Views\GoogleDriveFileInfoControl.xaml.cs">
+      <DependentUpon>GoogleDriveFileInfoControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GoogleDriveFolderPathControl.xaml.cs">
       <DependentUpon>GoogleDriveFolderPathControl.xaml</DependentUpon>
     </Compile>
@@ -141,6 +148,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\GoogleDriveFileInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GoogleDriveFolderPathControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

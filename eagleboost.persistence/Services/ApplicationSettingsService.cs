@@ -8,6 +8,7 @@ namespace eagleboost.persistence.Services
   using System.IO.IsolatedStorage;
   using System.Windows;
   using eagleboost.core.Extensions;
+  using eagleboost.core.Logging;
   using eagleboost.persistence.Contracts;
   using Newtonsoft.Json;
 
@@ -16,6 +17,10 @@ namespace eagleboost.persistence.Services
   /// </summary>
   public class ApplicationSettingsService : IApplicationSettingsService
   {
+    #region Statics
+    private static readonly ILoggerFacadeEx Log = LoggerManager.GetLogger<ApplicationSettingsService>();
+    #endregion Statics
+
     #region Declarations
     private static string _appName;
     private static Application _application;
@@ -51,7 +56,9 @@ namespace eagleboost.persistence.Services
     #region IApplicationSettingsService
     public void Save<T>(string key, T setting) where T : class
     {
-      _application.Properties[key] = JsonConvert.SerializeObject(setting);
+      var settingJson = JsonConvert.SerializeObject(setting);
+      Log.Info("Save setting " + key + ": " + settingJson);
+      _application.Properties[key] = settingJson;
     }
 
     public T Load<T>(string key) where T : class
@@ -129,10 +136,12 @@ namespace eagleboost.persistence.Services
       {
         var str = (string)_application.Properties[key];
         state = JsonConvert.DeserializeObject<T>(str);
+        Log.Info("Load setting " + key + ": " + str);
         return true;
       }
 
       state = default(T);
+      Log.Info("Load default setting " + key + ": " + state);
       return false;
     }
     #endregion Private Methods

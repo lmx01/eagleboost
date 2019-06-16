@@ -122,6 +122,7 @@
     <Compile Include="Threading\CancelationTokenTimeout\TaskExecutionLogger.Void.cs">
       <DependentUpon>TaskExecutionLogger.cs</DependentUpon>
     </Compile>
+    <Compile Include="Threading\CancellableTaskHandler.cs" />
     <Compile Include="Threading\PauseTokenSource.cs" />
     <Compile Include="Types\FileSize.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,5 +7,7 @@ namespace eagleboost.googledrive.Types
   public class MimeType
   {
     public const string Folder = "application/vnd.google-apps.folder";
+    public const string Jpeg = "image/jpeg";
+    public const string Png = "image/png";
   }
 }

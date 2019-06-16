@@ -97,6 +97,7 @@
       <DependentUpon>BrowseForFolder.xaml</DependentUpon>
     </Compile>
     <Compile Include="FileSystems\Contracts\IFile.cs" />
+    <Compile Include="FileSystems\Contracts\IFileSystemFileInfoViewModel.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemTreeNodesOperation.cs" />
     <Compile Include="FileSystems\Contracts\IFolder.cs" />
     <Compile Include="FileSystems\Extensions\FileExt.cs" />
