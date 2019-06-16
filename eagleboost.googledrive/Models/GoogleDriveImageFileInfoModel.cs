@@ -15,6 +15,10 @@ namespace eagleboost.googledrive.Models
 
     #region Public Properties
     public ImageSource ImageSource { get; set; }
+
+    public double Width { get; set; }
+
+    public double Height { get; set; }
     #endregion Public Properties
   }
 }

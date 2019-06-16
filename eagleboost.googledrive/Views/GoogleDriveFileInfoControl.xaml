@@ -12,20 +12,59 @@
 
   <UserControl.Resources>
     <DataTemplate DataType="{x:Type models:GoogleDriveImageFileInfoModel}">
-      <Image Source="{Binding ImageSource}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="0,0,0,5">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="{Binding FileName}"/>
+          <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <TextBlock Text="{Binding Width}"/>
+            <TextBlock Text=" x "/>
+            <TextBlock Text="{Binding Height}"/>
+          </StackPanel>
+        </Grid>
+        <Image x:Name="Image" Grid.Row="1" Source="{Binding ImageSource}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Popup x:Name="ImagePopup">
+          <Image x:Name="PopupImage"/>
+        </Popup>
+      </Grid>
+      <DataTemplate.Triggers>
+        <Trigger SourceName="Image" Property="IsMouseOver" Value="True">
+          <Setter TargetName="PopupImage" Property="Source" Value="{Binding ImageSource}"/>
+          <Setter TargetName="ImagePopup" Property="IsOpen" Value="True"/>
+        </Trigger>
+      </DataTemplate.Triggers>
     </DataTemplate>
+
     <DataTemplate DataType="{x:Type models:GoogleDriveFileInfoInvalid}">
-      <TextBlock Text="Invalid file" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding FileName}" Margin="0,0,0,5"/>
+        <TextBlock Grid.Row="1" Text="Invalid file" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type models:GoogleDriveFileInfoModel}">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding FileName}" Margin="0,0,0,5"/>
+        <TextBlock Grid.Row="1" Text="Preview not available" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Grid>
     </DataTemplate>
   </UserControl.Resources>
 
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
-    <TextBlock Text="{Binding FileInfo.FileName}" Margin="0,0,0,5"/>
-    <ContentControl Grid.Row="1" Content="{Binding FileInfo}"/>
-  </Grid>
+  <ContentControl Content="{Binding FileInfo}"/>
 
 </UserControl>

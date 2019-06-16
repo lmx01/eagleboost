@@ -5,7 +5,6 @@
 namespace eagleboost.googledrive.ViewModels
 {
   using System;
-  using System.ComponentModel;
   using System.IO;
   using System.Threading;
   using System.Threading.Tasks;
@@ -68,12 +67,17 @@ namespace eagleboost.googledrive.ViewModels
         {
           await _gService.DownloadAsync(file.Id, stream, ct, process);
           var imageSource =BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-          var fileInfo = new GoogleDriveImageFileInfoModel(file) {ImageSource = imageSource};
+          var fileInfo = new GoogleDriveImageFileInfoModel(file)
+          {
+            ImageSource = imageSource,
+            Width = imageSource.PixelWidth,
+            Height = imageSource.PixelHeight,
+          };
           return fileInfo;
         }
       }
 
-      return null;
+      return new GoogleDriveFileInfoModel(file);
     }
     #endregion Private Methods
   }

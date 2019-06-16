@@ -107,10 +107,14 @@
     <Compile Include="Extensions\FileExt.cs" />
     <Compile Include="Extensions\GoogleDriveFileExt.cs" />
     <Compile Include="Models\GoogleDriveFile.cs" />
-    <Compile Include="Models\GoogleDriveFileInfoInvalid.cs" />
+    <Compile Include="Models\GoogleDriveFileInfoInvalid.cs">
+      <DependentUpon>GoogleDriveFileInfoModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\GoogleDriveFolder.cs" />
     <Compile Include="Models\GoogleDriveFileInfoModel.cs" />
-    <Compile Include="Models\GoogleDriveImageFileInfoModel.cs" />
+    <Compile Include="Models\GoogleDriveImageFileInfoModel.cs">
+      <DependentUpon>GoogleDriveFileInfoModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\GoogleDriveProgress.cs" />
     <Compile Include="Models\GoogleDriveRoot.cs" />
     <Compile Include="Models\GoogleMyDrive.cs" />
