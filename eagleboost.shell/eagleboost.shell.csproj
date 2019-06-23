@@ -98,6 +98,8 @@
     </Compile>
     <Compile Include="FileSystems\Contracts\IFile.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemFileInfoViewModel.cs" />
+    <Compile Include="FileSystems\Contracts\IFileSystemFolderOperations.cs" />
+    <Compile Include="FileSystems\Contracts\IFileSystemFolderPathViewModel.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemTreeNodesOperation.cs" />
     <Compile Include="FileSystems\Contracts\IFolder.cs" />
     <Compile Include="FileSystems\Extensions\FileExt.cs" />
@@ -105,6 +107,8 @@
     <Compile Include="FileSystems\ViewModels\FileSystemCollectionViewModel.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemCollectionViewModel.cs" />
     <Compile Include="FileSystems\Models\FileBase.cs" />
+    <Compile Include="FileSystems\ViewModels\FileSystemFolderOperations.cs" />
+    <Compile Include="FileSystems\ViewModels\FileSystemFolderPathViewModel.cs" />
     <Compile Include="FileSystems\ViewModels\FileSystemTreeViewModel.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemTreeViewModel.cs" />
     <Compile Include="FileSystems\ViewModels\FileSystemViewHandler.cs" />
