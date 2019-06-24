@@ -104,6 +104,7 @@
     <Compile Include="Behaviors\TextBoxClearButtonBehavior.cs" />
     <Compile Include="Behaviors\TextboxEx.cs" />
     <Compile Include="Behaviors\TextBoxSelectAll.cs" />
+    <Compile Include="Behaviors\ToggleDropdownMenu.cs" />
     <Compile Include="Behaviors\TreeViewSelectionChanging.cs" />
     <Compile Include="Behaviors\ViewModelLoader.cs" />
     <Compile Include="Collections\CollectionViewModelBase.cs" />

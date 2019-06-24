@@ -96,10 +96,15 @@
     <Compile Include="Controls\BrowseForFolder.xaml.cs">
       <DependentUpon>BrowseForFolder.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FileSystems\Collections\FileSystemBackwardHistory.cs" />
+    <Compile Include="FileSystems\Collections\FileSystemForwardHistory.cs" />
+    <Compile Include="FileSystems\Collections\FileSystemHistoryBase.cs" />
     <Compile Include="FileSystems\Contracts\IFile.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemFileInfoViewModel.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemFolderOperations.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemFolderPathViewModel.cs" />
+    <Compile Include="FileSystems\Contracts\IFileSystemHistoryOperations.cs" />
+    <Compile Include="FileSystems\Contracts\IFileSystemHistoryViewModel.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemTreeNodesOperation.cs" />
     <Compile Include="FileSystems\Contracts\IFolder.cs" />
     <Compile Include="FileSystems\Extensions\FileExt.cs" />
@@ -109,6 +114,8 @@
     <Compile Include="FileSystems\Models\FileBase.cs" />
     <Compile Include="FileSystems\ViewModels\FileSystemFolderOperations.cs" />
     <Compile Include="FileSystems\ViewModels\FileSystemFolderPathViewModel.cs" />
+    <Compile Include="FileSystems\ViewModels\FileSystemHistoryOperations.cs" />
+    <Compile Include="FileSystems\ViewModels\FileSystemHistoryViewModel.cs" />
     <Compile Include="FileSystems\ViewModels\FileSystemTreeViewModel.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemTreeViewModel.cs" />
     <Compile Include="FileSystems\ViewModels\FileSystemViewHandler.cs" />

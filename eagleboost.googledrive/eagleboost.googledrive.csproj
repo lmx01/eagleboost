@@ -126,6 +126,7 @@
     <Compile Include="Services\UserCredentialProvider.cs" />
     <Compile Include="Types\FolderProperties.cs" />
     <Compile Include="Types\MimeType.cs" />
+    <Compile Include="ViewModels\GoogleDriveHistoryViewModel.cs" />
     <Compile Include="ViewModels\GoogleDriveFileInfoViewModel.cs" />
     <Compile Include="ViewModels\GoogleDriveFolderOperations.cs" />
     <Compile Include="ViewModels\GoogleDriveFolderPathViewModel.cs" />
@@ -143,6 +144,9 @@
       <DependentUpon>GoogleDriveGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\GoogleDriveGridViewModel.cs" />
+    <Compile Include="Views\GoogleDriveHistoryControl.xaml.cs">
+      <DependentUpon>GoogleDriveHistoryControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GoogleDriveTreeView.xaml.cs">
       <DependentUpon>GoogleDriveTreeView.xaml</DependentUpon>
     </Compile>
@@ -161,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GoogleDriveGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GoogleDriveHistoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

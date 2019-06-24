@@ -17,5 +17,16 @@ namespace eagleboost.core.Utils
 
       return paramValue;
     }
+
+    public static T ThrowIfMismatch<T>(object paramValue, string paramName) where T : class
+    {
+      var result = paramValue as T;
+      if (result == null)
+      {
+        throw new ArgumentException("Type is not " + typeof(T), "paramValue");
+      }
+
+      return result;
+    }
   }
 }
