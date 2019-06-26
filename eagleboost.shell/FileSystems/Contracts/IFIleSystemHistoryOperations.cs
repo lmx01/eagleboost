@@ -18,6 +18,10 @@ namespace eagleboost.shell.FileSystems.Contracts
     ICommand NavigateToCommand { get; }
     #endregion Properties
 
+    #region Methods
+    void NavigateTo();
+    #endregion Methods
+
     #region Events
     event EventHandler Navigate;
     #endregion Events

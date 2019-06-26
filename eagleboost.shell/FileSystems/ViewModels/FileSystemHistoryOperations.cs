@@ -27,7 +27,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
     {
       _folder = folder;
       _navigateToAction = navigateToAction;
-      NavigateToCommand = new DelegateCommand<IFileSystemHistoryOperations>(HandleNavigateTo);
+      NavigateToCommand = new DelegateCommand(HandleNavigateTo);
     }
     #endregion ctors
 
@@ -48,6 +48,11 @@ namespace eagleboost.shell.FileSystems.ViewModels
     }
 
     public ICommand NavigateToCommand { get; private set; }
+
+    public void NavigateTo()
+    {
+      _navigateToAction(this);
+    }
 
     public event EventHandler Navigate;
 
@@ -71,9 +76,9 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #endregion Overrides
 
     #region Private Methods
-    private void HandleNavigateTo(IFileSystemHistoryOperations folder)
+    private void HandleNavigateTo()
     {
-      _navigateToAction(folder);
+      NavigateTo();
       RaiseNavigate();
     }
     #endregion Private Methods

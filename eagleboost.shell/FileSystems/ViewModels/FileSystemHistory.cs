@@ -108,7 +108,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       {
         var index = _historyEntries.IndexOf(Current);
         var prev = _historyEntries[index - 1];
-        prev.NavigateToCommand.TryExecute(prev);
+        prev.NavigateTo();
         Current = prev;
       }
     }
@@ -119,7 +119,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       {
         var index = _historyEntries.IndexOf(Current);
         var next = _historyEntries[index + 1];
-        next.NavigateToCommand.TryExecute(next);
+        next.NavigateTo();
         Current = next;
       }
     }
@@ -128,6 +128,17 @@ namespace eagleboost.shell.FileSystems.ViewModels
     {
       _historyEntries.Clear();
       Current = null;
+    }
+
+    public IFileSystemHistoryOperations GetNext(IFileSystemHistoryOperations entry)
+    {
+      var index = _historyEntries.IndexOf(entry);
+      if (index == _historyEntries.Count - 1)
+      {
+        return null;
+      }
+
+      return _historyEntries[index + 1];
     }
     #endregion Public Methods
 

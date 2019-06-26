@@ -84,10 +84,12 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     private void HandleNavigateEntry(IFileSystemHistoryOperations entry)
     {
-      NavigateAsync(entry.DriveFolder).ConfigureAwait(false);
+      var next = History.GetNext(entry);
+      var selected = next != null ? (TFolder) next.DriveFolder : null;
+      NavigateAsync(entry.DriveFolder, selected).ConfigureAwait(false);
     }
 
-    private async Task NavigateAsync(IFolder folder)
+    private async Task NavigateAsync(IFolder folder, TFolder selected)
     {
       _treeViewModel.PropertyChanged -= HandleTreePropertyChanged;
 
@@ -98,7 +100,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
       var gvm = _gridViewModel;
 
-      EventHandler handler = (s, e) => gvm.SetSelectedAsync(folder as TFile);
+      EventHandler handler = (s, e) => gvm.SetSelectedAsync(selected as TFile);
 
       var token = _gridSelectionToken = new DisposeManager();
       token.AddEvent(h => gvm.FilesPopulated += h, h => gvm.FilesPopulated -= h, handler);
