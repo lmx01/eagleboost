@@ -96,9 +96,7 @@
     <Compile Include="Controls\BrowseForFolder.xaml.cs">
       <DependentUpon>BrowseForFolder.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FileSystems\Collections\FileSystemBackwardHistory.cs" />
-    <Compile Include="FileSystems\Collections\FileSystemForwardHistory.cs" />
-    <Compile Include="FileSystems\Collections\FileSystemHistoryBase.cs" />
+    <Compile Include="FileSystems\ViewModels\FileSystemHistory.cs" />
     <Compile Include="FileSystems\Contracts\IFile.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemFileInfoViewModel.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemFolderOperations.cs" />

@@ -4,8 +4,7 @@
 
 namespace eagleboost.shell.FileSystems.Contracts
 {
-  using System.Windows.Input;
-  using eagleboost.shell.FileSystems.Collections;
+  using eagleboost.shell.FileSystems.ViewModels;
 
   /// <summary>
   /// IFileSystemHistoryViewModel
@@ -17,13 +16,7 @@ namespace eagleboost.shell.FileSystems.Contracts
     where TFolder : IFolder
   {
     #region Properties
-    FileSystemBackwardHistory BackwardHistory { get; }
-
-    FileSystemForwardHistory ForwardHistory { get; }
-
-    ICommand BackCommand { get; }
-
-    ICommand ForwardCommand { get; }
+    FileSystemHistory History { get; }
     #endregion Properties
 
     #region Methods

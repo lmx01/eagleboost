@@ -40,6 +40,14 @@
       }
     }
 
+    protected void NotifyPropertyReset<T>(ref T field, [CallerMemberName] string property = null) where T : class
+    {
+      NotifyPropertyChanging(property);
+      field = null;
+      NotifyPropertyChanged(property);
+      OnPropertyChanged(property);
+    }
+
     protected bool SetValue<T>(ref T field, T value, [CallerMemberName] string property = null)
     {
       if (!EqualityComparer<T>.Default.Equals(field, value))

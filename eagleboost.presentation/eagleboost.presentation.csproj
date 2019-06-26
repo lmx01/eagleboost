@@ -168,6 +168,7 @@
     <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
     <Compile Include="Controls\ViewControllerWindow.cs" />
     <Compile Include="Converters\BooleanInverse.cs" />
+    <Compile Include="Converters\CollectionReverseConverter.cs" />
     <Compile Include="Converters\ConverterMarkupExtension.cs" />
     <Compile Include="Converters\GroupBoxHeaderWidth.cs" />
     <Compile Include="Converters\HasTextConverter.cs" />

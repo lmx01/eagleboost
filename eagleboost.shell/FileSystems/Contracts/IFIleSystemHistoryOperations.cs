@@ -4,6 +4,7 @@
 
 namespace eagleboost.shell.FileSystems.Contracts
 {
+  using System;
   using System.Windows.Input;
 
   /// <summary>
@@ -16,5 +17,9 @@ namespace eagleboost.shell.FileSystems.Contracts
 
     ICommand NavigateToCommand { get; }
     #endregion Properties
+
+    #region Events
+    event EventHandler Navigate;
+    #endregion Events
   }
 }

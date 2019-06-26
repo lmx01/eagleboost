@@ -5,6 +5,7 @@
 namespace eagleboost.shell.FileSystems.ViewModels
 {
   using System;
+  using System.Diagnostics;
   using System.Windows.Input;
   using eagleboost.core.ComponentModel;
   using eagleboost.shell.FileSystems.Contracts;
@@ -13,6 +14,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   /// <summary>
   /// FileSystemHistoryOperations
   /// </summary>
+  [DebuggerDisplay("{DriveFolder}")]
   public class FileSystemHistoryOperations : NotifyPropertyChangedBase, IFileSystemHistoryOperations
   {
     #region Declarations
@@ -46,12 +48,33 @@ namespace eagleboost.shell.FileSystems.ViewModels
     }
 
     public ICommand NavigateToCommand { get; private set; }
+
+    public event EventHandler Navigate;
+
+    internal void RaiseNavigate()
+    {
+      var handler = Navigate;
+      if (handler != null)
+      {
+        handler(this, EventArgs.Empty);
+      }
+    }
     #endregion IFileSystemHistoryOperations
+
+    #region Overrides
+
+    public override string ToString()
+    {
+      return _folder.ToString();
+    }
+
+    #endregion Overrides
 
     #region Private Methods
     private void HandleNavigateTo(IFileSystemHistoryOperations folder)
     {
       _navigateToAction(folder);
+      RaiseNavigate();
     }
     #endregion Private Methods
   }

@@ -4,10 +4,10 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-  xmlns:local="clr-namespace:eagleboost.googledrive.Views"
+  xmlns:own="clr-namespace:eagleboost.googledrive.Views"
   xmlns:viewModels="clr-namespace:eagleboost.googledrive.ViewModels"
-  xmlns:contracts="clr-namespace:eagleboost.shell.FileSystems.Contracts;assembly=eagleboost.shell"
   xmlns:ebui="http://www.eagleboost.com/xaml/presentation"
+  xmlns:converters="clr-namespace:eagleboost.presentation.Converters;assembly=eagleboost.presentation"
   mc:Ignorable="d" d:DesignHeight="24" d:DesignWidth="800"
   d:DataContext="{d:DesignInstance viewModels:GoogleDriveHistoryViewModel, IsDesignTimeCreatable=True}">
 
@@ -20,10 +20,10 @@
   </UserControl.Resources>
 
   <StackPanel Orientation="Horizontal">
-    <Button Command="{Binding BackCommand}" x:Name="BackwardButton">Back</Button>
+    <Button Command="{Binding History.BackCommand}" x:Name="BackwardButton">Back</Button>
     <ToggleButton IsEnabled="{Binding IsEnabled, ElementName=BackwardButton}">
       <ebui:ToggleDropdownMenu.Menu>
-        <ContextMenu ItemsSource="{Binding BackwardHistory.HistoryEntries}" ItemContainerStyle="{StaticResource MenuItemStyle}"/>
+        <ContextMenu ItemsSource="{Binding History.BackwardHistoryView, Converter={converters:CollectionReverseConverter}}" ItemContainerStyle="{StaticResource MenuItemStyle}"/>
       </ebui:ToggleDropdownMenu.Menu>
       <ToggleButton.Content>
         <Path Fill="Black" Data="M 0 4 L 4 0 L 8 4 Z">
@@ -35,7 +35,7 @@
     </ToggleButton>
     <ToggleButton IsEnabled="{Binding IsEnabled, ElementName=ForwardButton}">
       <ebui:ToggleDropdownMenu.Menu>
-        <ContextMenu ItemsSource="{Binding ForwardHistory.HistoryEntries}" ItemContainerStyle="{StaticResource MenuItemStyle}"/>
+        <ContextMenu ItemsSource="{Binding History.ForwardHistoryView}" ItemContainerStyle="{StaticResource MenuItemStyle}"/>
       </ebui:ToggleDropdownMenu.Menu>
       <ToggleButton.Content>
         <Path Fill="Black" Data="M 0 4 L 4 0 L 8 4 Z">
@@ -45,7 +45,7 @@
         </Path>
       </ToggleButton.Content>
     </ToggleButton>
-    <Button Command="{Binding ForwardCommand}" x:Name="ForwardButton">Forward</Button>
+    <Button Command="{Binding History.ForwardCommand}" x:Name="ForwardButton">Forward</Button>
   </StackPanel>
 
 </UserControl>

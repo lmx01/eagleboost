@@ -16,7 +16,7 @@
       return view.Cast<T>().Skip(1).First();
     }
 
-    public static IReadOnlyCollection<T> GetView<T>(this ICollectionView view)
+    public static IReadOnlyList<T> GetView<T>(this ICollectionView view)
     {
       return view.Cast<T>().ToList();
     }
