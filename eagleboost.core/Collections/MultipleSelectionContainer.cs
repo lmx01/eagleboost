@@ -14,7 +14,7 @@ namespace eagleboost.core.Collections
     where T : class
   {
     #region Declarations
-    private SortedSet<T> _selectedItems;
+    private HashSet<T> _selectedItems;
     #endregion Declarations
 
     #region ctors
@@ -35,7 +35,7 @@ namespace eagleboost.core.Collections
 
     protected override ICollection<T> CreateSelectedItems(ICollection<T> initialSelection)
     {
-      return _selectedItems = new SortedSet<T>(initialSelection);
+      return _selectedItems = new HashSet<T>(initialSelection);
     }
 
     protected override bool IsSelectedImpl(T item)
