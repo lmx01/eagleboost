@@ -2,16 +2,15 @@
 // // E-MAIL   : eagleboost@msn.com
 // // Creation : 26 10:32 PM
 
-using System;
 using NSubstitute;
 
 namespace eagleboost.core.test.Threading
 {
   using System.Threading;
   using System.Threading.Tasks;
+  using eagleboost.core.Logging;
   using eagleboost.core.Threading.CancelationTokenTimeout;
   using NUnit.Framework;
-  using Prism.Logging;
 
   public class TaskExecutionLoggerTests
   {
@@ -29,7 +28,7 @@ namespace eagleboost.core.test.Threading
       }
       catch
       {
-        logger.Received().Log(TaskName + " is time out", Category.Exception, Priority.Medium);
+        logger.Received().Log(TaskName + " is time out", Category.Exception);
       }
     }
 
@@ -45,7 +44,7 @@ namespace eagleboost.core.test.Threading
       }
       catch
       {
-        logger.Received().Log(TaskName + " is not returned in 1000ms", Category.Exception, Priority.Medium);
+        logger.Received().Log(TaskName + " is not returned in 1000ms", Category.Exception);
       }
     }
 
@@ -60,7 +59,7 @@ namespace eagleboost.core.test.Threading
       CancellationTokenSource cts;
       tel.ExecuteAsync(TaskName, Helpers.ServerNeverReturnsAsync, logger, 3000, out cts).ContinueWith(t =>
       {
-        logger.Received().Log(TaskName + " is canceled", Category.Exception, Priority.Medium);
+        logger.Received().Log(TaskName + " is canceled", Category.Exception);
         evt.Set();
       });
 
@@ -76,7 +75,7 @@ namespace eagleboost.core.test.Threading
 
       var tel = new TaskExecutionLogger();
       await tel.ExecuteAsync(TaskName, Helpers.ServerReturnsFastAsync, logger, 1000);
-      logger.DidNotReceiveWithAnyArgs().Log("", Category.Exception, Priority.Medium);
+      logger.DidNotReceiveWithAnyArgs().Log("", Category.Exception);
     }
 
     [Test]
@@ -91,7 +90,7 @@ namespace eagleboost.core.test.Threading
       }
       catch
       {
-        logger.Received().Log(TaskName + " is time out", Category.Exception, Priority.Medium);
+        logger.Received().Log(TaskName + " is time out", Category.Exception);
       }
     }
 
@@ -107,7 +106,7 @@ namespace eagleboost.core.test.Threading
       }
       catch
       {
-        logger.Received().Log(TaskName + " is not returned in 1000ms", Category.Exception, Priority.Medium);
+        logger.Received().Log(TaskName + " is not returned in 1000ms", Category.Exception);
       }
     }
 
@@ -122,7 +121,7 @@ namespace eagleboost.core.test.Threading
       CancellationTokenSource cts;
       tel.ExecuteAsync(TaskName, Helpers.ServerNeverReturnsAsync_Generic, logger, 3000, out cts).ContinueWith(t =>
       {
-        logger.Received().Log(TaskName + " is canceled", Category.Exception, Priority.Medium);
+        logger.Received().Log(TaskName + " is canceled", Category.Exception);
         evt.Set();
       });
 
@@ -138,7 +137,7 @@ namespace eagleboost.core.test.Threading
 
       var tel = new TaskExecutionLogger();
       await tel.ExecuteAsync(TaskName, Helpers.ServerReturnsFastAsync_Generic, logger, 1000);
-      logger.DidNotReceiveWithAnyArgs().Log("", Category.Exception, Priority.Medium);
+      logger.DidNotReceiveWithAnyArgs().Log("", Category.Exception);
     }
   }
 }

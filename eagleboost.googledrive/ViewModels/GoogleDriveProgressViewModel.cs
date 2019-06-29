@@ -20,7 +20,7 @@ namespace eagleboost.googledrive.ViewModels
   /// </summary>
   public class GoogleDriveProgressViewModel : ProgressItemViewModel<GoogleDriveProgress>
   {
-    private static readonly ILoggerFacadeEx Logger = LoggerManager.GetLogger<GoogleDriveProgressViewModel>();
+    private static readonly ILoggerFacade Logger = LoggerManager.GetLogger<GoogleDriveProgressViewModel>();
 
     #region ctors
     public GoogleDriveProgressViewModel(PauseTokenSource pts, CancellationTokenSource cts) : base(pts, cts)

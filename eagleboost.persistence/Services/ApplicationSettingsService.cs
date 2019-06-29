@@ -18,7 +18,7 @@ namespace eagleboost.persistence.Services
   public class ApplicationSettingsService : IApplicationSettingsService
   {
     #region Statics
-    private static readonly ILoggerFacadeEx Log = LoggerManager.GetLogger<ApplicationSettingsService>();
+    private static readonly ILoggerFacade Log = LoggerManager.GetLogger<ApplicationSettingsService>();
     #endregion Statics
 
     #region Declarations

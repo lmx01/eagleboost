@@ -7,7 +7,7 @@ namespace eagleboost.core.Threading.CancelationTokenTimeout
   using System;
   using System.Threading;
   using System.Threading.Tasks;
-  using Prism.Logging;
+  using eagleboost.core.Logging;
 
   /// <summary>
   /// ITaskExecutionLogger

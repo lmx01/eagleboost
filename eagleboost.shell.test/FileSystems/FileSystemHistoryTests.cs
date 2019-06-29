@@ -4,8 +4,8 @@
 
 namespace eagleboost.shell.test.FileSystems
 {
+  using System.ComponentModel;
   using System.Linq;
-  using eagleboost.core.Collections;
   using eagleboost.shell.FileSystems.Contracts;
   using eagleboost.shell.FileSystems.ViewModels;
   using FluentAssertions;

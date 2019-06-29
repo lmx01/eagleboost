@@ -107,6 +107,7 @@
     <Compile Include="Behaviors\ToggleDropdownMenu.cs" />
     <Compile Include="Behaviors\TreeViewSelectionChanging.cs" />
     <Compile Include="Behaviors\ViewModelLoader.cs" />
+    <Compile Include="Collections\CollectionViewExt.cs" />
     <Compile Include="Collections\CollectionViewModelBase.cs" />
     <Compile Include="Collections\FilterDescriptionCollection.cs" />
     <Compile Include="Collections\ICollectionViewModel.cs" />

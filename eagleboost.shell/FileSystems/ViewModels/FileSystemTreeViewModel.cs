@@ -25,7 +25,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   public abstract class FileSystemTreeViewModel : NotifyPropertyChangedBase, IFileSystemTreeViewModel
   {
     #region Statics
-    private static readonly ILoggerFacadeEx Logger = LoggerManager.GetLogger<FileSystemTreeViewModel>();
+    private static readonly ILoggerFacade Logger = LoggerManager.GetLogger<FileSystemTreeViewModel>();
     protected static readonly string Name = Property<IFile>(o => o.Name);
     protected static readonly PropertyChangedEventArgs SelectedItemArgs = GetChangedArgs<FileSystemTreeViewModel>(o => o.SelectedItem);
     #endregion Statics

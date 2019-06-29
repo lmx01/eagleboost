@@ -34,7 +34,7 @@ namespace eagleboost.googledrive.Services
     private readonly string _credentialTokenFile;
     private TaskCompletionSource<DriveService> _tcs;
     private readonly object _tcsLock = new object();
-    private readonly ILoggerFacadeEx _logger;
+    private readonly ILoggerFacade _logger;
     #endregion Declarations
 
     #region ctors
@@ -42,7 +42,7 @@ namespace eagleboost.googledrive.Services
     {
     }
 
-    public GoogleDriveService(ILoggerFacadeEx logger, string credentialsFile, string credentialTokenFile, string applicationName)
+    public GoogleDriveService(ILoggerFacade logger, string credentialsFile, string credentialTokenFile, string applicationName)
     {
       _logger = logger ?? LoggerManager.GetLogger<GoogleDriveService>();
       _credentialsFile = credentialsFile;
@@ -52,7 +52,7 @@ namespace eagleboost.googledrive.Services
     #endregion ctors
 
     #region Private Properties
-    private ILoggerFacadeEx Logger
+    private ILoggerFacade Logger
     {
       get { return _logger; }
     }

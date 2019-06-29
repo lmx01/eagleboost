@@ -88,6 +88,10 @@
       <Project>{5c4c4e80-3895-418c-aa33-440b9a817c82}</Project>
       <Name>eagleboost.core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\eagleboost.presentation\eagleboost.presentation.csproj">
+      <Project>{A118772D-121D-4CA3-B568-BCAFACCAE33F}</Project>
+      <Name>eagleboost.presentation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\eagleboost.shell\eagleboost.shell.csproj">
       <Project>{4515AA2F-B031-4018-AFE9-29FE3E34255F}</Project>
       <Name>eagleboost.shell</Name>

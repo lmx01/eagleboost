@@ -5,7 +5,7 @@
 namespace eagleboost.core.Threading.CancelationTokenTimeout
 {
   using System.Threading;
-  using Prism.Logging;
+  using eagleboost.core.Logging;
 
   /// <summary>
   /// TaskExecutionLoggerBase
@@ -37,17 +37,17 @@ namespace eagleboost.core.Threading.CancelationTokenTimeout
 
     protected void LogTimeout(ILoggerFacade logger, TaskContext taskContext)
     {
-      logger.Log(taskContext.TaskName + " is time out", Category.Exception, Priority.Medium);
+      logger.Log(taskContext.TaskName + " is time out", Category.Exception);
     }
 
     protected void LogCallerTimeout(ILoggerFacade logger, TaskContext taskContext)
     {
-      logger.Log(taskContext.TaskName + " is not returned in " + taskContext.MillisecondsTimeout + "ms", Category.Exception, Priority.Medium);
+      logger.Log(taskContext.TaskName + " is not returned in " + taskContext.MillisecondsTimeout + "ms", Category.Exception);
     }
 
     protected void LogCallerCancel(ILoggerFacade logger, TaskContext taskContext)
     {
-      logger.Log(taskContext.TaskName + " is canceled", Category.Exception, Priority.Medium);
+      logger.Log(taskContext.TaskName + " is canceled", Category.Exception);
     }
     #endregion Protected Methods
 

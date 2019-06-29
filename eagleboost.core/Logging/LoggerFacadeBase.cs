@@ -4,9 +4,7 @@
 
 namespace eagleboost.core.Logging
 {
-  using Prism.Logging;
-
-  public abstract class LoggerFacadeBase : ILoggerFacadeEx
+  public abstract class LoggerFacadeBase : ILoggerFacade
   {
     private const string Debug = "[Debug] ";
     private const string Exception = "[Error] ";
@@ -31,9 +29,9 @@ namespace eagleboost.core.Logging
       }
     }
 
-    void ILoggerFacade.Log(string message, Category category, Priority priority)
+    void ILoggerFacade.Log(string message, Category category)
     {
-      Log(message, category, priority);
+      Log(message, category);
     }
 
     protected virtual string GetPrefix(Category category)
@@ -41,6 +39,6 @@ namespace eagleboost.core.Logging
       return GetDefaultPrefix(category);
     }
 
-    protected abstract void Log(string message, Category category, Priority priority);
+    protected abstract void Log(string message, Category category);
   }
 }

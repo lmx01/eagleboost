@@ -19,7 +19,7 @@ namespace eagleboost.googledrive.ViewModels
   public class GoogleDriveFileInfoViewModel : NotifyPropertyChangedBase, IFileSystemFileInfoViewModel<IGoogleDriveFile, IGoogleDriveFolder>
   {
     #region Statics
-    private static readonly ILoggerFacadeEx Log = LoggerManager.GetLogger<GoogleDriveFileInfoViewModel>();
+    private static readonly ILoggerFacade Log = LoggerManager.GetLogger<GoogleDriveFileInfoViewModel>();
     #endregion Statics
 
     #region Declarations

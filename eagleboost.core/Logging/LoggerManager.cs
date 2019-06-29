@@ -6,7 +6,7 @@ namespace eagleboost.core.Logging
 {
   public static class LoggerManager
   {
-    public static ILoggerFacadeEx GetLogger<T>()
+    public static ILoggerFacade GetLogger<T>()
     {
       var instance =  FileLogger<T>.Instance;
       return instance;

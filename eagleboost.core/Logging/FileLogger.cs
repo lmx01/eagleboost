@@ -4,11 +4,8 @@
 
 namespace eagleboost.core.Logging
 {
-  using System.Reflection;
-  using System.Text;
   using eagleboost.core.Extensions;
   using log4net;
-  using Prism.Logging;
 
   public class FileLogger<T> : LoggerFacadeBase
   {
@@ -34,7 +31,7 @@ namespace eagleboost.core.Logging
 
     private readonly ILog _log;
 
-    protected override void Log(string message, Category category, Priority priority)
+    protected override void Log(string message, Category category)
     {
       switch (category)
       {

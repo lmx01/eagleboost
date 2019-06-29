@@ -1,7 +1,6 @@
-﻿namespace eagleboost.core.Collections
+﻿namespace System.ComponentModel
 {
   using System.Collections.Generic;
-  using System.ComponentModel;
   using System.Linq;
 
   public static class EnumerableExt
