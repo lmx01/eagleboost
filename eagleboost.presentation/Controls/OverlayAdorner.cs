@@ -29,7 +29,10 @@ namespace eagleboost.presentation.Controls
       target.SetupLoaded(() =>
       {
         _layer = AdornerLayer.GetAdornerLayer(target);
-        _layer.Add(this);
+        if (_layer != null)
+        {
+          _layer.Add(this);
+        }
       });
 
       _overlayElement = overlayElement;

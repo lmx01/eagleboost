@@ -48,14 +48,14 @@ namespace eagleboost.sampleapp
 
       ClipboardMonitor.Install();
       ClipboardMonitor.ClipboardUpdated += ClipboardMonitor_ClipboardUpdated;
-      DispatcherViewFactory.InvokeAsync("ABC", () =>
-      {
-        var w = new ViewControllerWindow { Title = "ABC" ,Content = "I'm running on thead 'ABC'",
-          ShowInTaskbar = true,
-          Topmost = true,
-        }.RemoveIcon().HideMinMaxButton(); ;
-        w.Show();
-      });
+      //DispatcherViewFactory.InvokeAsync("ABC", () =>
+      //{
+      //  var w = new ViewControllerWindow { Title = "ABC" ,Content = "I'm running on thead 'ABC'",
+      //    ShowInTaskbar = true,
+      //    Topmost = true,
+      //  }.RemoveIcon().HideMinMaxButton(); ;
+      //  w.Show();
+      //});
       Closed += MainWindow_Closed;
     }
 

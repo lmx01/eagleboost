@@ -62,6 +62,20 @@
     <Compile Include="Collections\BatchObservableCollection.Ext.cs">
       <DependentUpon>BatchObservableCollection.cs</DependentUpon>
     </Compile>
+    <Compile Include="Collections\MultipleSelectionContainer.cs">
+      <DependentUpon>SelectionContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Collections\RadioSelectionContainer.cs">
+      <DependentUpon>SelectionContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Collections\SelectionContainer.cs" />
+    <Compile Include="Collections\SelectionContainerBase.cs">
+      <DependentUpon>SelectionContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Collections\SelectionContainerExt.cs" />
+    <Compile Include="Collections\SingleSelectionContainer.cs">
+      <DependentUpon>SelectionContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Commands\NotifiableCommand.cs" />
     <Compile Include="Commands\NotifiableCommand.Generic.cs" />
     <Compile Include="ComponentModel\ArgumentGuard.cs" />

@@ -95,6 +95,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\SelectionContainerBehavior.cs" />
+    <Compile Include="Behaviors\SelectionContainerToggleButton.cs" />
+    <Compile Include="Behaviors\SelectionContainerToggleButtonState.cs" />
     <Compile Include="Behaviors\TextBlockDefault.cs" />
     <Compile Include="Behaviors\ClearButtonBehavior.cs" />
     <Compile Include="Behaviors\ClosePopupButton.cs" />
@@ -131,6 +134,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Compile Include="Controls\Buttons\AutoInvalidateButton.cs" />
+    <Compile Include="Controls\Buttons\CommandHelpers.cs" />
     <Compile Include="Controls\Choosers\DataItemChooserView.xaml.cs">
       <DependentUpon>DataItemChooserView.xaml</DependentUpon>
     </Compile>
@@ -169,6 +174,7 @@
     <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
     <Compile Include="Controls\ViewControllerWindow.cs" />
     <Compile Include="Converters\BooleanInverse.cs" />
+    <Compile Include="Converters\CollectionConcatConverter.cs" />
     <Compile Include="Converters\CollectionReverseConverter.cs" />
     <Compile Include="Converters\ConverterMarkupExtension.cs" />
     <Compile Include="Converters\GroupBoxHeaderWidth.cs" />

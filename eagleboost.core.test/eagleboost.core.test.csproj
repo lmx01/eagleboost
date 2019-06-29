@@ -99,6 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoNotifyTests.cs" />
+    <Compile Include="Collections\MultipleSelectionContainerTests.cs" />
+    <Compile Include="Collections\RadioSelectionContainerTests.cs" />
+    <Compile Include="Collections\SingleSelectionContainerTests.cs" />
     <Compile Include="Extensions\TypeExtTests.cs" />
     <Compile Include="FileExtTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

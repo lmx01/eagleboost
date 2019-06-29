@@ -7,13 +7,15 @@
         xmlns:controls="clr-namespace:eagleboost.UserExperience.Controls;assembly=eagleboost.UserExperience"
         xmlns:indicators="clr-namespace:eagleboost.presentation.Controls.Indicators;assembly=eagleboost.presentation"
         xmlns:views="clr-namespace:eagleboost.shell.Shell.Views;assembly=eagleboost.shell"
+        xmlns:sampleapp="clr-namespace:eagleboost.sampleapp"
+        xmlns:selectionContainerSample="clr-namespace:eagleboost.sampleapp.SelectionContainerSample"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:ViewModel}"
         Title="MainWindow" Height="350" Width="525">
 
   <Window.Resources>
 
   </Window.Resources>
-  <TabControl SelectedIndex="1">
+  <TabControl SelectedIndex="3">
     <TabControl.Items>
       <TabItem Header="StaThreadContainer">
         <StackPanel>
@@ -42,6 +44,10 @@
 
       <TabItem Header="Shell Tree">
         <views:WindowsShellTreeView Options="{Binding }"/>
+      </TabItem>
+
+      <TabItem Header="SelectionContainer">
+        <selectionContainerSample:SelectionContainerView/>
       </TabItem>
     </TabControl.Items>
   </TabControl>
