@@ -65,29 +65,20 @@
         <TextBlock Grid.Column="2" Text="{Binding}"/>
       </Grid>
     </DataTemplate>
-
-    <ControlTemplate x:Key="SimpleCheckTemplate" TargetType="CheckBox">
-      <Path x:Name="SelectionMark" Stretch="Uniform" Stroke="Black" StrokeThickness="2" Data="M0,1 L0.5,2 L2,0.5" Margin="2" Visibility="Collapsed"/>
-      <ControlTemplate.Triggers>
-        <Trigger Property="IsChecked" Value="True">
-          <Setter TargetName="SelectionMark" Property="Visibility" Value="Visible"/>
-        </Trigger>
-      </ControlTemplate.Triggers>
-    </ControlTemplate>
-
+  
     <DataTemplate x:Key="SelectCommandTemplate" DataType="{x:Type selectionContainerSample:SelectionContainerViewModel}">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <CheckBox x:Name="SelectionBox" Template="{StaticResource SimpleCheckTemplate}" Height="14" Width="14"
+        <ebui:CheckMark x:Name="SelectionBox" Height="14" Width="14"
                   ToolTip="This is the default item">
           <i:Interaction.Behaviors>
             <ebui:SelectionContainerToggleButtonState SelectionContainer="{Binding RadioSelectionContainer}"
                                                       DataItem="{Binding Tag, RelativeSource={RelativeSource AncestorType=ContentControl, AncestorLevel=2}}"/>
           </i:Interaction.Behaviors>
-        </CheckBox>
+        </ebui:CheckMark>
         <buttons:AutoInvalidateButton 
           x:Name="Button" Grid.Column="1" Height="16" Width="16" Padding="0,-1,0,0" Content="🟊"
           Command="{Binding RadioSelectionContainer.SelectCommand}" ToolTip="Set as default"

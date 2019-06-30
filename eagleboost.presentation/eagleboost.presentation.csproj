@@ -137,6 +137,11 @@
     </Page>
     <Compile Include="Controls\Buttons\AutoInvalidateButton.cs" />
     <Compile Include="Controls\Buttons\CommandHelpers.cs" />
+    <Page Include="Controls\CheckMark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Controls\CheckMark.cs" />
     <Compile Include="Controls\Choosers\DataItemChooserView.xaml.cs">
       <DependentUpon>DataItemChooserView.xaml</DependentUpon>
     </Compile>
@@ -222,6 +227,10 @@
     <Compile Include="Win32\NativeMethods.WindowStyle.cs">
       <DependentUpon>NativeMethods.cs</DependentUpon>
     </Compile>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\eagleboost.core\eagleboost.core.csproj">
