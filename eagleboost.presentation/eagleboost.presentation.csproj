@@ -95,9 +95,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\SelectionContainerBehavior.cs" />
-    <Compile Include="Behaviors\SelectionContainerToggleButton.cs" />
-    <Compile Include="Behaviors\SelectionContainerToggleButtonState.cs" />
+    <Compile Include="Behaviors\SelectionContainer\SelectionContainerListBoxSync.cs" />
+    <Compile Include="Behaviors\SelectionContainer\SelectionContainerSync.cs" />
+    <Compile Include="Behaviors\SelectionContainer\SelectionContainerToggleButton.cs" />
+    <Compile Include="Behaviors\SelectionContainer\SelectionContainerToggleButtonState.cs" />
     <Compile Include="Behaviors\TextBlockDefault.cs" />
     <Compile Include="Behaviors\ClearButtonBehavior.cs" />
     <Compile Include="Behaviors\ClosePopupButton.cs" />

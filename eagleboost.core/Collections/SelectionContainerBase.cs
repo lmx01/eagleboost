@@ -9,7 +9,6 @@ namespace eagleboost.core.Collections
   using System.Collections.Generic;
   using System.ComponentModel;
   using System.Linq;
-  using System.Runtime.Remoting.Channels;
   using System.Windows.Input;
   using eagleboost.core.Commands;
   using eagleboost.core.ComponentModel;
@@ -30,7 +29,7 @@ namespace eagleboost.core.Collections
     #endregion Statics
 
     #region Declarations
-    private ICollection<T> _selectedItems;
+    private IReadOnlyCollection<T> _selectedItems;
     private readonly IInvalidatableCommand _selectCommand;
     private readonly IInvalidatableCommand _unselectCommand;
     private readonly T[] _initialSelection;
@@ -54,9 +53,9 @@ namespace eagleboost.core.Collections
     #endregion ctors
 
     #region ISelectionContainer
-    ICollection ISelectionContainer.SelectedItems
+    IEnumerable ISelectionContainer.SelectedItems
     {
-      get { return (ICollection)SelectedItems; }
+      get { return SelectedItems; }
     }
 
     bool ISelectionContainer.this[object item]
@@ -90,11 +89,11 @@ namespace eagleboost.core.Collections
 
     public event EventHandler ItemsCleared;
 
-    public event EventHandler<ItemsUnselectedEventArgs> ItemsSelected;
+    public event EventHandler<ItemsSelectedEventArgs> ItemsSelected;
 
     public event EventHandler<ItemsUnselectedEventArgs> ItemsUnselected;
 
-    public ICollection<T> SelectedItems
+    public IReadOnlyCollection<T> SelectedItems
     {
       get { return _selectedItems ?? (_selectedItems = CreateSelectedItems(_initialSelection)); }
     }
@@ -173,7 +172,7 @@ namespace eagleboost.core.Collections
     #region Virtuals
     protected abstract void ClearImpl();
 
-    protected abstract ICollection<T> CreateSelectedItems(ICollection<T> initialSelection);
+    protected abstract IReadOnlyCollection<T> CreateSelectedItems(ICollection<T> initialSelection);
 
     protected abstract bool IsSelectedImpl(T item);
 
@@ -207,7 +206,7 @@ namespace eagleboost.core.Collections
       var handler = ItemsSelected;
       if (handler != null)
       {
-        handler(this, new ItemsUnselectedEventArgs(items));
+        handler(this, new ItemsSelectedEventArgs(items));
       }
     }
 

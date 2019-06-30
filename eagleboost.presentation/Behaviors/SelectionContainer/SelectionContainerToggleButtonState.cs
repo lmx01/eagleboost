@@ -2,7 +2,7 @@
 // // E-MAIL   : eagleboost@msn.com
 // // Creation : 29 4:08 PM
 
-namespace eagleboost.presentation.Behaviors
+namespace eagleboost.presentation.Behaviors.SelectionContainer
 {
   using System.Windows;
   using System.Windows.Controls.Primitives;

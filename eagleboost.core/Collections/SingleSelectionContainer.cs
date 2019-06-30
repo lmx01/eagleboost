@@ -43,7 +43,7 @@ namespace eagleboost.core.Collections
       _selectedItem = null;
     }
 
-    protected sealed override ICollection<T> CreateSelectedItems(ICollection<T> initialSelection)
+    protected sealed override IReadOnlyCollection<T> CreateSelectedItems(ICollection<T> initialSelection)
     {
       return _selectedItems = new List<T>(initialSelection);
     }

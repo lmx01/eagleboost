@@ -7,7 +7,7 @@
   xmlns:local="clr-namespace:eagleboost.googledrive.Views"
   xmlns:viewModels="clr-namespace:eagleboost.googledrive.ViewModels"
   xmlns:contracts="clr-namespace:eagleboost.googledrive.Contracts"
-  xmlns:controls="clr-namespace:eagleboost.presentation.Controls;assembly=eagleboost.presentation"
+  xmlns:ebui="http://www.eagleboost.com/xaml/presentation"
   mc:Ignorable="d" d:DesignHeight="50" d:DesignWidth="800"
   d:DataContext="{d:DesignInstance viewModels:GoogleDriveFolderPathViewModel, IsDesignTimeCreatable=True}">
 
@@ -30,7 +30,7 @@
         <Button Content="{Binding DisplayName}" Command="{Binding NavigateToCommand}" CommandParameter="{Binding}"/>
       </Grid>
     </DataTemplate>
-    <controls:NormalOrLastItemTemplateSelector x:Key="DataTemplateSelector" NormalItemTemplate="{StaticResource NormalItemTemplate}" LastItemTemplate="{StaticResource LastItemTemplate}" />
+    <ebui:NormalOrLastItemTemplateSelector x:Key="DataTemplateSelector" NormalItemTemplate="{StaticResource NormalItemTemplate}" LastItemTemplate="{StaticResource LastItemTemplate}" />
   </UserControl.Resources>
 
   <ItemsControl ItemsSource="{Binding SelectedFolders}" ItemTemplateSelector="{StaticResource DataTemplateSelector}">

@@ -41,7 +41,7 @@ namespace eagleboost.core.Collections
   public interface ISelectionContainer
   {
     #region Properties
-    ICollection SelectedItems { get; }
+    IEnumerable SelectedItems { get; }
 
     bool this[object item] { get; }
 
@@ -61,7 +61,7 @@ namespace eagleboost.core.Collections
     #region Events
     event EventHandler ItemsCleared;
 
-    event EventHandler<ItemsUnselectedEventArgs> ItemsSelected;
+    event EventHandler<ItemsSelectedEventArgs> ItemsSelected;
 
     event EventHandler<ItemsUnselectedEventArgs> ItemsUnselected;
     #endregion Events
@@ -74,7 +74,7 @@ namespace eagleboost.core.Collections
   public interface ISelectionContainer<T>
   {
     #region Properties
-    ICollection<T> SelectedItems { get; }
+    IReadOnlyCollection<T> SelectedItems { get; }
 
     bool this[T item] { get; }
     #endregion Properties

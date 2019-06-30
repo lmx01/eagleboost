@@ -5,9 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-  xmlns:behaviors="clr-namespace:eagleboost.presentation.Behaviors;assembly=eagleboost.presentation"
-  xmlns:treeView="clr-namespace:eagleboost.presentation.Controls.TreeView;assembly=eagleboost.presentation"
-  xmlns:indicators="clr-namespace:eagleboost.presentation.Controls.Indicators;assembly=eagleboost.presentation"
+  xmlns:etui="http://www.eagleboost.com/xaml/presentation"
   mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
   <UserControl.Resources>
@@ -16,14 +14,14 @@
         <ResourceDictionary Source="/eagleboost.presentation;component/Controls/TreeView/TreeViewResources.xaml"/>
       </ResourceDictionary.MergedDictionaries>
 
-      <HierarchicalDataTemplate x:Key="ShellTreeItemDataTemplate" ItemsSource="{Binding ChildrenView}" DataType="{x:Type treeView:TreeNode}">
+      <HierarchicalDataTemplate x:Key="ShellTreeItemDataTemplate" ItemsSource="{Binding ChildrenView}" DataType="{x:Type etui:TreeNode}">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
           <Viewbox x:Name="BusyIndicator" Grid.Column="0" Height="16" Width="16" Visibility="Collapsed">
-            <indicators:CircularProgressBar/>
+            <etui:CircularProgressBar/>
           </Viewbox>
           <Image x:Name="Thumbnail" Grid.Column="0" Height="16" Width="16" Source="{Binding DataItem.ShellObject.Thumbnail.SmallBitmapSource}"></Image>
           <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4"></TextBlock>
@@ -42,8 +40,8 @@
   <Grid>
     <TreeView x:Name="ShellTree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemTemplate="{StaticResource ShellTreeItemDataTemplate}">
       <i:Interaction.Behaviors>
-        <behaviors:TreeViewSelectionChanging/>
-        <treeView:BringSelectedTreeItemIntoView/>
+        <etui:TreeViewSelectionChanging/>
+        <etui:BringSelectedTreeItemIntoView/>
       </i:Interaction.Behaviors>
     </TreeView>
   </Grid>

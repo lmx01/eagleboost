@@ -33,9 +33,10 @@ namespace eagleboost.core.Collections
       _selectedItems.Clear();
     }
 
-    protected override ICollection<T> CreateSelectedItems(ICollection<T> initialSelection)
+    protected override IReadOnlyCollection<T> CreateSelectedItems(ICollection<T> initialSelection)
     {
-      return _selectedItems = new HashSet<T>(initialSelection);
+      _selectedItems = new HashSet<T>(initialSelection);
+      return (IReadOnlyCollection<T>) _selectedItems;
     }
 
     protected override bool IsSelectedImpl(T item)

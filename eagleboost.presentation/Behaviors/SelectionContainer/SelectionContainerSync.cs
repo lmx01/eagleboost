@@ -2,7 +2,7 @@
 // // E-MAIL   : eagleboost@msn.com
 // // Creation : 29 12:03 PM
 
-namespace eagleboost.presentation.Behaviors
+namespace eagleboost.presentation.Behaviors.SelectionContainer
 {
   using System.Windows;
   using System.Windows.Controls;
@@ -11,19 +11,24 @@ namespace eagleboost.presentation.Behaviors
   using eagleboost.core.Collections;
 
   /// <summary>
-  /// SelectionContainerBehavior
+  /// SelectionContainerSync
   /// </summary>
-  public class SelectionContainerBehavior : Behavior<Selector>
+  public class SelectionContainerSync<T> : Behavior<T> where T : Selector
   {
     #region Dependency Properties
     #region SelectionContainer
     public static readonly DependencyProperty SelectionContainerProperty = DependencyProperty.Register(
-      "SelectionContainer", typeof(ISelectionContainer), typeof(SelectionContainerBehavior));
+      "SelectionContainer", typeof(ISelectionContainer), typeof(SelectionContainerSync<T>), new PropertyMetadata(OnSelectionContainerChanged));
 
     public ISelectionContainer SelectionContainer
     {
       get { return (ISelectionContainer) GetValue(SelectionContainerProperty); }
       set { SetValue(SelectionContainerProperty, value); }
+    }
+
+    private static void OnSelectionContainerChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+    {
+      ((SelectionContainerSync<T>)obj).OnSelectionContainerChanged();
     }
     #endregion SelectionContainer
     #endregion Dependency Properties
@@ -49,16 +54,14 @@ namespace eagleboost.presentation.Behaviors
     }
     #endregion Overrides
 
-    #region Event Handlers
-    private void HandleSelectionChanged(object sender, SelectionChangedEventArgs e)
+    #region Virtuals
+    protected virtual void OnSelectionContainerChanged()
+    {
+    }
+
+    protected virtual void OnSelectorSelectionChanged(SelectionChangedEventArgs e)
     {
       var c = SelectionContainer;
-      if (c == null)
-      {
-        Detach();
-        return;
-      }
-
       foreach (var removed in e.RemovedItems)
       {
         c.Unselect(removed);
@@ -69,6 +72,27 @@ namespace eagleboost.presentation.Behaviors
         c.Select(added);
       }
     }
+    #endregion Virtuals
+
+    #region Event Handlers
+    private void HandleSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+      var c = SelectionContainer;
+      if (c == null)
+      {
+        Detach();
+        return;
+      }
+
+      OnSelectorSelectionChanged(e);
+    }
     #endregion Event Handlers
+  }
+
+  /// <summary>
+  /// SelectionContainerSync
+  /// </summary>
+  public class SelectionContainerSync : SelectionContainerSync<Selector>
+  {
   }
 }

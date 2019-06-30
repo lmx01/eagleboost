@@ -24,10 +24,14 @@ using System.Windows.Markup;
 [assembly: Guid("a118772d-121d-4ca3-b568-bcafaccae33f")]
 
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Behaviors")]
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Behaviors.SelectionContainer")]
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls")]
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.Buttons")]
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.DataGrids")]
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.Indicators")]
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.Selectors")]
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Controls.TreeView")]
+[assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.Converters")]
 [assembly: XmlnsDefinition("http://www.eagleboost.com/xaml/presentation", "eagleboost.presentation.MarkupExtensions.ItemIndex")]
 [assembly: XmlnsPrefix("http://www.eagleboost.com/xaml/presentation", "ebui")]
 

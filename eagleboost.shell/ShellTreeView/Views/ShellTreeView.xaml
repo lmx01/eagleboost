@@ -5,8 +5,8 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-  xmlns:behaviors="clr-namespace:eagleboost.presentation.Behaviors;assembly=eagleboost.presentation"
   xmlns:local="clr-namespace:eagleboost.shell.ShellTreeView.Data"
+  xmlns:ebui="http://www.eagleboost.com/xaml/presentation"
   mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
   <UserControl.Resources>
@@ -32,7 +32,7 @@
   <Grid>
     <TreeView x:Name="ShellTree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemTemplate="{StaticResource ShellTreeItemDataTemplate}">
       <i:Interaction.Behaviors>
-        <behaviors:TreeViewSelectionChanging/>
+        <ebui:TreeViewSelectionChanging/>
       </i:Interaction.Behaviors>
     </TreeView>
   </Grid>
