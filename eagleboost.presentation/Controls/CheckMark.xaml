@@ -3,21 +3,20 @@
   xmlns:controls="clr-namespace:eagleboost.presentation.Controls"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+  <ControlTemplate TargetType="CheckBox" x:Key="CheckMarkControlTemplate">
+    <Path x:Name="SelectionMark" Stretch="Uniform" Stroke="Black" StrokeThickness="2" Data="M0,1 L0.5,2 L2,0.5" 
+          MinHeight="12" MinWidth="12" Margin="2" Visibility="Collapsed"/>
+    <ControlTemplate.Triggers>
+      <Trigger Property="IsChecked" Value="True">
+        <Setter TargetName="SelectionMark" Property="Visibility" Value="Visible"/>
+      </Trigger>
+    </ControlTemplate.Triggers>
+  </ControlTemplate>
+
   <Style x:Key="CheckMark" TargetType="{x:Type controls:CheckMark}" BasedOn="{StaticResource {x:Type CheckBox}}">
     <Setter Property="Height" Value="14"/>
     <Setter Property="Width" Value="14"/>
-    <Setter Property="Template">
-      <Setter.Value>
-        <ControlTemplate TargetType="controls:CheckMark">
-          <Path x:Name="SelectionMark" Stretch="Uniform" Stroke="Black" StrokeThickness="2" Data="M0,1 L0.5,2 L2,0.5" Margin="2" Visibility="Collapsed"/>
-          <ControlTemplate.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-              <Setter TargetName="SelectionMark" Property="Visibility" Value="Visible"/>
-            </Trigger>
-          </ControlTemplate.Triggers>
-        </ControlTemplate>
-      </Setter.Value>
-    </Setter>
+    <Setter Property="Template" Value="{StaticResource CheckMarkControlTemplate}"/>
   </Style>
 
   <Style TargetType="{x:Type controls:CheckMark}" BasedOn="{StaticResource CheckMark}"/>

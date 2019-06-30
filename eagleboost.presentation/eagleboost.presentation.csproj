@@ -146,6 +146,7 @@
       <DependentUpon>DataItemChooserView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Choosers\DataItemChooserViewModel.cs" />
+    <Compile Include="Controls\DataGridCheckMarkColumn.cs" />
     <Compile Include="Controls\DataGrids\DataGridPrioritySorting.cs" />
     <Compile Include="Controls\DataGrids\DataGridPrioritySortingItem.cs" />
     <Compile Include="Controls\DataGrids\IColumnComparer.cs" />
