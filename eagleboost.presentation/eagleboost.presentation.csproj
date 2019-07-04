@@ -215,6 +215,8 @@
     <Compile Include="Controls\TreeView\TreeNode.cs" />
     <Compile Include="Controls\TreeView\TreeNodeContainer.cs" />
     <Compile Include="Controls\TreeView\TreeNodeData.cs" />
+    <Compile Include="Tools\RemoteIconManager.cs" />
+    <Compile Include="Tools\WebImageDownloader.cs" />
     <Compile Include="Utils\ElementFromPoint.cs" />
     <Compile Include="Utils\InvertEffect.cs" />
     <Compile Include="Utils\MultiSelectorHelper.cs" />

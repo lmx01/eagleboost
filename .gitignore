@@ -318,3 +318,6 @@ __pycache__/
 /output/CommonServiceLocator.dll
 /output/log4net.xml
 /output/log4net.dll
+/output/XamlAnimatedGif.dll
+/output/WpfAnimatedGif.xml
+/output/WpfAnimatedGif.dll

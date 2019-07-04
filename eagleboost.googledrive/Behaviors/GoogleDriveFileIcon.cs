@@ -4,10 +4,15 @@
 
 namespace eagleboost.googledrive.Behaviors
 {
+  using System;
+  using System.Threading.Tasks;
   using System.Windows;
   using System.Windows.Controls;
   using System.Windows.Interactivity;
+  using eagleboost.core.Extensions;
   using eagleboost.googledrive.Contracts;
+  using eagleboost.presentation.Extensions;
+  using eagleboost.presentation.Tools;
   using eagleboost.shell.Tools;
 
   public class GoogleDriveFileIcon : Behavior<Image>
@@ -56,7 +61,15 @@ namespace eagleboost.googledrive.Behaviors
         return;
       }
 
-      image.Source = ShellIconManager.FindIconForFilename(file.Name, Large);
+      if (file.IconLink.HasValue())
+      {
+        var d = image.Dispatcher;
+        RemoteIconManager.GetIconAsync(file.IconLink).ContinueWith(t => d.CheckedInvoke(() => image.Source = t.Result));
+      }
+      else
+      {
+        image.Source = ShellIconManager.FindIconForFilename(file.Name, Large);
+      }
     }
     #endregion Private Methods
   }

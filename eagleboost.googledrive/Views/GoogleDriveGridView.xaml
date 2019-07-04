@@ -72,11 +72,10 @@
       <DataGridTemplateColumn Header="Name" CellTemplate="{StaticResource NameTemplate}" SortMemberPath="Name"/>
       <DataGridTemplateColumn Header="Size" CellTemplate="{StaticResource FileSizeTemplate}" SortMemberPath="FileSize"/>
       <ebui:DataGridCheckMarkColumn Header="Copied" Binding="{Binding IsChildrenCopied, Mode=OneWay}"/>
-      <DataGridTextColumn Header="Type" Binding="{Binding Type, Mode=OneWay}"/>
       <ebui:DataGridCheckMarkColumn Header="Owned by me" Binding="{Binding OwnedByMe, Mode=OneWay}"/>
       <DataGridTextColumn Header="Owners" Binding="{Binding Owners, Mode=OneWay}"/>
-      <DataGridTextColumn Header="Parents" Binding="{Binding Parents, Mode=OneWay}"/>
-      <DataGridTextColumn Header="Id" Binding="{Binding Id, Mode=OneWay}"/>
+      <DataGridTextColumn Header="Created" Binding="{Binding CreatedTime, Mode=OneWay, StringFormat=\{0:MMM dd\, yyyy\}}"/>
+      <DataGridTextColumn Header="Modified" Binding="{Binding ModifiedTime, Mode=OneWay, StringFormat=\{0:MMM dd\, yyyy\}}"/>
     </DataGrid.Columns>
     <i:Interaction.Behaviors>
       <ebui:DataGridPrioritySorting>

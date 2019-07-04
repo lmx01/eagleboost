@@ -42,6 +42,7 @@
 
     protected void NotifyPropertyReset<T>(ref T field, [CallerMemberName] string property = null) where T : class
     {
+      OnPropertyChanging(property);
       NotifyPropertyChanging(property);
       field = null;
       NotifyPropertyChanged(property);
@@ -52,6 +53,7 @@
     {
       if (!EqualityComparer<T>.Default.Equals(field, value))
       {
+        OnPropertyChanging(property);
         NotifyPropertyChanging(property);
         field = value;
         NotifyPropertyChanged(property);
@@ -64,6 +66,7 @@
 
     protected void Force<T>(ref T field, T value, [CallerMemberName] string property = null)
     {
+      OnPropertyChanging(property);
       NotifyPropertyChanging(property);
       field = value;
       NotifyPropertyChanged(property);

@@ -4,6 +4,7 @@
 
 namespace eagleboost.shell.Shell.Models
 {
+  using System;
   using eagleboost.shell.FileSystems.Models;
   using eagleboost.shell.Shell.Contracts;
   using Microsoft.WindowsAPICodePack.Shell;
@@ -50,6 +51,16 @@ namespace eagleboost.shell.Shell.Models
     public override long? Size
     {
       get { return 0; }
+    }
+
+    public override DateTime? CreatedTime
+    {
+      get { return null; }
+    }
+
+    public override DateTime? ModifiedTime
+    {
+      get { return null; }
     }
     #endregion Overrides
   }

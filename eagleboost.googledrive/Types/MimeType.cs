@@ -9,5 +9,6 @@ namespace eagleboost.googledrive.Types
     public const string Folder = "application/vnd.google-apps.folder";
     public const string Jpeg = "image/jpeg";
     public const string Png = "image/png";
+    public const string Gif = "image/gif";
   }
 }

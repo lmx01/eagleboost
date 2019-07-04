@@ -10,12 +10,17 @@ namespace eagleboost.googledrive.ViewModels
   using System.Threading.Tasks;
   using System.Windows.Media.Imaging;
   using eagleboost.core.ComponentModel;
+  using eagleboost.core.Extensions;
   using eagleboost.core.Logging;
   using eagleboost.googledrive.Contracts;
   using eagleboost.googledrive.Models;
   using eagleboost.googledrive.Types;
+  using eagleboost.presentation.Tools;
   using eagleboost.shell.FileSystems.Contracts;
 
+  /// <summary>
+  /// GoogleDriveFileInfoViewModel
+  /// </summary>
   public class GoogleDriveFileInfoViewModel : NotifyPropertyChangedBase, IFileSystemFileInfoViewModel<IGoogleDriveFile, IGoogleDriveFolder>
   {
     #region Statics
@@ -58,26 +63,94 @@ namespace eagleboost.googledrive.ViewModels
     }
     #endregion IFileSystemFileInfoViewModel
 
+    #region Overrides
+    protected override void OnPropertyChanging(string propertyName)
+    {
+      base.OnPropertyChanging(propertyName);
+
+      if (propertyName == this.Property(o=>o.FileInfo))
+      {
+        DisposeImageStream(FileInfo as GoogleDriveImageFileInfoModel);
+      }
+    }
+
+    #endregion Overrides
+
     #region Private Methods
-    private async Task<GoogleDriveFileInfoModel> DoLoadFileInfoAsync(IGoogleDriveFile file, CancellationToken ct, IProgress<string> process)
+    private Task<GoogleDriveFileInfoModel> DoLoadFileInfoAsync(IGoogleDriveFile file, CancellationToken ct,IProgress<string> process)
     {
       if (file.Type == MimeType.Jpeg || file.Type == MimeType.Png)
       {
-        using (var stream = new MemoryStream())
-        {
-          await _gService.DownloadAsync(file.Id, stream, ct, process);
-          var imageSource =BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-          var fileInfo = new GoogleDriveImageFileInfoModel(file)
-          {
-            ImageSource = imageSource,
-            Width = imageSource.PixelWidth,
-            Height = imageSource.PixelHeight,
-          };
-          return fileInfo;
-        }
+        return DoLoadImageInfoAsync(file, ct, process);
       }
 
-      return new GoogleDriveFileInfoModel(file);
+      if (file.Type == MimeType.Gif)
+      {
+        return DoLoadStreamInfoAsync(file, ct, process);
+      }
+
+      if (file.HasThumbnail.GetValueOrDefault() && file.ThumbnailLink.HasValue())
+      {
+        return DoLoadThumbnailInfoAsync(file);
+      }
+
+      return Task.FromResult(new GoogleDriveFileInfoModel(file));
+    }
+
+    private GoogleDriveImageFileInfoModel CreateFileInfo(IGoogleDriveFile file, BitmapSource imageSource)
+    {
+      var fileInfo = new GoogleDriveImageFileInfoModel(file)
+      {
+        ImageSource = imageSource,
+        Width = imageSource.PixelWidth,
+        Height = imageSource.PixelHeight,
+      };
+      return fileInfo;
+    }
+
+    private async Task<GoogleDriveFileInfoModel> DoLoadStreamInfoAsync(IGoogleDriveFile file, CancellationToken ct, IProgress<string> process)
+    {
+      var stream = new MemoryStream();
+      await _gService.DownloadAsync(file.Id, stream, ct, process);
+      var imageSource = await LoadThumbnailAsync(file, stream);
+      var fileInfo = CreateFileInfo(file, imageSource);
+      fileInfo.ImageStream = stream;
+      return fileInfo;
+    }
+
+    private async Task<BitmapSource> LoadThumbnailAsync(IGoogleDriveFile file, Stream stream)
+    {
+      if (file.ThumbnailLink.HasValue())
+      {
+        return await WebImageDownloader.DownloadAsync(file.ThumbnailLink);
+      }
+
+      return BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+    }
+
+    private async Task<GoogleDriveFileInfoModel> DoLoadImageInfoAsync(IGoogleDriveFile file, CancellationToken ct, IProgress<string> process)
+    {
+      using (var stream = new MemoryStream())
+      {
+        await _gService.DownloadAsync(file.Id, stream, ct, process);
+        var imageSource = BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+        return CreateFileInfo(file, imageSource);
+      }
+    }
+
+    private async Task<GoogleDriveFileInfoModel> DoLoadThumbnailInfoAsync(IGoogleDriveFile file)
+    {
+      var imageSource = await WebImageDownloader.DownloadAsync(file.ThumbnailLink);
+      return CreateFileInfo(file, imageSource);
+    }
+
+    private void DisposeImageStream(GoogleDriveImageFileInfoModel fileInfo)
+    {
+      if (fileInfo != null && fileInfo.ImageStream != null)
+      {
+        fileInfo.ImageStream.Dispose();
+        fileInfo.ImageStream = null;
+      }
     }
     #endregion Private Methods
   }

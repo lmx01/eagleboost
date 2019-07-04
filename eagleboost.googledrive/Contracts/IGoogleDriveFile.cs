@@ -9,6 +9,7 @@ namespace eagleboost.googledrive.Contracts
 
   /// <summary>
   /// IGoogleDriveFile
+  /// https://developers.google.com/drive/api/v3/reference/files
   /// </summary>
   public interface IGoogleDriveFile : IFile
   {
@@ -19,6 +20,16 @@ namespace eagleboost.googledrive.Contracts
     string Parents { get; }
 
     bool? IsChildrenCopied { get; }
+
+    string WebContentLink { get; }
+
+    string WebViewLink { get; }
+
+    string IconLink { get; }
+
+    bool? HasThumbnail { get; }
+
+    string ThumbnailLink { get; }
 
     IDictionary<string, string> AppProperties { get; }
   }

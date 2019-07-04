@@ -7,6 +7,8 @@
   xmlns:own="clr-namespace:eagleboost.googledrive.Views"
   xmlns:viewModels="clr-namespace:eagleboost.googledrive.ViewModels"
   xmlns:models="clr-namespace:eagleboost.googledrive.Models"
+  xmlns:types="clr-namespace:eagleboost.googledrive.Types"
+  xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
   mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
   d:DataContext="{d:DesignInstance viewModels:GoogleDriveFileInfoViewModel}">
 
@@ -30,6 +32,7 @@
           </StackPanel>
         </Grid>
         <Image x:Name="Image" Grid.Row="1" Source="{Binding ImageSource}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Image x:Name="GifImage" Grid.Row="1" gif:AnimationBehavior.SourceStream="{Binding ImageStream}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
         <Popup x:Name="ImagePopup">
           <Image x:Name="PopupImage"/>
         </Popup>
@@ -39,6 +42,9 @@
           <Setter TargetName="PopupImage" Property="Source" Value="{Binding ImageSource}"/>
           <Setter TargetName="ImagePopup" Property="IsOpen" Value="True"/>
         </Trigger>
+        <DataTrigger Binding="{Binding File.Type}" Value="{x:Static types:MimeType.Gif}">
+          <Setter TargetName="GifImage" Property="Visibility" Value="Visible"/>
+        </DataTrigger>
       </DataTemplate.Triggers>
     </DataTemplate>
 

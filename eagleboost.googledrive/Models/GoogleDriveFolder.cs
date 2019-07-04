@@ -60,6 +60,16 @@ namespace eagleboost.googledrive.Models
     {
       get { return _file.Size; }
     }
+
+    public override DateTime? CreatedTime
+    {
+      get { return _file.CreatedTime; }
+    }
+
+    public override DateTime? ModifiedTime
+    {
+      get { return _file.ModifiedTime; }
+    }
     #endregion Overrides
 
     #region IGoogleDriveFile
@@ -101,6 +111,31 @@ namespace eagleboost.googledrive.Models
 
         return null;
       }
+    }
+
+    public string WebContentLink
+    {
+      get { return _file.WebContentLink; }
+    }
+
+    public string WebViewLink
+    {
+      get { return _file.WebViewLink; }
+    }
+
+    public string IconLink
+    {
+      get { return _file.IconLink; }
+    }
+
+    public bool? HasThumbnail
+    {
+      get { return _file.HasThumbnail; }
+    }
+
+    public string ThumbnailLink
+    {
+      get { return _file.ThumbnailLink; }
     }
 
     public IDictionary<string, string> AppProperties

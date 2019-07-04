@@ -4,6 +4,7 @@
 
 namespace eagleboost.shell.FileSystems.Contracts
 {
+  using System;
   using eagleboost.core.ComponentModel;
   using eagleboost.core.Types;
 
@@ -21,5 +22,9 @@ namespace eagleboost.shell.FileSystems.Contracts
     FileSize? FileSize { get; }
 
     IFolder Parent { get; }
+
+    DateTime? CreatedTime { get; }
+
+    DateTime? ModifiedTime { get; }
   }
 }

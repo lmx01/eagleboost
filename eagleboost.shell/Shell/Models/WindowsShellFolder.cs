@@ -66,6 +66,16 @@ namespace eagleboost.shell.Shell.Models
       get { return null; }
     }
 
+    public override DateTime? CreatedTime
+    {
+      get { return null; }
+    }
+
+    public override DateTime? ModifiedTime
+    {
+      get { return null; }
+    }
+
     public override string ToString()
     {
       var levels = new List<string>(this.FolderToRoot<IFolder>().Select(i => i.Name).Reverse());

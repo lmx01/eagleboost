@@ -4,6 +4,7 @@
 
 namespace eagleboost.googledrive.Models
 {
+  using System.IO;
   using System.Windows.Media;
   using eagleboost.googledrive.Contracts;
 
@@ -15,6 +16,8 @@ namespace eagleboost.googledrive.Models
 
     #region Public Properties
     public ImageSource ImageSource { get; set; }
+
+    public Stream ImageStream { get; set; }
 
     public double Width { get; set; }
 
