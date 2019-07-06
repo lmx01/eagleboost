@@ -32,8 +32,6 @@ namespace eagleboost.googledrive.Extensions
     {
       var request = driveService.Files.List();
       request.Q = query;
-      request.SupportsTeamDrives = true;
-      request.IncludeTeamDriveItems = true;
       request.Spaces = "drive";
       request.Corpora = "user";
       var fields = fileFields.Any() ? fileFields : DefaultFileFields;
@@ -41,6 +39,14 @@ namespace eagleboost.googledrive.Extensions
       request.OrderBy = "name";
       request.PageToken = pageToken;
 
+      return request;
+    }
+
+    public static FilesResource.GetRequest GetFileRequest(this DriveService driveService, string id, params string[] fileFields)
+    {
+      var request = driveService.Files.Get(id);
+      var fields = fileFields.Any() ? fileFields : DefaultFileFields;
+      request.Fields = string.Join(", ", fields);
       return request;
     }
   }

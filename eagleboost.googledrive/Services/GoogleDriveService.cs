@@ -83,6 +83,11 @@ namespace eagleboost.googledrive.Services
       return Task.Run(() => DoGetGoogleDriveFilesAsync(null, query, ct, progress), ct);
     }
 
+    public Task<IGoogleDriveFile> GetFileAsync(string id, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
+    {
+      return Task.Run(() => DoGetGoogleDriveFileAsync(id, ct, progress), ct);
+    }
+
     public Task<IGoogleDriveFile> CopyAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, PauseToken pt = default(PauseToken), CancellationToken ct = default(CancellationToken), IProgress<GoogleDriveProgress> progress = null, GoogleDriveProgress progressPayload = null)
     {
       return Task.Run(async() =>
@@ -234,6 +239,22 @@ namespace eagleboost.googledrive.Services
       while (pageToken != null && !ct.IsCancellationRequested);
 
       return result;
+    }
+
+    private async Task<IGoogleDriveFile> DoGetGoogleDriveFileAsync(string id, CancellationToken ct, IProgress<string> progress)
+    {
+      var f = await DoGetFileAsync(id, ct, progress).ConfigureAwait(false);
+      var result = CreateDriveFile(f, null, ct, progress);
+      return result;
+    }
+
+    private async Task<File> DoGetFileAsync(string id, CancellationToken ct, IProgress<string> progress)
+    {
+      var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
+      var request = driveService.GetFileRequest(id);
+      var file = await request.ExecuteAsync(ct);
+      progress.TryReport("Loaded file ", file.Name + "[" + id + "]");
+      return file;
     }
 
     public Task<IGoogleDriveFile> DoCopyAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, PauseToken pt, CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
