@@ -388,7 +388,7 @@ namespace eagleboost.googledrive.Services
 
     private async Task<T> GetFileAsync<T>(string name, IGoogleDriveFolder toFolder, CancellationToken ct, IProgress<string> progress) where T : class, IGoogleDriveFile
     {
-      var query = string.Format(CommonQueries.LiveFileFormat + " and name = '{1}'", toFolder.Id, name);
+      var query = string.Format(CommonQueries.LiveFileFormat + " and name = '{1}'", toFolder.Id, NormalizeName(name));
       var files = await DoGetGoogleDriveFilesAsync(toFolder, query, ct, progress).ConfigureAwait(false);
       if (files.Count == 1)
       {
@@ -401,6 +401,11 @@ namespace eagleboost.googledrive.Services
       }
 
       return null;
+    }
+
+    private string NormalizeName(string name)
+    {
+      return name.Replace("'", "\\'");
     }
 
     private async Task<IGoogleDriveFolder> DoCreateFolderAsync(IGoogleDriveFolder from, IGoogleDriveFolder toFolder, CancellationToken ct, IProgress<string> progress)

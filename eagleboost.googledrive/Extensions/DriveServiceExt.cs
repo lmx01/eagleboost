@@ -34,6 +34,8 @@ namespace eagleboost.googledrive.Extensions
       request.Q = query;
       request.Spaces = "drive";
       request.Corpora = "user";
+      request.IncludeTeamDriveItems = true;
+      request.SupportsTeamDrives = true;
       var fields = fileFields.Any() ? fileFields : DefaultFileFields;
       request.Fields = "nextPageToken, files(" + string.Join(", ", fields) + ")";
       request.OrderBy = "name";

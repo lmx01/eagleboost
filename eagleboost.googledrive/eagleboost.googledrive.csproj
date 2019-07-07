@@ -124,8 +124,10 @@
     <Compile Include="Models\GoogleTeamDrive.cs" />
     <Compile Include="Models\GoogleTeamDriveFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\GoogleDriveService.CommonQueries.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\GoogleDriveService.cs" />
-    <Compile Include="Services\GoogleDriveService.CommonQueries.cs" />
     <Compile Include="Services\UserCredentialProvider.cs" />
     <Compile Include="Types\FolderProperties.cs" />
     <Compile Include="Types\MimeType.cs" />
