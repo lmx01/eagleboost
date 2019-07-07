@@ -12,9 +12,18 @@ namespace eagleboost.googledrive.Contracts
   using eagleboost.core.Threading;
   using eagleboost.googledrive.Models;
 
+  /// <summary>
+  /// IGoogleDriveService
+  /// </summary>
   public interface IGoogleDriveService
   {
+    #region Properties
+    string StartPageToken { get; set; }
+    #endregion Properties
+
     #region Methods
+    IObservable<IReadOnlyCollection<IGoogleDriveFile>> ObserveChanges(string startPageToken);
+
     Task<IReadOnlyList<IGoogleDriveFile>> GetTeamDrivesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task<IReadOnlyList<IGoogleDriveFile>> GetChildFilesAsync(IGoogleDriveFolder parent, string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
@@ -32,6 +41,8 @@ namespace eagleboost.googledrive.Contracts
     Task DeleteAsync(string id, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task DownloadAsync(string id, Stream stream, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+
+    Task AddToSharedAsync(string fileId, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
     #endregion Methods
 
     #region Events

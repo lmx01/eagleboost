@@ -8,6 +8,7 @@ namespace eagleboost.googledrive.Services
   using System.Collections.Generic;
   using System.IO;
   using System.Linq;
+  using System.Reactive.Subjects;
   using System.Threading;
   using System.Threading.Tasks;
   using eagleboost.core.Extensions;
@@ -20,6 +21,7 @@ namespace eagleboost.googledrive.Services
   using eagleboost.googledrive.Types;
   using Google.Apis.Download;
   using Google.Apis.Drive.v3;
+  using Google.Apis.Drive.v3.Data;
   using Google.Apis.Services;
   using File = Google.Apis.Drive.v3.Data.File;
 
@@ -35,6 +37,8 @@ namespace eagleboost.googledrive.Services
     private TaskCompletionSource<DriveService> _tcs;
     private readonly object _tcsLock = new object();
     private readonly ILoggerFacade _logger;
+    private Subject<IReadOnlyCollection<IGoogleDriveFile>> _changesSubject;
+    private readonly IGoogleDriveFolder _rootFolder;
     #endregion Declarations
 
     #region ctors
@@ -48,6 +52,7 @@ namespace eagleboost.googledrive.Services
       _credentialsFile = credentialsFile;
       _credentialTokenFile = credentialTokenFile;
       _applicationName = applicationName;
+      _rootFolder = new GoogleDriveFolder(new GoogleMyDrive(), null, f => null);
     }
     #endregion ctors
 
@@ -59,6 +64,82 @@ namespace eagleboost.googledrive.Services
     #endregion Private Properties
 
     #region IGoogleDriveService
+    public string StartPageToken { get; set; }
+
+    public IObservable<IReadOnlyCollection<IGoogleDriveFile>> ObserveChanges(string startPageToken)
+    {
+      if (_changesSubject == null)
+      {
+        _changesSubject = new Subject<IReadOnlyCollection<IGoogleDriveFile>>();
+        if (startPageToken != null)
+        {
+          StartPageToken = startPageToken;
+          Task.Run(() => RetrieveChangesAsync(_changesSubject));
+        }
+        else
+        {
+          Task.Run(async () =>
+          {
+            var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
+            var req = driveService.Changes.GetStartPageToken();
+            var token = await req.ExecuteAsync();
+            StartPageToken = token.StartPageTokenValue;
+            await RetrieveChangesAsync(_changesSubject);
+          });
+        }
+      }
+
+      return _changesSubject;
+    }
+
+    private async Task RetrieveChangesAsync(Subject<IReadOnlyCollection<IGoogleDriveFile>> subject)
+    {
+      var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
+
+      var pageToken = StartPageToken;
+      while (pageToken != null)
+      {
+        var request = driveService.Changes.List(pageToken);
+        request.Spaces = "drive";
+        request.IncludeTeamDriveItems = true;
+        request.IncludeCorpusRemovals = true;
+        request.IncludeRemoved = true;
+        request.SupportsTeamDrives = true;
+        var changes = await request.ExecuteAsync();
+        foreach (var change in changes.Changes)
+        {
+          // Process change
+          var log = "Change found for file: " + change.FileId;
+          if (change.File != null)
+          {
+            log += ", " + change.File.Name;
+          }
+          Logger.Info(log);
+        }
+
+        var changedFiles = changes.Changes.Select(CreateChange).ToArray();
+        subject.OnNext(changedFiles);
+
+        if (changes.NewStartPageToken != null)
+        {
+          // Last page, save this token for the next polling interval
+          StartPageToken = changes.NewStartPageToken;
+        }
+        pageToken = changes.NextPageToken;
+      }
+    }
+
+    private IGoogleDriveFile CreateChange(Change change)
+    {
+      var file = change.File;
+      if (file != null)
+      {
+        return CreateDriveFile(file, null, default(CancellationToken), null);
+      }
+
+      return new GoogleDriveFileUnknownChange(change);
+    }
+
     public Task<IReadOnlyList<IGoogleDriveFile>> GetTeamDrivesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
     {
       return Task.Run(() => DoGetTeamDrivesAsync(parent, ct, progress), ct);
@@ -112,6 +193,11 @@ namespace eagleboost.googledrive.Services
     public Task DownloadAsync(string id, Stream stream, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
     {
       return Task.Run(() => DoDownloadAsync(id, stream, ct, progress), ct);
+    }
+
+    public Task AddToSharedAsync(string fileId, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
+    {
+      return Task.Run(() => DoAddToSharedAsync(fileId, ct, progress), ct);
     }
 
     public event FileCreatedEventHandler FileCreated;
@@ -286,7 +372,7 @@ namespace eagleboost.googledrive.Services
     private async Task<IGoogleDriveFile> DoCopyFolderAsync(IGoogleDriveFolder from, IGoogleDriveFolder toFolder, PauseToken pt, CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
     {
       await pt.WaitWhilePausedAsync().ConfigureAwait(false);
-      var getOrCreateFolder = await GetOrCreateFolderAsync(from, toFolder, ct, progress, progressPayload).ConfigureAwait(false);
+      var getOrCreateFolder = await GetOrCreateFolderAsync(from.Name, toFolder, ct, progress, progressPayload).ConfigureAwait(false);
       var fromFolderCopy = getOrCreateFolder.Folder;
       if (fromFolderCopy.IsChildrenCopied.GetValueOrDefault())
       {
@@ -363,26 +449,36 @@ namespace eagleboost.googledrive.Services
       }
     }
 
-    private async Task<GetOrCreateFolder> GetOrCreateFolderAsync(IGoogleDriveFolder from, IGoogleDriveFolder toFolder,
-      CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
+    private async Task<GetOrCreateFolder> GetOrCreateFolderAsync(string name, IGoogleDriveFolder parent,
+      CancellationToken ct, IProgress<GoogleDriveProgress> progress = null, GoogleDriveProgress progressPayload = null)
     {
       GetOrCreateFolder result;
-      var folder = await GetFileAsync<IGoogleDriveFolder>(from.Name, toFolder, ct, null).ConfigureAwait(false);
+      var folder = await GetFileAsync<IGoogleDriveFolder>(name, parent, ct, null).ConfigureAwait(false);
       if (folder != null)
       {
         result = new GetOrCreateFolder(folder, false);
-        progressPayload.Status = string.Format("Found folder '{0}' under {1}...", from.Name, toFolder.Name);
+        if (progressPayload != null)
+        {
+          progressPayload.Status = string.Format("Found folder '{0}' under {1}...", name, parent.Name);
+        }
       }
       else
       {
-        folder = await DoCreateFolderAsync(from, toFolder, ct, null).ConfigureAwait(false);
+        folder = await DoCreateFolderAsync(name, parent, ct, null).ConfigureAwait(false);
         result = new GetOrCreateFolder(folder, true);
-        progressPayload.Status = string.Format("Creating folder '{0}' under {1}...", from.Name, toFolder.Name);
+        if (progressPayload != null)
+        {
+          progressPayload.Status = string.Format("Creating folder '{0}' under {1}...", name, parent.Name);
+        }
       }
 
-      progressPayload.Count++;
-      progressPayload.Current = folder;
-      progress.TryReport(() => progressPayload);
+      if (progressPayload != null)
+      {
+        progressPayload.Count++;
+        progressPayload.Current = folder;
+        progress.TryReport(() => progressPayload);
+      }
+
       return result;
     }
 
@@ -408,18 +504,6 @@ namespace eagleboost.googledrive.Services
       return name.Replace("'", "\\'");
     }
 
-    private async Task<IGoogleDriveFolder> DoCreateFolderAsync(IGoogleDriveFolder from, IGoogleDriveFolder toFolder, CancellationToken ct, IProgress<string> progress)
-    {
-      var fromCopy = new File {Parents = new List<string> {toFolder.Id}, Name = from.Name, MimeType = MimeType.Folder};
-      var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
-      var createRequest = driveService.Files.Create(fromCopy);
-      createRequest.SupportsTeamDrives = true;
-      var resp = await createRequest.ExecuteAsync(ct).ConfigureAwait(false);
-      var result = new GoogleDriveFolder(resp, toFolder, _ => DoGetChildFilesAsync(_, null, ct, progress));
-      RaiseFileCreated(result);
-      return result;
-    }
-
     private async Task<IGoogleDriveFolder> DoCreateFolderAsync(string name, IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
     {
       progress.TryReport("Creating folder '{0}' under folder '{1}'...", name, parent.Name);
@@ -430,7 +514,7 @@ namespace eagleboost.googledrive.Services
         var createRequest = driveService.Files.Create(folder);
         createRequest.SupportsTeamDrives = true;
         var resp = await createRequest.ExecuteAsync(ct).ConfigureAwait(false);
-        var result = (IGoogleDriveFolder)CreateDriveFile(resp, parent, ct, progress);
+        var result = new GoogleDriveFolder(resp, parent, _ => DoGetChildFilesAsync(_, null, ct, progress));
         RaiseFileCreated(result);
         return result;
       }
@@ -498,6 +582,32 @@ namespace eagleboost.googledrive.Services
         Logger.Error("Error deleting file {0} - {1}", id, ex);
       }
     }
+
+    private async Task DoAddToSharedAsync(string fileId, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
+    {
+      var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
+      var sharedFolder = await GetOrCreateFolderAsync("_Shared", _rootFolder, ct);
+      var sharedFolderId = sharedFolder.Folder.Id;
+      var file = await DoGetGoogleDriveFileAsync(fileId, ct, progress);
+      if (file.OwnedByMe)
+      {
+        Logger.Info(file.Name + "[" + fileId + "] is not shared by others");
+        return;
+      }
+
+      if (file.Parents.Contains(sharedFolderId))
+      {
+        Logger.Info(file.Name + "[" + fileId + "] already exists in " + sharedFolder.Folder);
+        return;
+      }
+
+      var updateRequest = driveService.Files.Update(new File(), fileId);
+      updateRequest.Fields = "id, parents";
+      updateRequest.AddParents = sharedFolder.Folder.Id;
+      await updateRequest.ExecuteAsync(ct);
+      Logger.Info("Added " + file.Name + "[" + fileId + "]  to " + sharedFolder.Folder);
+    }
+
     #endregion Private Methods
 
     /// <summary>
