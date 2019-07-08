@@ -108,12 +108,19 @@ namespace eagleboost.googledrive.Services
       if (_activitiesSubject == null)
       {
         _activitiesSubject = new Subject<IReadOnlyCollection<GoogleDriveActivity>>();
-        Task.Run(() => ObserveActivitiesAsync(_activitiesSubject, ct));
+        Task.Run(() => ObserveActivitiesAsync(_activitiesSubject, ct), ct);
       }
 
       return _activitiesSubject;
     }
 
+    /// <summary>
+    /// https://dzone.com/articles/working-with-the-google-drive-api-track-changes-in
+    /// https://developers.google.com/drive/activity/v2/quickstart/dotnet
+    /// </summary>
+    /// <param name="subject"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
     private async Task ObserveActivitiesAsync(Subject<IReadOnlyCollection<GoogleDriveActivity>> subject, CancellationToken ct)
     {
       var activityService = await GetDriveActivityServiceAsync().ConfigureAwait(false);
