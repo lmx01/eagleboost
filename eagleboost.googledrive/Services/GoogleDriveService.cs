@@ -22,8 +22,11 @@ namespace eagleboost.googledrive.Services
   using Google.Apis.Download;
   using Google.Apis.Drive.v3;
   using Google.Apis.Drive.v3.Data;
+  using Google.Apis.DriveActivity.v2;
+  using Google.Apis.DriveActivity.v2.Data;
   using Google.Apis.Services;
   using File = Google.Apis.Drive.v3.Data.File;
+  using User = Google.Apis.DriveActivity.v2.Data.User;
 
   /// <summary>
   /// GoogleDriveService
@@ -32,25 +35,33 @@ namespace eagleboost.googledrive.Services
   {
     #region Declarations
     private readonly string _credentialsFile;
-    private readonly string _applicationName;
     private readonly string _credentialTokenFile;
-    private TaskCompletionSource<DriveService> _tcs;
-    private readonly object _tcsLock = new object();
+    private readonly string _activityCredentialsFile;
+    private readonly string _activityCredentialTokenFile;
+    private readonly string _applicationName;
+    private TaskCompletionSource<DriveService> _driveServiceTcs;
+    private readonly object _driveServiceTcsLock = new object();
+    private TaskCompletionSource<DriveActivityService> _driveActivityServiceTcs;
+    private readonly object _driveActivityServiceTcsLock = new object();
     private readonly ILoggerFacade _logger;
     private Subject<IReadOnlyCollection<IGoogleDriveFile>> _changesSubject;
+    private Subject<IReadOnlyCollection<GoogleDriveActivity>> _activitiesSubject;
     private readonly IGoogleDriveFolder _rootFolder;
     #endregion Declarations
 
     #region ctors
-    public GoogleDriveService(string credentialsFile, string credentialTokenFile, string applicationName) : this(null, credentialsFile, credentialTokenFile, applicationName)
+    public GoogleDriveService(string credentialsFile, string credentialTokenFile, string activityCredentialsFile, string activityCredentialTokenFile, string applicationName) 
+      : this(null, credentialsFile, credentialTokenFile, activityCredentialsFile, activityCredentialTokenFile, applicationName)
     {
     }
 
-    public GoogleDriveService(ILoggerFacade logger, string credentialsFile, string credentialTokenFile, string applicationName)
+    public GoogleDriveService(ILoggerFacade logger, string credentialsFile, string credentialTokenFile, string activityCredentialsFile, string activityCredentialTokenFile, string applicationName)
     {
       _logger = logger ?? LoggerManager.GetLogger<GoogleDriveService>();
       _credentialsFile = credentialsFile;
       _credentialTokenFile = credentialTokenFile;
+      _activityCredentialsFile = activityCredentialsFile;
+      _activityCredentialTokenFile = activityCredentialTokenFile;
       _applicationName = applicationName;
       _rootFolder = new GoogleDriveFolder(new GoogleMyDrive(), null, f => null);
     }
@@ -90,6 +101,164 @@ namespace eagleboost.googledrive.Services
       }
 
       return _changesSubject;
+    }
+
+    public IObservable<IReadOnlyCollection<GoogleDriveActivity>> ObserveActivities(CancellationToken ct = default(CancellationToken))
+    {
+      if (_activitiesSubject == null)
+      {
+        _activitiesSubject = new Subject<IReadOnlyCollection<GoogleDriveActivity>>();
+        Task.Run(() => ObserveActivitiesAsync(_activitiesSubject, ct));
+      }
+
+      return _activitiesSubject;
+    }
+
+    private async Task ObserveActivitiesAsync(Subject<IReadOnlyCollection<GoogleDriveActivity>> subject, CancellationToken ct)
+    {
+      var activityService = await GetDriveActivityServiceAsync().ConfigureAwait(false);
+
+      string pageToken = null;
+      do
+      {
+        var requestData = new QueryDriveActivityRequest { PageSize = 10 };
+        var query = activityService.Activity.Query(requestData);
+        var response = await query.ExecuteAsync().ConfigureAwait(false);
+        var activities = response.Activities;
+        if (activities == null || activities.Count == 0)
+        {
+          Logger.Info("No activities");
+          subject.OnCompleted();
+          return;
+        }
+
+        var googleActivities = new List<GoogleDriveActivity>(activities.Count);
+        foreach (var activity in activities)
+        {
+          string time = GetTimeInfo(activity);
+          string action = GetActionInfo(activity.PrimaryActionDetail);
+          List<string> actors = activity.Actors.Select(a => GetActorInfo(a)).ToList();
+          List<string> targetNames = activity.Targets.Select(t => GetTargetName(t)).ToList();
+          List<string> targetIds = activity.Targets.Select(t => GetTargetId(t)).ToList();
+          var ga = new GoogleDriveActivity(Truncated(actors), action, Truncated(targetNames), Truncated(targetIds), time);
+          Logger.Info("New activity: " + ga);
+          googleActivities.Add(ga);
+        }
+        subject.OnNext(googleActivities);
+
+        pageToken = response.NextPageToken;
+      }
+      while (pageToken != null && !ct.IsCancellationRequested);
+
+      subject.OnCompleted();
+    }
+
+    // Returns a string representation of the first elements in a list.
+    private static string Truncated<T>(List<T> list, int limit = 2)
+    {
+      string contents = string.Join(", ", list.Take(limit));
+      string more = list.Count > limit ? ", ..." : "";
+      return string.Format("[{0}{1}]", contents, more);
+    }
+
+    // Returns the name of a set property in an object, or else "unknown".
+    private static string GetOneOf(object obj)
+    {
+      foreach (var p in obj.GetType().GetProperties())
+      {
+        if (!ReferenceEquals(p.GetValue(obj), null))
+        {
+          return p.Name;
+        }
+      }
+      return "unknown";
+    }
+
+    // Returns a time associated with an activity.
+    private static string GetTimeInfo(DriveActivity activity)
+    {
+      if (activity.Timestamp != null)
+      {
+        return activity.Timestamp.ToString();
+      }
+      if (activity.TimeRange != null)
+      {
+        return activity.TimeRange.EndTime.ToString();
+      }
+      return "unknown";
+    }
+
+    // Returns the type of action.
+    private static string GetActionInfo(ActionDetail actionDetail)
+    {
+      return GetOneOf(actionDetail);
+    }
+
+    // Returns user information, or the type of user if not a known user.
+    private static string GetUserInfo(User user)
+    {
+      if (user.KnownUser != null)
+      {
+        KnownUser knownUser = user.KnownUser;
+        bool isMe = knownUser.IsCurrentUser ?? false;
+        return isMe ? "people/me" : knownUser.PersonName;
+      }
+      return GetOneOf(user);
+    }
+
+    // Returns actor information, or the type of actor if not a user.
+    private static string GetActorInfo(Actor actor)
+    {
+      if (actor.User != null)
+      {
+        return GetUserInfo(actor.User);
+      }
+      return GetOneOf(actor);
+    }
+
+    // Returns the type of a target and an associated title.
+    private static string GetTargetName(Target target)
+    {
+      if (target.DriveItem != null)
+      {
+        return "driveItem:\"" + target.DriveItem.Title + "\"";
+      }
+      if (target.Drive != null)
+      {
+        return "drive:\"" + target.Drive.Title + "\"";
+      }
+      if (target.FileComment != null)
+      {
+        DriveItem parent = target.FileComment.Parent;
+        if (parent != null)
+        {
+          return "fileComment:\"" + parent.Title + "\"";
+        }
+        return "fileComment:unknown";
+      }
+      return GetOneOf(target);
+    }
+
+    private static string GetTargetId(Target target)
+    {
+      if (target.DriveItem != null)
+      {
+        return "driveItem:\"" + target.DriveItem.Name + "\"";
+      }
+      if (target.Drive != null)
+      {
+        return "drive:\"" + target.Drive.Name + "\"";
+      }
+      if (target.FileComment != null)
+      {
+        DriveItem parent = target.FileComment.Parent;
+        if (parent != null)
+        {
+          return "fileComment:\"" + parent.Name + "\"";
+        }
+        return "fileComment:unknown";
+      }
+      return GetOneOf(target);
     }
 
     private async Task RetrieveChangesAsync(Subject<IReadOnlyCollection<IGoogleDriveFile>> subject)
@@ -215,11 +384,11 @@ namespace eagleboost.googledrive.Services
     #region Private Methods
     private Task<DriveService> GetDriveServiceAsync()
     {
-      lock (_tcsLock)
+      lock (_driveServiceTcsLock)
       {
-        if (_tcs == null)
+        if (_driveServiceTcs == null)
         {
-          _tcs = new TaskCompletionSource<DriveService>();
+          _driveServiceTcs = new TaskCompletionSource<DriveService>();
           Task.Run(async () =>
           {
             var provider = new UserCredentialProvider();
@@ -230,11 +399,36 @@ namespace eagleboost.googledrive.Services
               ApplicationName = _applicationName,
             });
 
-            _tcs.TrySetResult(driveService);
+            _driveServiceTcs.TrySetResult(driveService);
           });
         }
 
-        return _tcs.Task;
+        return _driveServiceTcs.Task;
+      }
+    }
+
+    private Task<DriveActivityService> GetDriveActivityServiceAsync()
+    {
+      lock (_driveActivityServiceTcsLock)
+      {
+        if (_driveActivityServiceTcs == null)
+        {
+          _driveActivityServiceTcs = new TaskCompletionSource<DriveActivityService>();
+          Task.Run(async () =>
+          {
+            var provider = new UserCredentialProvider();
+            var credential = await provider.GetUserCredentialAsync(_activityCredentialsFile, _activityCredentialTokenFile).ConfigureAwait(true);
+            var driveService = new DriveActivityService(new BaseClientService.Initializer
+            {
+              HttpClientInitializer = credential,
+              ApplicationName = _applicationName,
+            });
+
+            _driveActivityServiceTcs.TrySetResult(driveService);
+          });
+        }
+
+        return _driveActivityServiceTcs.Task;
       }
     }
 

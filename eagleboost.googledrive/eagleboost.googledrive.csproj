@@ -121,6 +121,7 @@
     <Compile Include="Extensions\DriveServiceExt.cs" />
     <Compile Include="Extensions\FileExt.cs" />
     <Compile Include="Extensions\GoogleDriveFileExt.cs" />
+    <Compile Include="Models\GoogleDriveActivity.cs" />
     <Compile Include="Models\GoogleDriveFile.cs" />
     <Compile Include="Models\GoogleDriveFileInfoInvalid.cs">
       <DependentUpon>GoogleDriveFileInfoModel.cs</DependentUpon>
