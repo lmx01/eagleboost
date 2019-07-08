@@ -33,6 +33,11 @@ namespace eagleboost.googledrive.Services
   /// </summary>
   public partial class GoogleDriveService : IGoogleDriveService
   {
+    #region Statics
+    private static string[] DriveScope = {DriveService.Scope.Drive, DriveService.Scope.DriveReadonly};
+    private static string[] ActivityScope = {DriveActivityService.Scope.DriveActivity};
+    #endregion Statics
+
     #region Declarations
     private readonly string _credentialsFile;
     private readonly string _credentialTokenFile;
@@ -125,12 +130,12 @@ namespace eagleboost.googledrive.Services
     {
       var activityService = await GetDriveActivityServiceAsync().ConfigureAwait(false);
 
-      string pageToken = null;
+      string pageToken;
       do
       {
         var requestData = new QueryDriveActivityRequest { PageSize = 10 };
         var query = activityService.Activity.Query(requestData);
-        var response = await query.ExecuteAsync().ConfigureAwait(false);
+        var response = await query.ExecuteAsync(ct).ConfigureAwait(false);
         var activities = response.Activities;
         if (activities == null || activities.Count == 0)
         {
@@ -399,7 +404,7 @@ namespace eagleboost.googledrive.Services
           Task.Run(async () =>
           {
             var provider = new UserCredentialProvider();
-            var credential = await provider.GetUserCredentialAsync(_credentialsFile, _credentialTokenFile).ConfigureAwait(true);
+            var credential = await provider.GetUserCredentialAsync(_credentialsFile, _credentialTokenFile, DriveScope).ConfigureAwait(true);
             var driveService = new DriveService(new BaseClientService.Initializer
             {
               HttpClientInitializer = credential,
@@ -424,7 +429,7 @@ namespace eagleboost.googledrive.Services
           Task.Run(async () =>
           {
             var provider = new UserCredentialProvider();
-            var credential = await provider.GetUserCredentialAsync(_activityCredentialsFile, _activityCredentialTokenFile).ConfigureAwait(true);
+            var credential = await provider.GetUserCredentialAsync(_activityCredentialsFile, _activityCredentialTokenFile, ActivityScope).ConfigureAwait(true);
             var driveService = new DriveActivityService(new BaseClientService.Initializer
             {
               HttpClientInitializer = credential,

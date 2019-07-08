@@ -8,7 +8,6 @@ namespace eagleboost.googledrive.Services
   using System.Threading;
   using System.Threading.Tasks;
   using Google.Apis.Auth.OAuth2;
-  using Google.Apis.Drive.v3;
   using Google.Apis.Util.Store;
 
   public interface IUserCredentialProvider
@@ -18,15 +17,13 @@ namespace eagleboost.googledrive.Services
 
   public class UserCredentialProvider
   {
-    private static readonly string[] Scopes = { DriveService.Scope.Drive, DriveService.Scope.DriveReadonly };
-
-    public async Task<UserCredential> GetUserCredentialAsync(string credentialFile, string credPath)
+    public async Task<UserCredential> GetUserCredentialAsync(string credentialFile, string credPath, string[] scopes)
     {
       using (var stream = new FileStream(credentialFile, FileMode.Open, FileAccess.Read))
       {
         var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
           GoogleClientSecrets.Load(stream).Secrets,
-          Scopes,
+          scopes,
           "user",
           CancellationToken.None,
           new FileDataStore(credPath, true)).ConfigureAwait(false);
