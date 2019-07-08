@@ -801,7 +801,7 @@ namespace eagleboost.googledrive.Services
         return;
       }
 
-      if (file.Parents.Contains(sharedFolderId))
+      if (file.Parents != null && file.Parents.Contains(sharedFolderId))
       {
         Logger.Info(file.Name + "[" + fileId + "] already exists in " + sharedFolder.Folder);
         return;
@@ -811,7 +811,9 @@ namespace eagleboost.googledrive.Services
       updateRequest.Fields = "id, parents";
       updateRequest.AddParents = sharedFolder.Folder.Id;
       await updateRequest.ExecuteAsync(ct);
-      Logger.Info("Added " + file.Name + "[" + fileId + "]  to " + sharedFolder.Folder);
+      var log = "Added " + file.Name + "[" + fileId + "]  to " + sharedFolder.Folder;
+      progress.TryReport(log);
+      Logger.Info(log);
     }
 
     #endregion Private Methods
