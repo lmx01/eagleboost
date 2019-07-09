@@ -64,6 +64,8 @@ namespace eagleboost.shell.FileSystems.Models
 
     public abstract DateTime? ModifiedTime { get; }
 
+    public abstract string LastModifyingUser { get; }
+
     public TFolder Parent { get; private set; }
     #endregion Public Properties
 

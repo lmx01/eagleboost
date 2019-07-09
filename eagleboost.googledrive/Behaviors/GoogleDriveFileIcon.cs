@@ -35,6 +35,8 @@ namespace eagleboost.googledrive.Behaviors
 
     #region Public Properties
     public bool Large { get; set; }
+
+    public bool UseFolderIcon { get; set; }
     #endregion Public Properties
 
     #region Overrides
@@ -56,7 +58,7 @@ namespace eagleboost.googledrive.Behaviors
     {
       var image = AssociatedObject;
       var file = File;
-      if (image == null || file == null || file is IGoogleDriveFolder)
+      if (image == null || file == null || (!UseFolderIcon && file is IGoogleDriveFolder))
       {
         return;
       }

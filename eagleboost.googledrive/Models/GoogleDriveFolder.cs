@@ -70,6 +70,17 @@ namespace eagleboost.googledrive.Models
     {
       get { return _file.ModifiedTime; }
     }
+
+    public override string LastModifyingUser
+    {
+      get
+      {
+        var user = _file.LastModifyingUser;
+        return user != null
+          ? user.Me.GetValueOrDefault(false) ? "me" : user.DisplayName
+          : null;
+      }
+    }
     #endregion Overrides
 
     #region IGoogleDriveFile

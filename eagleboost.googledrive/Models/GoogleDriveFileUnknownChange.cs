@@ -56,6 +56,11 @@ namespace eagleboost.googledrive.Models
     {
       get { return null; }
     }
+
+    public override string LastModifyingUser
+    {
+      get { return null; }
+    }
     #endregion Overrides
 
     #region IGoogleDriveFile

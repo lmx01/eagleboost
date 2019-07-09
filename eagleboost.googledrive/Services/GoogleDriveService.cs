@@ -293,7 +293,8 @@ namespace eagleboost.googledrive.Services
           var log = "Change found for file: " + change.FileId;
           if (change.File != null)
           {
-            log += ", " + change.File.Name;
+            var gFile = await GetFileAsync(change.FileId).ConfigureAwait(false);
+            log += ", " + gFile.Name + "[" + gFile.LastModifyingUser + "]";
           }
           Logger.Info(log);
         }

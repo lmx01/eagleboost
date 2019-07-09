@@ -26,5 +26,7 @@ namespace eagleboost.shell.FileSystems.Contracts
     DateTime? CreatedTime { get; }
 
     DateTime? ModifiedTime { get; }
+
+    string LastModifyingUser { get; }
   }
 }

@@ -76,6 +76,11 @@ namespace eagleboost.shell.Shell.Models
       get { return null; }
     }
 
+    public override string LastModifyingUser
+    {
+      get { return null; }
+    }
+
     public override string ToString()
     {
       var levels = new List<string>(this.FolderToRoot<IFolder>().Select(i => i.Name).Reverse());

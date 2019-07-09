@@ -62,6 +62,11 @@ namespace eagleboost.shell.Shell.Models
     {
       get { return null; }
     }
+
+    public override string LastModifyingUser
+    {
+      get { return null; }
+    }
     #endregion Overrides
   }
 }

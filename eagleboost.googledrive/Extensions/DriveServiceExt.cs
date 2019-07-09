@@ -21,6 +21,7 @@ namespace eagleboost.googledrive.Extensions
       "appProperties",
       "createdTime",
       "modifiedTime",
+      "lastModifyingUser",
       "webContentLink",
       "webViewLink",
       "iconLink",
