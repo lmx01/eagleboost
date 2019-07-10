@@ -72,7 +72,10 @@ namespace eagleboost.presentation.Controls.DataGrids
     {
       var grid = (DataGrid)sender;
       var support = SelectedItemsSupport;
-      support.SelectedItems = grid.SelectedItems;
+      if (support != null)
+      {
+        support.SelectedItems = grid.SelectedItems;
+      }
     }
 
     private void HandleViewModelSelectedItemsChanged(object sender, EventArgs e)

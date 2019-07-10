@@ -4,18 +4,20 @@
 
 namespace eagleboost.googledrive.Models
 {
+  using eagleboost.googledrive.Contracts;
+
   /// <summary>
   /// GoogleDriveActivity
   /// </summary>
   public class GoogleDriveActivity
   {
-    public GoogleDriveActivity(string user, string action, string name, string id, string time)
+    public GoogleDriveActivity(string user, string action, string name, string id, IGoogleDriveFile file)
     {
       User = user;
       Action = action;
       Name = name;
       Id = id;
-      Time = time;
+      File = file;
     }
 
     public readonly string User;
@@ -26,11 +28,11 @@ namespace eagleboost.googledrive.Models
 
     public readonly string Id;
 
-    public readonly string Time;
+    public readonly IGoogleDriveFile File;
 
     public override string ToString()
     {
-      return string.Format("{0}: {1}, {2}, {3}[{4}]", Time, User, Action, Name, Id);
+      return string.Format("{0} {1}, {2}[{3}]", User, Action, Name, Id);
     }
   }
 }

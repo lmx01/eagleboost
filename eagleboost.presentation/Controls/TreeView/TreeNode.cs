@@ -26,7 +26,7 @@ namespace eagleboost.presentation.Controls.TreeView
     private readonly string _name;
     private readonly ITreeNodesOperation _treeNodesOperation;
     private readonly ObservableCollection<ITreeNode> _children = new ObservableCollection<ITreeNode>();
-    private readonly LiveListCollectionView _childrenView;
+    private LiveListCollectionView _childrenView;
     private bool _isSelected;
     private bool _isExpanded;
     private bool _isBeingExpanded;
@@ -43,8 +43,6 @@ namespace eagleboost.presentation.Controls.TreeView
       _dataItem = dataItem;
       _parent = parent;
       _treeNodesOperation = treeNodesOperation;
-      _childrenView = new LiveListCollectionView(_children) {Filter = o => treeNodesOperation.Filter((ITreeNode) o)};
-      _childrenView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
       _name = _dataItem is IDisplayItem ? ((IDisplayItem) _dataItem).DisplayName : _dataItem.ToString();
     }
@@ -94,7 +92,7 @@ namespace eagleboost.presentation.Controls.TreeView
 
     public bool IsEmpty
     {
-      get { return _childrenView.Count == 0; }
+      get { return ChildrenView.Count == 0; }
     }
 
     public bool IsSelected
@@ -147,6 +145,8 @@ namespace eagleboost.presentation.Controls.TreeView
       get { return false; }
     }
 
+    public string SortProperty { get; set; }
+
     public ITreeNodeContainer Parent
     {
       get { return _parent; }
@@ -159,13 +159,23 @@ namespace eagleboost.presentation.Controls.TreeView
 
     public LiveListCollectionView ChildrenView
     {
-      get { return _childrenView; }
+      get { return _childrenView ?? (_childrenView = CreateChildrenView()); }
     }
     #endregion Public Properties
 
     #region Virtuals
     protected virtual void OnIsExpandedChanged()
     {
+    }
+
+    protected virtual LiveListCollectionView CreateChildrenView()
+    {
+      var view = new LiveListCollectionView(_children) { Filter = o => _treeNodesOperation.Filter((ITreeNode)o) };
+      if (SortProperty != null)
+      {
+        view.SortDescriptions.Add(new SortDescription(SortProperty, ListSortDirection.Ascending));
+      }
+      return view;
     }
     #endregion Virtuals
 

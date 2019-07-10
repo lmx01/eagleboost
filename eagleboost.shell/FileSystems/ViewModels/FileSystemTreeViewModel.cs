@@ -130,6 +130,16 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     protected abstract ITreeNodeContainer CreateRootNode();
 
+    protected virtual TreeNodeContainer CreateContainerNode(IFile f, ITreeNodeContainer parent)
+    {
+      return new TreeNodeContainer(f, parent, this);
+    }
+
+    protected virtual TreeNodeData CreateDataNode(IFile f, ITreeNodeContainer parent)
+    {
+      return new TreeNodeData(f, parent, this);
+    }
+
     protected virtual ICollectionView CreateItemsView()
     {
       return new ListCollectionView(_items) {Filter = o => Filter((ITreeNode) o)};
@@ -215,11 +225,11 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
       if (f is IFolder)
       {
-        result = new TreeNodeContainer(f, parent, this);
+        result = CreateContainerNode(f, parent);
       }
       else
       {
-        result = new TreeNodeData(f, parent, this);
+        result = CreateDataNode(f, parent);
       }
 
       _itemsNodesMap.Add(f, result);

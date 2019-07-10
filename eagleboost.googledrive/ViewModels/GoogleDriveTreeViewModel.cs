@@ -6,6 +6,7 @@ namespace eagleboost.googledrive.ViewModels
 {
   using System.Collections.Generic;
   using System.ComponentModel;
+  using System.Linq;
   using System.Threading.Tasks;
   using System.Windows.Data;
   using eagleboost.googledrive.Contracts;
@@ -35,6 +36,10 @@ namespace eagleboost.googledrive.ViewModels
     private IGoogleDriveFolder _rootFolder;
     private IGoogleDriveFolder _myDriveFolder;
     private IGoogleDriveFolder _teamDriveFolder;
+    private IGoogleDriveFolder _activityFolder;
+    private IGoogleDriveFolder _adhocFolder;
+    private ITreeNode _activityNode;
+    private ITreeNode _adhocNode;
     private IGoogleDriveService _gService;
     private readonly IDispatcherProvider _dispatcher;
     #endregion Declarations
@@ -55,7 +60,7 @@ namespace eagleboost.googledrive.ViewModels
     public void Initialize(IGoogleDriveService gService)
     {
       _gService = gService;
-      _gService.FileCreated += HangleGoogleDriveFileCreated;
+      _gService.FileCreated += HandleGoogleDriveFileCreated;
     }
     #endregion Init
 
@@ -69,25 +74,79 @@ namespace eagleboost.googledrive.ViewModels
 
     protected override bool DoFilter(ITreeNode node)
     {
-      return node is DummyTreeNode || node.DataItem is IGoogleDriveFolder;
+      if (node is DummyTreeNode || node.DataItem is IGoogleDriveFolder)
+      {
+        return true;
+      }
+
+      if (node.Parent == AdhocNode)
+      {
+        return true;
+      }
+
+      return false;
     }
+
     protected override ITreeNodeContainer CreateRootNode()
     {
       var root = new GoogleDriveRoot();
       var myDrive = new GoogleMyDrive();
       var teamDrive = new GoogleTeamDrive();
+      var activityDrive = new GoogleActivityDrive();
+      var adhocDrive = new GoogleAdhocDrive();
 
       _rootFolder = new GoogleDriveFolder(root, null, GetRootsAsync);
       _myDriveFolder = new GoogleDriveFolder(myDrive, _rootFolder, GetFilesAsync);
       _teamDriveFolder = new GoogleDriveFolder(teamDrive, _rootFolder, GetTeamDrivesAsync);
+      _activityFolder = new GoogleDriveFolder(activityDrive, _rootFolder, GetActivityFilesAsync);
+      _adhocFolder = new GoogleDriveFolder(adhocDrive, _rootFolder, GetAdhocFilesAsync);
       return new TreeNodeContainer(_rootFolder, null, this);
     }
+
+    protected override TreeNodeContainer CreateContainerNode(IFile f, ITreeNodeContainer parent)
+    {
+      var result = new TreeNodeContainer(f, parent, this);
+      if (Equals(f, _myDriveFolder))
+      {
+        result.SortProperty = "Name";
+      }
+
+      return result;
+    }
     #endregion Overrides
+
+    #region Public Methods
+    public async void AddAdhocFile(IGoogleDriveFile file)
+    {
+      var adhocNode = AdhocNode as TreeNodeContainer;
+      if (adhocNode != null)
+      {
+        if (adhocNode.HasDummyChild)
+        {
+          await adhocNode.ExpandAsync().ConfigureAwait(true);
+        }
+
+        _dispatcher.CheckedInvoke(() => adhocNode.AddData(file));
+      }
+    }
+    #endregion Public Methods
+
+    #region Private Properties
+    private ITreeNode ActivityNode
+    {
+      get { return _activityNode ?? (_activityNode = Root.Children.FirstOrDefault(i => i.DataItem == _activityFolder)); }
+    }
+
+    private ITreeNode AdhocNode
+    {
+      get { return _adhocNode ?? (_adhocNode = Root.Children.FirstOrDefault(i => i.DataItem == _adhocFolder)); }
+    }
+    #endregion Private Properties
 
     #region Private Methods
     private Task<IReadOnlyList<IGoogleDriveFile>> GetRootsAsync(GoogleDriveFolder parent)
     {
-      IReadOnlyList<IGoogleDriveFile> roots = new IGoogleDriveFile[] {_myDriveFolder, _teamDriveFolder};
+      IReadOnlyList<IGoogleDriveFile> roots = new IGoogleDriveFile[] {_myDriveFolder, _teamDriveFolder, _activityFolder, _adhocFolder };
       return Task.FromResult(roots);
     }
 
@@ -100,10 +159,21 @@ namespace eagleboost.googledrive.ViewModels
     {
       return _gService.GetTeamDrivesAsync(parent, progress: BusyStatusReceiver);
     }
+
+    private Task<IReadOnlyList<IGoogleDriveFile>> GetActivityFilesAsync(GoogleDriveFolder parent)
+    {
+      return _gService.GetActivityFilesAsync(parent, progress: BusyStatusReceiver);
+    }
+
+    private Task<IReadOnlyList<IGoogleDriveFile>> GetAdhocFilesAsync(GoogleDriveFolder parent)
+    {
+      IReadOnlyList<IGoogleDriveFile> emptyFiles = new IGoogleDriveFile[0];
+      return Task.FromResult(emptyFiles);
+    }
     #endregion Private Methods
 
     #region Event Handlers
-    private void HangleGoogleDriveFileCreated(object sender, GoogldDriveFileCreatedEventArgs args)
+    private void HandleGoogleDriveFileCreated(object sender, GoogldDriveFileCreatedEventArgs args)
     {
       var folder = args.File as IGoogleDriveFolder;
       if (folder != null)

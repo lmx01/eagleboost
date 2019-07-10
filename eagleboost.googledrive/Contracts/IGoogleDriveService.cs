@@ -22,7 +22,9 @@ namespace eagleboost.googledrive.Contracts
     #endregion Properties
 
     #region Methods
-    IObservable<IReadOnlyCollection<IGoogleDriveFile>> ObserveChanges(string startPageToken);
+    Task<IReadOnlyList<IGoogleDriveFile>> GetActivityFilesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+
+    IObservable<IReadOnlyCollection<GoogleDriveActivity>> ObserveChanges(string startPageToken);
 
     IObservable<IReadOnlyCollection<GoogleDriveActivity>> ObserveActivities(CancellationToken ct = default(CancellationToken));
 
@@ -34,7 +36,7 @@ namespace eagleboost.googledrive.Contracts
 
     Task<IReadOnlyList<IGoogleDriveFile>> GetFilesAsync(string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
-    Task<IGoogleDriveFile> GetFileAsync(string id, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+    Task<IGoogleDriveFile> GetFileAsync(string id, IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task<IGoogleDriveFile> CopyAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, PauseToken pt = default(PauseToken), CancellationToken ct = default(CancellationToken), IProgress<GoogleDriveProgress> progress = null, GoogleDriveProgress progressPayload = null);
 
