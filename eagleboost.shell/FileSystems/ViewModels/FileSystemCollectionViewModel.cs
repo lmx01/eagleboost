@@ -14,6 +14,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   using eagleboost.core.Extensions;
   using eagleboost.presentation.Collections;
   using eagleboost.shell.FileSystems.Contracts;
+  using eagleboost.shell.FileSystems.Models;
 
   /// <summary>
   /// FileSystemCollectionViewModel
@@ -30,6 +31,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     #region Declarations
     private TFolder _currentFolder;
+    private readonly Dictionary<string, FolderCacheEntry<TFile, TFolder>> _folderCache = new Dictionary<string, FolderCacheEntry<TFile, TFolder>>();
     #endregion Declarations
 
     #region IFileSystemCollectionViewModel
@@ -49,8 +51,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       CurrentFolder = folder;
 
       Items.Clear();
-      var files = await folder.GetFilesAsync(ct:ct).ConfigureAwait(true);
-      var result = files.Cast<TFile>().ToArray();
+      var result = await GetFilesAsync(folder, ct);
       Items.AddRange(result);
 
       RaiseFilesPopulated();
@@ -91,8 +92,38 @@ namespace eagleboost.shell.FileSystems.ViewModels
         handler(this, EventArgs.Empty);
       }
     }
-
     #endregion IFileSystemCollectionViewModel
+
+    #region Virtuals
+    protected virtual void OnFolderCacheLoaded(FolderCacheEntry<TFile, TFolder> cacheEntry)
+    {
+    }
+
+    protected virtual FolderCacheEntry<TFile, TFolder> CreateFolderCache(TFolder folder, IReadOnlyList<TFile> files)
+    {
+      return new FolderCacheEntry<TFile, TFolder>(folder, files);
+    }
+    #endregion Virtuals
+
+    #region Private Methods
+    private async Task<IReadOnlyList<TFile>> GetFilesAsync(TFolder folder, CancellationToken ct = default(CancellationToken))
+    {
+      FolderCacheEntry<TFile, TFolder> cacheEntry;
+      if (_folderCache.TryGetValue(folder.Id, out cacheEntry))
+      {
+        OnFolderCacheLoaded(cacheEntry);
+        if (!cacheEntry.NeedsRefresh)
+        {
+          return cacheEntry.Files;
+        }
+      }
+
+      var files = await folder.GetFilesAsync(ct: ct).ConfigureAwait(true);
+      var result = files.Cast<TFile>().ToArray();
+      _folderCache[folder.Id] = CreateFolderCache(folder, result);
+      return result;
+    }
+    #endregion Private Methods
 
     #region Overrides
     protected override ICollectionView CreateItemsView()

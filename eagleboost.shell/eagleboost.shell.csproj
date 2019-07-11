@@ -96,6 +96,7 @@
     <Compile Include="Controls\BrowseForFolder.xaml.cs">
       <DependentUpon>BrowseForFolder.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FileSystems\Models\FolderCacheEntry.cs" />
     <Compile Include="FileSystems\ViewModels\FileSystemHistory.cs" />
     <Compile Include="FileSystems\Contracts\IFile.cs" />
     <Compile Include="FileSystems\Contracts\IFileSystemFileInfoViewModel.cs" />
