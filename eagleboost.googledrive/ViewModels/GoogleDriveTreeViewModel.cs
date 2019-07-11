@@ -106,7 +106,7 @@ namespace eagleboost.googledrive.ViewModels
     protected override TreeNodeContainer CreateContainerNode(IFile f, ITreeNodeContainer parent)
     {
       var result = new TreeNodeContainer(f, parent, this);
-      if (Equals(f, _myDriveFolder))
+      if (Equals(f, _myDriveFolder)|| Equals(f, _teamDriveFolder))
       {
         result.SortProperty = "Name";
       }
@@ -167,6 +167,13 @@ namespace eagleboost.googledrive.ViewModels
 
     private Task<IReadOnlyList<IGoogleDriveFile>> GetAdhocFilesAsync(GoogleDriveFolder parent)
     {
+      var adhocNode = AdhocNode;
+      if (adhocNode != null)
+      {
+        IReadOnlyList<IGoogleDriveFile> files = adhocNode.Children.Select(i => i.DataItem).Cast<IGoogleDriveFile>().ToArray();
+        return Task.FromResult(files);
+      }
+
       IReadOnlyList<IGoogleDriveFile> emptyFiles = new IGoogleDriveFile[0];
       return Task.FromResult(emptyFiles);
     }
