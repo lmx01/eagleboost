@@ -1,0 +1,21 @@
+﻿<ResourceDictionary 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:controls="clr-namespace:eagleboost.presentation.Controls.Buttons">
+
+  <ControlTemplate TargetType="{x:Type controls:LinkButton}" x:Key="LinkButtonControlTemplate">
+    <TextBlock>
+      <Hyperlink x:Name="PART_Hyperlink" NavigateUri="{TemplateBinding Link}">
+        <Run Text="{TemplateBinding Content}" />
+      </Hyperlink>
+    </TextBlock>
+  </ControlTemplate>
+
+  <Style x:Key="LinkButton" TargetType="{x:Type controls:LinkButton}">
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Template" Value="{StaticResource LinkButtonControlTemplate}"/>
+  </Style>
+
+  <Style TargetType="{x:Type controls:LinkButton}" BasedOn="{StaticResource LinkButton}"/>
+
+</ResourceDictionary>

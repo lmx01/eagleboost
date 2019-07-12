@@ -59,6 +59,10 @@
           </DataTrigger>
         </DataTemplate.Triggers>
       </DataTemplate>
+
+      <DataTemplate x:Key="WebViewLinkTemplate" DataType="{x:Type contracts:IGoogleDriveFile}">
+        <ebui:LinkButton Content="{Binding WebViewLink}" Link="{Binding WebViewLink}"/>
+      </DataTemplate>
     </ResourceDictionary>
   </UserControl.Resources>
 
@@ -76,6 +80,7 @@
       <DataGridTextColumn Header="Owners" Binding="{Binding Owners, Mode=OneWay}"/>
       <DataGridTextColumn Header="Created" Binding="{Binding CreatedTime, Mode=OneWay, StringFormat=\{0:MMM dd\, yyyy\}}"/>
       <DataGridTextColumn Header="Modified" Binding="{Binding ModifiedTime, Mode=OneWay, StringFormat=\{0:MMM dd\, yyyy\}}"/>
+      <DataGridTemplateColumn Header="WebView" CellTemplate="{StaticResource WebViewLinkTemplate}" SortMemberPath="WebView"/>
     </DataGrid.Columns>
     <i:Interaction.Behaviors>
       <ebui:DataGridPrioritySorting>

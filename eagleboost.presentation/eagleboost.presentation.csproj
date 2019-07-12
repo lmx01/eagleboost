@@ -141,6 +141,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Buttons\LinkButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Controls\Buttons\LinkButton.cs" />
     <Compile Include="Controls\CheckMark.cs" />
     <Compile Include="Controls\Choosers\DataItemChooserView.xaml.cs">
       <DependentUpon>DataItemChooserView.xaml</DependentUpon>

@@ -6,6 +6,7 @@
 
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/eagleboost.presentation;component/Controls/CheckMark.xaml"/>
+    <ResourceDictionary Source="/eagleboost.presentation;component/Controls/Buttons/LinkButton.xaml"/>
   </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
