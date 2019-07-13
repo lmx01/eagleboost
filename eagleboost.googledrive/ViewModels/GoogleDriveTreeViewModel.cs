@@ -167,8 +167,8 @@ namespace eagleboost.googledrive.ViewModels
 
     private Task<IReadOnlyList<IGoogleDriveFile>> GetAdhocFilesAsync(GoogleDriveFolder parent)
     {
-      var adhocNode = AdhocNode;
-      if (adhocNode != null)
+      var adhocNode = AdhocNode as TreeNodeContainer;
+      if (adhocNode != null && !adhocNode.HasDummyChild)
       {
         IReadOnlyList<IGoogleDriveFile> files = adhocNode.Children.Select(i => i.DataItem).Cast<IGoogleDriveFile>().ToArray();
         return Task.FromResult(files);

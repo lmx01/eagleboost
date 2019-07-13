@@ -11,8 +11,12 @@
   d:DataContext="{d:DesignInstance viewModels:GoogleDriveHistoryViewModel, IsDesignTimeCreatable=True}">
 
   <UserControl.Resources>
+    <DataTemplate x:Key="MenuHeaderTemplate">
+      <Label Content="{Binding}" VerticalContentAlignment="Center"/>
+    </DataTemplate>
     <Style TargetType="MenuItem" x:Key="MenuItemStyle">
       <Setter Property="Header" Value="{Binding DriveFolder}" />
+      <Setter Property="HeaderTemplate" Value="{StaticResource MenuHeaderTemplate}" />
       <Setter Property="Command" Value="{Binding NavigateToCommand}" />
       <Setter Property="CommandParameter" Value="{Binding}" />
     </Style>
