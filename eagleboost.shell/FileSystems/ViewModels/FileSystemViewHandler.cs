@@ -74,7 +74,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       var vm = (IFileSystemTreeViewModel)sender;
       if (e.PropertyName == "SelectedItem")
       {
-        var containerNode = (ITreeNodeContainer)vm.SelectedItem;
+        var containerNode = vm.SelectedItem as ITreeNodeContainer;
         PopulateGrid(containerNode);
       }
     }

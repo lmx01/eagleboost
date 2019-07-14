@@ -57,12 +57,12 @@ namespace eagleboost.shell.FileSystems.ViewModels
     {
       if (e.Match<ICollectionViewModel>(v => v.SelectedItem))
       {
-        var selected = (TreeNodeContainer)_treeViewModel.SelectedItem;
+        var selected = _treeViewModel.SelectedItem as TreeNodeContainer;
         if (selected != null)
         {
           UpdateSelectedFolders((TFolder)selected.DataItem);
         }
-        else
+        else if (_treeViewModel.SelectedItem == null)
         {
           UpdateEmptySelectedFolders();
         }

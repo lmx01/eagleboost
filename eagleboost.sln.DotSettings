@@ -11,6 +11,17 @@
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=1D74A46F3B49524D85E91A4AD6FD385D/Text/@EntryValue">#region Private Methods
 
 #endregion Private Methods</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/Shortcut/@EntryValue">#rgni</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=247D0D313A44FE47975BE3D52C985A79/Text/@EntryValue">#region Virtuals
+
+#endregion Virtuals</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=2CAB0A567F30704CA99AA3EC249E3153/Text/@EntryValue">$HEADER$namespace $NAMESPACE$
 {
   /// &lt;summary&gt;
