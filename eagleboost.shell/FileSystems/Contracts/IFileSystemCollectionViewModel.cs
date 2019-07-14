@@ -10,6 +10,7 @@ namespace eagleboost.shell.FileSystems.Contracts
   using System.Threading;
   using System.Threading.Tasks;
   using eagleboost.presentation.Collections;
+  using eagleboost.presentation.Controls.TreeView;
 
   /// <summary>
   /// IFileSystemCollectionViewModel
@@ -17,7 +18,7 @@ namespace eagleboost.shell.FileSystems.Contracts
   public interface IFileSystemCollectionViewModel : ICollectionViewModel
   {
     #region Methods
-    Task<IReadOnlyList<IFile>> SetFolderAsync(IFolder folder, CancellationToken ct = default(CancellationToken));
+    Task<IReadOnlyList<IFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken));
     #endregion Methods
   }
 
@@ -32,11 +33,10 @@ namespace eagleboost.shell.FileSystems.Contracts
   {
     #region Properties
     TFolder CurrentFolder { get; }
-
     #endregion Properties
 
     #region Methods
-    Task<IReadOnlyList<TFile>> SetFolderAsync(TFolder folder, CancellationToken ct = default(CancellationToken));
+    Task<IReadOnlyList<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken));
 
     Task<TFile> SetSelectedAsync(TFile file, CancellationToken ct = default(CancellationToken));
     #endregion Methods

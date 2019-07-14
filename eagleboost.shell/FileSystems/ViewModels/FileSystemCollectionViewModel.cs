@@ -13,6 +13,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   using System.Windows.Data;
   using eagleboost.core.Extensions;
   using eagleboost.presentation.Collections;
+  using eagleboost.presentation.Controls.TreeView;
   using eagleboost.shell.FileSystems.Contracts;
   using eagleboost.shell.FileSystems.Models;
 
@@ -41,17 +42,18 @@ namespace eagleboost.shell.FileSystems.ViewModels
       private set { SetValue(ref _currentFolder, value); }
     }
 
-    async Task<IReadOnlyList<IFile>> IFileSystemCollectionViewModel.SetFolderAsync(IFolder folder, CancellationToken ct)
+    async Task<IReadOnlyList<IFile>> IFileSystemCollectionViewModel.SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct)
     {
-      return await SetFolderAsync((TFolder) folder, ct).ConfigureAwait(false);
+      return await SetFolderAsync(folderNode, ct).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<TFile>> SetFolderAsync(TFolder folder, CancellationToken ct = default(CancellationToken))
+    public async Task<IReadOnlyList<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
     {
+      var folder = (TFolder) folderNode.DataItem;
       CurrentFolder = folder;
 
       Items.Clear();
-      var result = await GetFilesAsync(folder, ct);
+      var result = await GetFilesAsync(folderNode, ct);
       Items.AddRange(result);
 
       RaiseFilesPopulated();
@@ -106,15 +108,19 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #endregion Virtuals
 
     #region Private Methods
-    private async Task<IReadOnlyList<TFile>> GetFilesAsync(TFolder folder, CancellationToken ct = default(CancellationToken))
+    private async Task<IReadOnlyList<TFile>> GetFilesAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
     {
+      var folder = (TFolder)folderNode.DataItem;
       FolderCacheEntry<TFile, TFolder> cacheEntry;
       if (_folderCache.TryGetValue(folder.Id, out cacheEntry))
       {
-        OnFolderCacheLoaded(cacheEntry);
-        if (!cacheEntry.NeedsRefresh)
+        if (folderNode.Children.Count == cacheEntry.Files.Count)
         {
-          return cacheEntry.Files;
+          OnFolderCacheLoaded(cacheEntry);
+          if (!cacheEntry.NeedsRefresh)
+          {
+            return cacheEntry.Files;
+          }
         }
       }
 

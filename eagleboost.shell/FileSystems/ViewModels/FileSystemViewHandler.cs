@@ -109,8 +109,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
     {
       if (folderNode != null)
       {
-        var folder = (TFolder)folderNode.DataItem;
-        BusyStatusReceiver.AutoReset("Loading...", () => _setFolder.ExecuteAsync(ct => ListViewModel.SetFolderAsync(folder, ct), Timeout))
+        BusyStatusReceiver.AutoReset("Loading...", () => _setFolder.ExecuteAsync(ct => ListViewModel.SetFolderAsync(folderNode, ct), Timeout))
           .ConfigureAwait(true);
       }
     }

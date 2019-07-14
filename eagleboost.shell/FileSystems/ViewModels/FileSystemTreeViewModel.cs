@@ -153,7 +153,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
       if (SelectedItemArgs.Match(propertyName))
       {
-        var selected = (ITreeNodeContainer)SelectedItem;
+        var selected = SelectedItem as ITreeNodeContainer;
         if (selected != null)
         {
           selected.IsSelected = true;
