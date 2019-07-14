@@ -36,6 +36,8 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #endregion Declarations
 
     #region IFileSystemCollectionViewModel
+    public ITreeNodeContainer CurrentFolderNode { get; private set; }
+
     public TFolder CurrentFolder
     {
       get { return _currentFolder; }
@@ -49,6 +51,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     public async Task<IReadOnlyList<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
     {
+      CurrentFolderNode = folderNode;
       var folder = (TFolder) folderNode.DataItem;
       CurrentFolder = folder;
 

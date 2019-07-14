@@ -21,6 +21,8 @@ namespace eagleboost.presentation.Controls.TreeView
     void AddData(object dataItem);
 
     void RemoveData(object dataItem);
+
+    void Clear();
     #endregion Methods 
   }
 }

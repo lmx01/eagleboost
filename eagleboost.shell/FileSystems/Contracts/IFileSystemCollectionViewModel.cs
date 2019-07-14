@@ -32,6 +32,8 @@ namespace eagleboost.shell.FileSystems.Contracts
     where TFolder : IFolder
   {
     #region Properties
+    ITreeNodeContainer CurrentFolderNode { get; }
+
     TFolder CurrentFolder { get; }
     #endregion Properties
 

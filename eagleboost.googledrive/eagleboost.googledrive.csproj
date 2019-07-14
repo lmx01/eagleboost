@@ -137,6 +137,7 @@
     <Compile Include="Models\GoogleDriveProgress.cs" />
     <Compile Include="Models\GoogleDriveRoot.cs" />
     <Compile Include="Models\GoogleMyDrive.cs" />
+    <Compile Include="Models\GoogleSearchResultDrive.cs" />
     <Compile Include="Models\GoogleTeamDrive.cs" />
     <Compile Include="Models\GoogleTeamDriveFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

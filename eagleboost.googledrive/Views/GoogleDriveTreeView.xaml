@@ -9,6 +9,7 @@
   xmlns:views="clr-namespace:eagleboost.googledrive.Views"
   xmlns:treeView="clr-namespace:eagleboost.presentation.Controls.TreeView;assembly=eagleboost.presentation"
   xmlns:indicators="clr-namespace:eagleboost.presentation.Controls.Indicators;assembly=eagleboost.presentation"
+  xmlns:behaviors1="clr-namespace:eagleboost.googledrive.Behaviors"
   mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300">
 
   <UserControl.Resources>
@@ -26,7 +27,11 @@
           <Viewbox x:Name="BusyIndicator" Grid.Column="0" Height="16" Width="16" Visibility="Collapsed">
             <indicators:CircularProgressBar/>
           </Viewbox>
-          <Image x:Name="Thumbnail" Grid.Column="0" Height="16" Width="16" Source="..\Resources\Folder.png"/>
+          <Image x:Name="Thumbnail" Grid.Column="0" Height="16" Width="16" Source="..\Resources\Folder.png">
+            <i:Interaction.Behaviors>
+              <behaviors1:GoogleDriveFileIcon File="{Binding DataItem}"/>
+            </i:Interaction.Behaviors>
+          </Image>
           <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4" />
         </Grid>
         <HierarchicalDataTemplate.Triggers>

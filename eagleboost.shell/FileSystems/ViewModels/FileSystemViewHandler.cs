@@ -6,6 +6,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 {
   using System.ComponentModel;
   using System.Diagnostics;
+  using System.Linq;
   using eagleboost.core.Extensions;
   using eagleboost.core.Threading;
   using eagleboost.presentation.Controls.Indicators;
@@ -79,12 +80,24 @@ namespace eagleboost.shell.FileSystems.ViewModels
       }
     }
 
-    private void HandleGridFileSelected(object sender, FileSelectedEventArgs<TFile> args)
+    private async void HandleGridFileSelected(object sender, FileSelectedEventArgs<TFile> args)
     {
       var folder = args.File as IFolder;
       if (folder != null)
       {
-        TreeViewModel.SelectAsync(folder);
+        ////The selected file may be some adhoc files that don't belong to any folder
+        ////so we don't want the grid to be populated by HandleTreePropertyChanged.
+        var tree = TreeViewModel;
+        tree.PropertyChanged -= HandleTreePropertyChanged;
+        await tree.SelectAsync(folder).ConfigureAwait(true);
+        tree.PropertyChanged += HandleTreePropertyChanged;
+
+        var list = ListViewModel;
+        var node = list.CurrentFolderNode.Children.FirstOrDefault(i => i.DataItem == folder) as ITreeNodeContainer;
+        if (node != null)
+        {
+          PopulateGrid(node);
+        }
       }
     }
 

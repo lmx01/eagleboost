@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\Array.cs" />
     <Compile Include="Collections\BatchObservableCollection.cs" />
     <Compile Include="Collections\BatchObservableCollection.Ext.cs">
       <DependentUpon>BatchObservableCollection.cs</DependentUpon>

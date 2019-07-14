@@ -86,6 +86,11 @@ namespace eagleboost.shell.FileSystems.ViewModels
       var node = (ITreeNodeContainer)Root;
       var folderStack = new Stack<string>(path.Reverse());
       folderStack.Pop();
+      if (folderStack.Count == 0)
+      {
+        return false;
+      }
+
       while (folderStack.Count > 0)
       {
         await node.LoadChildrenAsync().ConfigureAwait(true);

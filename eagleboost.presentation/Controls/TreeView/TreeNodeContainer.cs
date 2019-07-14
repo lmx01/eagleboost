@@ -59,6 +59,11 @@ namespace eagleboost.presentation.Controls.TreeView
         Children.Remove(node);
       }
     }
+
+    public void Clear()
+    {
+      Children.Clear();
+    }
     #endregion ITreeNodeContainer
 
     #region Public Methods
