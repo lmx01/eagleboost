@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\PopupBottomPlacement.cs" />
+    <Compile Include="Behaviors\ReturnCommandBehavior.cs" />
     <Compile Include="Behaviors\SelectionContainer\SelectionContainerListBoxSync.cs" />
     <Compile Include="Behaviors\SelectionContainer\SelectionContainerSync.cs" />
     <Compile Include="Behaviors\SelectionContainer\SelectionContainerToggleButton.cs" />
