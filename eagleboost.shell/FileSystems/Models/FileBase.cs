@@ -113,6 +113,21 @@ namespace eagleboost.shell.FileSystems.Models
 
       return Id == other.Id;
     }
+
+    public static bool operator ==(FileBase<T, TFolder> l, FileBase<T, TFolder> r)
+    {
+      if (l == null)
+      {
+        return r == null;
+      }
+
+      return l.Equals(r);
+    }
+
+    public static bool operator !=(FileBase<T, TFolder> l, FileBase<T, TFolder> r)
+    {
+      return !(l == r);
+    }
     #endregion IEquatable
   }
 }
