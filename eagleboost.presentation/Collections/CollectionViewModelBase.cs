@@ -6,11 +6,13 @@ namespace eagleboost.presentation.Collections
 {
   using System;
   using System.Collections;
+  using System.Collections.Generic;
   using System.Collections.ObjectModel;
   using System.ComponentModel;
-  using System.Linq;
   using System.Windows.Input;
+  using eagleboost.core.Collections;
   using eagleboost.core.ComponentModel;
+  using eagleboost.core.Extensions;
   using eagleboost.presentation.Contracts;
   using Prism.Commands;
 
@@ -20,27 +22,36 @@ namespace eagleboost.presentation.Collections
   /// <typeparam name="T"></typeparam>
   public abstract class CollectionViewModelBase<T> : NotifyPropertyChangedBase, ICollectionViewModel<T>, ISelectedItemsSupport<T>, ISelectItemReceiver where T : class
   {
-    #region Statics
-    protected static readonly PropertyChangedEventArgs SelectedItemsArgs = GetChangedArgs<CollectionViewModelBase<T>>(o => o.SelectedItems);
-    #endregion Statics
-
     #region Declarations
     private T _selectedItem;
-    private ObservableCollection<T> _selectedItems;
     private ObservableCollection<T> _items;
     private ICollectionView _itemsView;
     private ICommand _itemSelectedCommand;
     #endregion Declarations
 
+    #region ctors
+    protected CollectionViewModelBase()
+    {
+      SelectionContainer = new MultipleSelectionContainer<T>();
+      SelectionContainer.PropertyChanged += HandleSelectionContainerChanged;
+    }
+    #endregion ctors
+
+    #region Components
+    public MultipleSelectionContainer<T> SelectionContainer { get; private set; }
+    #endregion Components
+
+    #region ICollectionViewModel
+    ISelectionContainer<T> ICollectionViewModel<T>.SelectionContainer
+    {
+      get { return SelectionContainer; }
+    }
+    #endregion ICollectionViewModel
+
     #region ISelectedItemsSupport
     IList ISelectedItemsSupport.SelectedItems
     {
-      get { return SelectedItems; }
-      set
-      {
-        _selectedItems = new ObservableCollection<T>(value.Cast<T>());
-        NotifyPropertyChanged(SelectedItemsArgs.PropertyName);
-      }
+      get { return (IList)SelectionContainer.SelectedItems; }
     }
 
     public event EventHandler SelectedItemsChanged;
@@ -54,16 +65,9 @@ namespace eagleboost.presentation.Collections
       }
     }
 
-    public ObservableCollection<T> SelectedItems
+    public IReadOnlyCollection<T> SelectedItems
     {
-      get { return _selectedItems; }
-      set
-      {
-        if (SetValue(ref _selectedItems, value))
-        {
-          RaiseSelectedItemsChanged();
-        }
-      }
+      get { return SelectionContainer.SelectedItems; }
     }
     #endregion ISelectedItemsSupport
 
@@ -102,6 +106,16 @@ namespace eagleboost.presentation.Collections
       get { return _itemSelectedCommand ?? (_itemSelectedCommand = new DelegateCommand<T>(HandleItemSelected)); }
     }
     #endregion ISelectItemReceiver
+
+    #region Event Handlers
+    private void HandleSelectionContainerChanged(object sender, PropertyChangedEventArgs e)
+    {
+      if (e.PropertyName == SelectionContainer.Property(o=>o.SelectedItems))
+      {
+        RaiseSelectedItemsChanged();
+      }
+    }
+    #endregion Event Handlers
 
     #region Virtuals
     protected virtual ObservableCollection<T> GetItemsCollection()

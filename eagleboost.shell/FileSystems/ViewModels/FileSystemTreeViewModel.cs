@@ -12,6 +12,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   using System.Linq;
   using System.Threading.Tasks;
   using System.Windows.Data;
+  using eagleboost.core.Collections;
   using eagleboost.core.ComponentModel;
   using eagleboost.core.Extensions;
   using eagleboost.core.Logging;
@@ -38,7 +39,23 @@ namespace eagleboost.shell.FileSystems.ViewModels
     private ITreeNodeContainer _root;
     #endregion Declarations
 
+    #region ctors
+    protected FileSystemTreeViewModel()
+    {
+      SelectionContainer = new SingleSelectionContainer<ITreeNode>();
+    }
+    #endregion ctors
+
+    #region Components
+    public SingleSelectionContainer<ITreeNode> SelectionContainer { get; private set; }
+    #endregion Components
+
     #region IFileSystemTreeViewModel
+    ISelectionContainer<ITreeNode> ICollectionViewModel<ITreeNode>.SelectionContainer
+    {
+      get { return SelectionContainer; }
+    }
+
     IList ICollectionViewModel.Items
     {
       get { return Items; }
@@ -68,8 +85,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     public IList SelectedItems
     {
-      get { throw new NotImplementedException(); }
-      set { throw new NotImplementedException(); }
+      get { return (IList)SelectionContainer.SelectedItems; }
     }
 
     public event EventHandler SelectedItemsChanged;

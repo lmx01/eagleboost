@@ -41,7 +41,7 @@
     <TreeView x:Name="ShellTree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemTemplate="{StaticResource ShellTreeItemDataTemplate}">
       <i:Interaction.Behaviors>
         <etui:TreeViewSelectionChanging/>
-        <etui:BringSelectedTreeItemIntoView/>
+        <etui:TreeViewSelectedItems/>
       </i:Interaction.Behaviors>
     </TreeView>
   </Grid>

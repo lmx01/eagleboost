@@ -7,8 +7,8 @@ namespace eagleboost.presentation.Collections
   using System.Collections;
   using System.Collections.ObjectModel;
   using System.ComponentModel;
+  using eagleboost.core.Collections;
   using eagleboost.presentation.Contracts;
-  using eagleboost.presentation.Controls.DataGrids;
 
   /// <summary>
   /// ICollectionViewModel
@@ -28,6 +28,8 @@ namespace eagleboost.presentation.Collections
   /// <typeparam name="T"></typeparam>
   public interface ICollectionViewModel<T> : ICollectionViewModel where T : class
   {
+    ISelectionContainer<T> SelectionContainer { get; }
+
     new ObservableCollection<T> Items { get; }
 
     new T SelectedItem { get; set; }

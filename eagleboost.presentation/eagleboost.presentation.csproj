@@ -111,6 +111,7 @@
     <Compile Include="Behaviors\TextboxEx.cs" />
     <Compile Include="Behaviors\TextBoxSelectAll.cs" />
     <Compile Include="Behaviors\ToggleDropdownMenu.cs" />
+    <Compile Include="Behaviors\TreeViewSelectedItems.cs" />
     <Compile Include="Behaviors\TreeViewSelectionChanging.cs" />
     <Compile Include="Behaviors\ViewModelLoader.cs" />
     <Compile Include="Collections\CollectionViewExt.cs" />
@@ -183,7 +184,7 @@
     <Compile Include="Controls\Progress\ProgressViewOptions.cs" />
     <Compile Include="Controls\Selectors\SelectorItemDoubleClick.cs" />
     <Compile Include="Controls\TabContentPreservation.cs" />
-    <Compile Include="Controls\TreeView\BringSelectedTreeItemIntoView.cs" />
+    <Compile Include="Controls\TreeView\BringSelectedTreeViewItemIntoView.cs" />
     <Compile Include="Controls\TreeView\ITreeNodeContainer.cs" />
     <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
     <Compile Include="Controls\ViewControllerWindow.cs" />

@@ -254,6 +254,7 @@
     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
     <Setter Property="Template" Value="{StaticResource TreeItemTemplate}" />
     <Setter Property="local:NonScrollTreeViewItem.IsEnabled" Value="True" />
+    <Setter Property="local:BringSelectedTreeViewItemIntoView.IsEnabled" Value="True" />
   </Style>
 
   </ResourceDictionary>

@@ -53,7 +53,7 @@
               ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=views:GoogleDriveTreeView}}">
       <i:Interaction.Behaviors>
         <behaviors:TreeViewSelectionChanging/>
-        <treeView:BringSelectedTreeItemIntoView/>
+        <behaviors:TreeViewSelectedItems/>
       </i:Interaction.Behaviors>
     </TreeView>
   </Grid>

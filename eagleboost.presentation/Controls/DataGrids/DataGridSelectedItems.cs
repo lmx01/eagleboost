@@ -4,11 +4,12 @@
 
 namespace eagleboost.presentation.Controls.DataGrids
 {
-  using System;
+  using System.Linq;
   using System.Windows;
   using System.Windows.Controls;
   using System.Windows.Interactivity;
-  using eagleboost.presentation.Contracts;
+  using eagleboost.core.Collections;
+  using eagleboost.presentation.Extensions;
   using eagleboost.presentation.Utils;
 
   /// <summary>
@@ -17,23 +18,22 @@ namespace eagleboost.presentation.Controls.DataGrids
   public class DataGridSelectedItems : Behavior<DataGrid>
   {
     #region Dependency Properties
-    public static readonly DependencyProperty SelectedItemsSupportProperty = DependencyProperty.Register(
-      "SelectedItemsSupport", typeof(ISelectedItemsSupport), typeof(DataGridSelectedItems), new PropertyMetadata(OnSelectedItemsSupportChanged));
+    public static readonly DependencyProperty SelectionContainerProperty = DependencyProperty.Register(
+      "SelectionContainer", typeof(ISelectionContainer), typeof(DataGridSelectedItems), new PropertyMetadata(OnSelectionContainerChanged));
 
-    public ISelectedItemsSupport SelectedItemsSupport
+    public ISelectionContainer SelectionContainer
     {
-      get { return (ISelectedItemsSupport) GetValue(SelectedItemsSupportProperty); }
-      set { SetValue(SelectedItemsSupportProperty, value); }
+      get { return (ISelectionContainer) GetValue(SelectionContainerProperty); }
+      set { SetValue(SelectionContainerProperty, value); }
     }
 
-    private static void OnSelectedItemsSupportChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+    private static void OnSelectionContainerChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-      ((DataGridSelectedItems)obj).OnSelectedItemsSupportChanged((ISelectedItemsSupport)e.OldValue, (ISelectedItemsSupport)e.NewValue);
+      ((DataGridSelectedItems)obj).OnSelectionContainerChanged((ISelectionContainer)e.OldValue, (ISelectionContainer)e.NewValue);
     }
     #endregion Dependency Properties 
 
     #region Overrides
-
     protected override void OnAttached()
     {
       base.OnAttached();
@@ -46,23 +46,23 @@ namespace eagleboost.presentation.Controls.DataGrids
     {
       var grid = AssociatedObject;
       grid.SelectionChanged -= HandleGridSelectionChanged;
-      SelectedItemsSupport = null;
+      SelectionContainer = null;
 
       base.OnDetaching();
     }
     #endregion Overrides
 
     #region Private Methods
-    private void OnSelectedItemsSupportChanged(ISelectedItemsSupport oldValue, ISelectedItemsSupport newValue)
+    private void OnSelectionContainerChanged(ISelectionContainer oldValue, ISelectionContainer newValue)
     {
       if (oldValue != null)
       {
-        oldValue.SelectedItemsChanged -= HandleViewModelSelectedItemsChanged;
+        oldValue.ItemsSelected -= HandleItemsSelected;
       }
 
       if (newValue != null)
       {
-        newValue.SelectedItemsChanged += HandleViewModelSelectedItemsChanged;
+        newValue.ItemsSelected += HandleItemsSelected;
       }
     }
     #endregion Private Methods
@@ -70,24 +70,35 @@ namespace eagleboost.presentation.Controls.DataGrids
     #region Event Handlers
     private void HandleGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      var grid = (DataGrid)sender;
-      var support = SelectedItemsSupport;
-      if (support != null)
+      var grid = AssociatedObject;
+      var container = SelectionContainer;
+      if (container != null && grid !=null)
       {
-        support.SelectedItems = grid.SelectedItems;
+        try
+        {
+          grid.SelectionChanged -= HandleGridSelectionChanged;
+          container.Unselect(e.RemovedItems);
+          container.Select(e.AddedItems);
+        }
+        finally
+        {
+          grid.SelectionChanged += HandleGridSelectionChanged;
+        }
       }
     }
 
-    private void HandleViewModelSelectedItemsChanged(object sender, EventArgs e)
+    private void HandleItemsSelected(object sender, ItemsSelectedEventArgs e)
     {
-      var support = (ISelectedItemsSupport)sender;
+      var container = (ISelectionContainer)sender;
       var grid = AssociatedObject;
       if (grid != null)
       {
         grid.SelectionChanged -= HandleGridSelectionChanged;
         try
         {
-          grid.SelectManyItems(support.SelectedItems);
+          grid.SelectManyItems(container.SelectedItems);
+          var first = container.SelectedItems.Cast<object>().First();
+          grid.Dispatcher.BeginInvoke(() => grid.ScrollIntoView(first));
         }
         finally
         {

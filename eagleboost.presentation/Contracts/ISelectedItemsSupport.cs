@@ -6,14 +6,14 @@ namespace eagleboost.presentation.Contracts
 {
   using System;
   using System.Collections;
-  using System.Collections.ObjectModel;
+  using System.Collections.Generic;
 
   /// <summary>
   /// ISelectedItemsSupport
   /// </summary>
   public interface ISelectedItemsSupport
   {
-    IList SelectedItems { get; set; }
+    IList SelectedItems { get; }
 
     event EventHandler SelectedItemsChanged;
   }
@@ -24,6 +24,6 @@ namespace eagleboost.presentation.Contracts
   /// <typeparam name="T"></typeparam>
   public interface ISelectedItemsSupport<T>
   {
-    ObservableCollection<T> SelectedItems { get; }
+    IReadOnlyCollection<T> SelectedItems { get; }
   }
 }

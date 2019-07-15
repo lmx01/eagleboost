@@ -11,6 +11,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   using System.Threading;
   using System.Threading.Tasks;
   using System.Windows.Data;
+  using eagleboost.core.Collections;
   using eagleboost.core.Extensions;
   using eagleboost.presentation.Collections;
   using eagleboost.presentation.Controls.TreeView;
@@ -66,14 +67,19 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     public Task<TFile> SetSelectedAsync(TFile file, CancellationToken ct = default(CancellationToken))
     {
-      var items = Items;
-      var item = items.FirstOrDefault(f => f.Id == file.Id);
-      if (item != null)
+      if (file != null)
       {
-        SelectedItem = item;
+        var items = Items;
+        var item = items.FirstOrDefault(f => f.Id == file.Id);
+        if (item != null)
+        {
+          SelectedItem = item;
+          SelectionContainer.Select(item);
+        }
+        return Task.FromResult(item);
       }
 
-      return Task.FromResult(item);
+      return Task.FromResult(default(TFile));
     }
 
     public event FileSelectedEventHandler<TFile> FileSelected;

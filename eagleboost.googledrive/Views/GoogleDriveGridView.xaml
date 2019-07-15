@@ -88,7 +88,7 @@
           <ebui:DataGridPrioritySortingItem Column="Name" Comparer="{x:Type local:GoogleDriveFileComparer}"/>
         </ebui:DataGridPrioritySorting.Items>
       </ebui:DataGridPrioritySorting>
-      <ebui:DataGridSelectedItems SelectedItemsSupport="{Binding}"/>
+      <ebui:DataGridSelectedItems SelectionContainer="{Binding SelectionContainer}"/>
       <ebui:SelectorItemDoubleClick SelectItemReceiver="{Binding}"/>
     </i:Interaction.Behaviors>
   </DataGrid>
