@@ -93,7 +93,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
         tree.PropertyChanged += HandleTreePropertyChanged;
 
         var list = ListViewModel;
-        var node = list.CurrentFolderNode.Children.FirstOrDefault(i => i.DataItem == folder) as ITreeNodeContainer;
+        var node = list.CurrentFolderNode.Children.FirstOrDefault(i => Equals(i.DataItem, folder)) as ITreeNodeContainer;
         if (node != null)
         {
           PopulateGrid(node);
