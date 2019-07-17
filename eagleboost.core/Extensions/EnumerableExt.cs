@@ -43,5 +43,18 @@
 
       return string.Join(separator, source);
     }
+
+    public static IEnumerable<T> Concat<T>(this IEnumerable<T> source, T one)
+    {
+      if (source != null)
+      {
+        foreach (var i in source)
+        {
+          yield return i;
+        }
+      }
+
+      yield return one;
+    }
   }
 }
