@@ -107,7 +107,7 @@
     <Compile Include="Exceptions\InvalidTypeException.cs" />
     <Compile Include="Extensions\DictionaryExt.cs" />
     <Compile Include="Extensions\DoubleExt.cs" />
-    <Compile Include="Extensions\EnumrableExt.cs" />
+    <Compile Include="Extensions\EnumerableExt.cs" />
     <Compile Include="Extensions\ExpressionExt.cs" />
     <Compile Include="Extensions\FileExt.cs" />
     <Compile Include="Extensions\ObjectExt.cs" />

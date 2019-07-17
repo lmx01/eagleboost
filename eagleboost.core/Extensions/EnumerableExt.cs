@@ -4,7 +4,7 @@
   using System.Collections.Generic;
   using System.Linq;
 
-  public static class EnumrableExt
+  public static class EnumerableExt
   {
     public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
     {
@@ -32,6 +32,16 @@
       }
 
       return source as T[] ?? source.Cast<T>().ToArray();
+    }
+
+    public static string ConcatAll<T>(this IEnumerable<T> source, string separator)
+    {
+      if (source == null)
+      {
+        return null;
+      }
+
+      return string.Join(separator, source);
     }
   }
 }

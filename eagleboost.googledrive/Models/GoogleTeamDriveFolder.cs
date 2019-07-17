@@ -30,6 +30,13 @@ namespace eagleboost.googledrive.Models
     }
     #endregion ctors
 
+    #region IGoogleDriveFolder
+    public File File
+    {
+      get { return null; }
+    }
+    #endregion IGoogleDriveFolder
+
     #region Public Properties
     public TeamDrive TeamDrive
     {

@@ -254,7 +254,6 @@ namespace eagleboost.shell.FileSystems.ViewModels
       }
 
       _itemsNodesMap.Add(f, result);
-      Logger.Info("Create new node for " + f);
 
       return result;
     }

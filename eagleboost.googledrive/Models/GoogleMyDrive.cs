@@ -4,9 +4,10 @@
 
 namespace eagleboost.googledrive.Models
 {
+  using eagleboost.googledrive.Contracts;
   using Google.Apis.Drive.v3.Data;
 
-  public sealed class GoogleMyDrive : File
+  public sealed class GoogleMyDrive : File, IGoogleRootFile
   {
     #region ctors
     public GoogleMyDrive()

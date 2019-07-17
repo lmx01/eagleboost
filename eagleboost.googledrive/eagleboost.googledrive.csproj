@@ -118,6 +118,7 @@
     <Compile Include="Contracts\IGoogleDriveFolder.cs" />
     <Compile Include="Contracts\IGoogleDriveFolderOperations.cs" />
     <Compile Include="Contracts\IGoogleDriveService.cs" />
+    <Compile Include="Contracts\IGoogleRootFile.cs" />
     <Compile Include="Extensions\DriveServiceExt.cs" />
     <Compile Include="Extensions\FileExt.cs" />
     <Compile Include="Extensions\GoogleDriveFileExt.cs" />
