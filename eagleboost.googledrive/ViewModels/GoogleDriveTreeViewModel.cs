@@ -20,13 +20,14 @@ namespace eagleboost.googledrive.ViewModels
   using eagleboost.presentation.Controls.TreeView;
   using eagleboost.presentation.Tasks;
   using eagleboost.shell.FileSystems.Contracts;
+  using eagleboost.shell.FileSystems.Models;
   using eagleboost.shell.FileSystems.ViewModels;
   using Unity.Attributes;
 
   /// <summary>
   /// IGoogleDriveTreeViewModel
   /// </summary>
-  public interface IGoogleDriveTreeViewModel : IFileSystemTreeViewModel
+  public interface IGoogleDriveTreeViewModel : IFileSystemTreeViewModel, ISupportFrequentFile
   {
   }
 
@@ -53,7 +54,7 @@ namespace eagleboost.googledrive.ViewModels
     private readonly IDispatcherProvider _dispatcher;
     private PriorityComparer<TreeNodeContainer> _favoriteFileComparer;
     private GoogleDriveFileNameComparer _fileNameComparer;
-    private readonly Dictionary<string, int> _filePriority = new Dictionary<string, int>();
+    private readonly Dictionary<string, FileFrequency> _fileFrequency = new Dictionary<string, FileFrequency>();
     #endregion Declarations
 
     #region ctors
@@ -67,6 +68,24 @@ namespace eagleboost.googledrive.ViewModels
     [Dependency]
     public BusyStatusReceiver BusyStatusReceiver { get; set; }
     #endregion Components
+
+    #region ISupportFrequentFile
+    public void SetFrequentFiles(IEnumerable<FileFrequency> frequencies)
+    {
+      if (frequencies != null)
+      {
+        foreach (var frequency in frequencies)
+        {
+          _fileFrequency[frequency.Id] = frequency;
+        }
+      }
+    }
+
+    public IReadOnlyCollection<FileFrequency> GetFrequentFiles()
+    {
+      return _fileFrequency.Values.ToArray();
+    }
+    #endregion ISupportFrequentFile
 
     #region Public Properties
     public bool UpdateFrequentFolder { get; set; }
@@ -224,7 +243,10 @@ namespace eagleboost.googledrive.ViewModels
         var selected = SelectedItem;
         if (selected != null)
         {
-          UpdatePriority(selected as TreeNodeContainer);
+          if (UpdateFrequentFolder)
+          {
+            UpdateFrequency(selected as TreeNodeContainer);
+          }
         }
       }
     }
@@ -241,18 +263,18 @@ namespace eagleboost.googledrive.ViewModels
       return new GoogleDriveFileNameComparer();
     }
 
-    private void UpdatePriority(TreeNodeContainer n)
+    private void UpdateFrequency(TreeNodeContainer n)
     {
       var f = (IGoogleDriveFile) n.DataItem;
 
-      int priority;
-      if (_filePriority.TryGetValue(f.Id, out priority))
+      FileFrequency frequency;
+      if (_fileFrequency.TryGetValue(f.Id, out frequency))
       {
-        _filePriority[f.Id] = ++priority;
+        frequency.Frequency++;
       }
       else
       {
-        _filePriority[f.Id] = 1;
+        _fileFrequency[f.Id] = new FileFrequency(f.Id, 1);
       }
     }
 
@@ -269,10 +291,10 @@ namespace eagleboost.googledrive.ViewModels
         return 0;
       }
 
-      int priority;
-      if (_filePriority.TryGetValue(f.Id, out priority))
+      FileFrequency frequency;
+      if (_fileFrequency.TryGetValue(f.Id, out frequency))
       {
-        return priority;
+        return frequency.Frequency;
       }
 
       return 0;
