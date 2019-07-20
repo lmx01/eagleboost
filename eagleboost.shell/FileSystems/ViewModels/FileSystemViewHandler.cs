@@ -24,8 +24,8 @@ namespace eagleboost.shell.FileSystems.ViewModels
     where TFolder : IFolder
   {
     #region Declarations
-    private readonly CancellableTaskHandler _setFolder = new CancellableTaskHandler();
-    private readonly CancellableTaskHandler _loadFileInfo = new CancellableTaskHandler();
+    private readonly CancellableTaskHandler _setFolderHandler = new CancellableTaskHandler();
+    private readonly CancellableTaskHandler _loadFileInfoHandler = new CancellableTaskHandler();
     #endregion Declarations
 
     #region Components
@@ -110,7 +110,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
         if (file != null && file.IsNot<IFolder>())
         {
           var br = BusyStatusReceiver;
-          br.AutoReset("Loading file info...", () => _loadFileInfo.ExecuteAsync(ct => FileInfoViewModel.LoadFileInfoAsync(file, ct,br), Timeout))
+          br.AutoReset("Loading file info...", () => _loadFileInfoHandler.ExecuteAsync(ct => FileInfoViewModel.LoadFileInfoAsync(file, ct,br), Timeout))
             .ConfigureAwait(true);
         }
       }
@@ -122,7 +122,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
     {
       if (folderNode != null)
       {
-        BusyStatusReceiver.AutoReset("Loading...", () => _setFolder.ExecuteAsync(ct => ListViewModel.SetFolderAsync(folderNode, ct), Timeout))
+        BusyStatusReceiver.AutoReset("Loading...", () => _setFolderHandler.ExecuteAsync(ct => ListViewModel.SetFolderAsync(folderNode, ct), Timeout))
           .ConfigureAwait(true);
       }
     }

@@ -47,6 +47,8 @@ namespace eagleboost.googledrive.Contracts
     Task DownloadAsync(string id, Stream stream, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task AddToSharedAsync(string fileId, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+
+    Task<IReadOnlyCollection<IGoogleDriveFile>> GetFullPathAsync(string fileId, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
     #endregion Methods
 
     #region Events

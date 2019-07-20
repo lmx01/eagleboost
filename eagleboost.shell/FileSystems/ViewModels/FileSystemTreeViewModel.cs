@@ -97,10 +97,11 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     public bool LoadOnSelectionChange { get; set; }
 
-    public async Task<bool> SelectAsync(params string[] path)
+    public async Task<bool> SelectAsync(params string[] paths)
     {
+      var processedPaths = ProcessPaths(paths);
       var node = (ITreeNodeContainer)Root;
-      var folderStack = new Stack<string>(path.Reverse());
+      var folderStack = new Stack<string>(processedPaths.Reverse());
       folderStack.Pop();
       if (folderStack.Count == 0)
       {
@@ -147,6 +148,11 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #endregion IFileSystemTreeNodesOperation
 
     #region Virtuals
+    protected virtual IEnumerable<string> ProcessPaths(string[] paths)
+    {
+      return paths;
+    }
+
     protected abstract bool DoFilter(ITreeNode item);
 
     protected abstract ITreeNodeContainer CreateRootNode();

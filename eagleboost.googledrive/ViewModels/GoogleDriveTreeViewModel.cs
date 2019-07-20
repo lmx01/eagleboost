@@ -100,6 +100,19 @@ namespace eagleboost.googledrive.ViewModels
     #endregion Init
 
     #region Overrides
+    protected override IEnumerable<string> ProcessPaths(string[] paths)
+    {
+      if (paths[0] != _rootFolder.Name)
+      {
+        yield return _rootFolder.Name;
+      }
+
+      foreach (var p in paths)
+      {
+        yield return p;
+      }
+    }
+
     protected override ICollectionView CreateItemsView()
     {
       var result = new ListCollectionView(Items) { Filter = o => Filter((ITreeNode)o) };
