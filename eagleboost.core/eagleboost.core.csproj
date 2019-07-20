@@ -63,6 +63,10 @@
     <Compile Include="Collections\BatchObservableCollection.Ext.cs">
       <DependentUpon>BatchObservableCollection.cs</DependentUpon>
     </Compile>
+    <Compile Include="Collections\ComparerBase.cs" />
+    <Compile Include="Collections\CompositeComparer.cs" />
+    <Compile Include="Collections\DelegateComparer.cs" />
+    <Compile Include="Collections\PriorityComparer.cs" />
     <Compile Include="Collections\MultipleSelectionContainer.cs">
       <DependentUpon>SelectionContainer.cs</DependentUpon>
     </Compile>

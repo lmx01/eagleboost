@@ -5,9 +5,9 @@
 namespace eagleboost.presentation.Controls.TreeView
 {
   using System;
+  using System.Collections;
   using System.Collections.Generic;
   using System.Collections.ObjectModel;
-  using System.ComponentModel;
   using eagleboost.core.ComponentModel;
   using eagleboost.presentation.Collections;
 
@@ -44,7 +44,7 @@ namespace eagleboost.presentation.Controls.TreeView
       _parent = parent;
       _treeNodesOperation = treeNodesOperation;
 
-      _name = _dataItem is IDisplayItem ? ((IDisplayItem) _dataItem).DisplayName : _dataItem.ToString();
+      _name = _dataItem is IDisplayItem ? ((IDisplayItem)_dataItem).DisplayName : _dataItem.ToString();
     }
     #endregion ctors
 
@@ -145,7 +145,7 @@ namespace eagleboost.presentation.Controls.TreeView
       get { return false; }
     }
 
-    public string SortProperty { get; set; }
+    public IComparer CustomSort { get; set; }
 
     public ITreeNodeContainer Parent
     {
@@ -170,13 +170,14 @@ namespace eagleboost.presentation.Controls.TreeView
 
     protected virtual LiveListCollectionView CreateChildrenView()
     {
-      var view = new LiveListCollectionView(_children) { Filter = o => _treeNodesOperation.Filter((ITreeNode)o) };
-      if (SortProperty != null)
+      var view = new LiveListCollectionView(_children)
       {
-        view.SortDescriptions.Add(new SortDescription(SortProperty, ListSortDirection.Ascending));
-      }
+        Filter = o => _treeNodesOperation.Filter((ITreeNode)o),
+        CustomSort = CustomSort,
+      };
       return view;
     }
+
     #endregion Virtuals
 
     #region Overrides

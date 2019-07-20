@@ -4,13 +4,16 @@
 
 namespace eagleboost.googledrive.ViewModels
 {
+  using System.Collections;
   using System.Collections.Generic;
   using System.ComponentModel;
   using System.Linq;
   using System.Threading.Tasks;
   using System.Windows.Data;
   using eagleboost.core.Collections;
+  using eagleboost.core.Extensions;
   using eagleboost.googledrive.Contracts;
+  using eagleboost.googledrive.Extensions;
   using eagleboost.googledrive.Models;
   using eagleboost.presentation.Contracts;
   using eagleboost.presentation.Controls.Indicators;
@@ -27,6 +30,9 @@ namespace eagleboost.googledrive.ViewModels
   {
   }
 
+  /// <summary>
+  /// GoogleDriveTreeViewModel
+  /// </summary>
   public class GoogleDriveTreeViewModel : FileSystemTreeViewModel, IGoogleDriveTreeViewModel
   {
     #region Statics
@@ -45,6 +51,9 @@ namespace eagleboost.googledrive.ViewModels
     private ITreeNode _searchResultNode;
     private IGoogleDriveService _gService;
     private readonly IDispatcherProvider _dispatcher;
+    private PriorityComparer<TreeNodeContainer> _favoriteFileComparer;
+    private GoogleDriveFileNameComparer _fileNameComparer;
+    private readonly Dictionary<string, int> _filePriority = new Dictionary<string, int>();
     #endregion Declarations
 
     #region ctors
@@ -58,6 +67,10 @@ namespace eagleboost.googledrive.ViewModels
     [Dependency]
     public BusyStatusReceiver BusyStatusReceiver { get; set; }
     #endregion Components
+
+    #region Public Properties
+    public bool UpdateFrequentFolder { get; set; }
+    #endregion Public Properties
 
     #region Init
     public void Initialize(IGoogleDriveService gService)
@@ -111,9 +124,16 @@ namespace eagleboost.googledrive.ViewModels
     protected override TreeNodeContainer CreateContainerNode(IFile f, ITreeNodeContainer parent)
     {
       var result = new TreeNodeContainer(f, parent, this);
-      if (Equals(f, _myDriveFolder)|| Equals(f, _teamDriveFolder))
+      if (Equals(f, _myDriveFolder) || Equals(f, _teamDriveFolder))
       {
-        result.SortProperty = "Name";
+        if (UpdateFrequentFolder)
+        {
+          result.CustomSort = new CompositeComparer<TreeNodeContainer>(new[] {FavoriteFileComparer, FileNameComparer});
+        }
+        else
+        {
+          result.CustomSort = (IComparer)FileNameComparer;
+        }
       }
 
       return result;
@@ -155,6 +175,16 @@ namespace eagleboost.googledrive.ViewModels
         });
       }
     }
+
+    public void RefreshCurrent()
+    {
+      var selected = SelectedItem;
+      var c= selected.Parent as TreeNodeContainer;
+      if (c != null)
+      {
+        c.ChildrenView.Refresh();
+      }
+    }
     #endregion Public Methods
 
     #region Private Properties
@@ -172,9 +202,82 @@ namespace eagleboost.googledrive.ViewModels
     {
       get { return _searchResultNode ?? (_searchResultNode = Root.Children.FirstOrDefault(i => i.DataItem == _searchResultFolder)); }
     }
+
+    private IComparer<TreeNodeContainer> FavoriteFileComparer
+    {
+      get { return _favoriteFileComparer ?? (_favoriteFileComparer = CreateFavoriteFileComparer()); }
+    }
+
+    private IComparer<TreeNodeContainer> FileNameComparer
+    {
+      get { return _fileNameComparer ?? (_fileNameComparer = CreateFileNameComparer()); }
+    }
     #endregion Private Properties
 
+    #region Overrides
+    protected override void OnPropertyChanged(string propertyName)
+    {
+      base.OnPropertyChanged(propertyName);
+
+      if (SelectedItemArgs.Match(propertyName))
+      {
+        var selected = SelectedItem;
+        if (selected != null)
+        {
+          UpdatePriority(selected as TreeNodeContainer);
+        }
+      }
+    }
+    #endregion Overrides
+
     #region Private Methods
+    private PriorityComparer<TreeNodeContainer> CreateFavoriteFileComparer()
+    {
+      return new PriorityComparer<TreeNodeContainer>(GetPriority);
+    }
+
+    private GoogleDriveFileNameComparer CreateFileNameComparer()
+    {
+      return new GoogleDriveFileNameComparer();
+    }
+
+    private void UpdatePriority(TreeNodeContainer n)
+    {
+      var f = (IGoogleDriveFile) n.DataItem;
+
+      int priority;
+      if (_filePriority.TryGetValue(f.Id, out priority))
+      {
+        _filePriority[f.Id] = ++priority;
+      }
+      else
+      {
+        _filePriority[f.Id] = 1;
+      }
+    }
+
+    private int GetPriority(TreeNodeContainer n)
+    {
+      if (n == null)
+      {
+        return 0;
+      }
+
+      var f = (IGoogleDriveFile) n.DataItem;
+      if (f == null)
+      {
+        return 0;
+      }
+
+      int priority;
+      if (_filePriority.TryGetValue(f.Id, out priority))
+      {
+        return priority;
+      }
+
+      return 0;
+    }
+
     private Task<IReadOnlyList<IGoogleDriveFile>> GetRootsAsync(GoogleDriveFolder parent)
     {
       IReadOnlyList<IGoogleDriveFile> roots = new IGoogleDriveFile[] {_myDriveFolder, _teamDriveFolder, _activityFolder, _adhocFolder, _searchResultFolder };

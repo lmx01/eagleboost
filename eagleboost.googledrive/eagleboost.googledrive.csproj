@@ -122,6 +122,7 @@
     <Compile Include="Extensions\DriveServiceExt.cs" />
     <Compile Include="Extensions\FileExt.cs" />
     <Compile Include="Extensions\GoogleDriveFileExt.cs" />
+    <Compile Include="Extensions\GoogleDriveFileNameComparer.cs" />
     <Compile Include="Models\GoogleActivityDrive.cs" />
     <Compile Include="Models\GoogleAdhocDrive.cs" />
     <Compile Include="Models\GoogleDriveActivity.cs" />
