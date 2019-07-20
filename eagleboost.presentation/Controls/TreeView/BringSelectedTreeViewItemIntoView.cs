@@ -36,11 +36,13 @@ namespace eagleboost.presentation.Controls.TreeView
       if (!(bool)e.NewValue)
       {
         item.Selected -= HandleTreeViewItemSelected;
+        item.IsVisibleChanged -= HandleTreeViewItemIsVisibleChanged;
       }
 
       if ((bool) e.NewValue)
       {
         item.Selected += HandleTreeViewItemSelected;
+        item.IsVisibleChanged += HandleTreeViewItemIsVisibleChanged;
       }
     }
 
@@ -55,6 +57,18 @@ namespace eagleboost.presentation.Controls.TreeView
       if (item != null)
       {
         item.BringIntoView();
+      }
+    }
+
+    private static void HandleTreeViewItemIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+      if ((bool) e.NewValue)
+      {
+        var treeViewItem = (TreeViewItem)sender;
+        if (treeViewItem.IsSelected)
+        {
+          treeViewItem.BringIntoView();
+        }
       }
     }
   }
