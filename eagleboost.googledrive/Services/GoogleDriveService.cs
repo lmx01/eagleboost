@@ -920,7 +920,9 @@ namespace eagleboost.googledrive.Services
         var parents = file.Parents;
         if (parents != null)
         {
-          var parent = await DoGetParentOwnedByMeAsync(parents, ct, progress).ConfigureAwait(false);
+          var parent = parents.Count == 1
+            ? await DoGetFileAsync(parents[0], ct, progress).ConfigureAwait(false)
+            : await DoGetParentOwnedByMeAsync(parents, ct, progress).ConfigureAwait(false);
           if (parent != null)
           {
             await DoGetFullPathRecursiveAsync(parent.Id, fileStack, ct, progress).ConfigureAwait(false);

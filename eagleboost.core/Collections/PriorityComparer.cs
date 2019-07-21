@@ -33,7 +33,7 @@ namespace eagleboost.core.Collections
       {
         if (yPriority > 0)
         {
-          return xPriority - yPriority;
+          return yPriority - xPriority;
         }
 
         return -1;
