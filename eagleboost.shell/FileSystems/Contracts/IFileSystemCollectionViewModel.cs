@@ -19,6 +19,8 @@ namespace eagleboost.shell.FileSystems.Contracts
   {
     #region Methods
     Task<IReadOnlyList<IFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken));
+
+    Task<IReadOnlyList<IFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyList<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken));
     #endregion Methods
   }
 
@@ -39,6 +41,8 @@ namespace eagleboost.shell.FileSystems.Contracts
 
     #region Methods
     Task<IReadOnlyList<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken));
+
+    Task<IReadOnlyList<TFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyList<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken));
 
     Task<TFile> SetSelectedAsync(TFile file, CancellationToken ct = default(CancellationToken));
     #endregion Methods

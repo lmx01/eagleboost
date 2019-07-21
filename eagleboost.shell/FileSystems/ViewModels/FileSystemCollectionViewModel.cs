@@ -65,7 +65,28 @@ namespace eagleboost.shell.FileSystems.ViewModels
       return result;
     }
 
-    public Task<TFile> SetSelectedAsync(TFile file, CancellationToken ct = default(CancellationToken))
+    async Task<IReadOnlyList<IFile>> IFileSystemCollectionViewModel.SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyList<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken))
+    {
+      return await SetFilesAsync(folderNode, fileFunc, ct).ConfigureAwait(false);
+    }
+
+    public async Task<IReadOnlyList<TFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyList<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken))
+    {
+      CurrentFolderNode = folderNode;
+      var folder = (TFolder)folderNode.DataItem;
+      CurrentFolder = folder;
+
+      Items.Clear();
+      var files = await fileFunc(ct);
+      var result = files.Cast<TFile>().ToArray();
+      Items.AddRange(result);
+
+      RaiseFilesPopulated();
+
+      return result;
+    }
+
+  public Task<TFile> SetSelectedAsync(TFile file, CancellationToken ct = default(CancellationToken))
     {
       if (file != null)
       {

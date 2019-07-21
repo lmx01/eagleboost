@@ -32,7 +32,7 @@ namespace eagleboost.googledrive.Contracts
 
     Task<IReadOnlyList<IGoogleDriveFile>> GetChildFilesAsync(IGoogleDriveFolder parent, string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
-    Task<IDictionary<IGoogleDriveFile, int>> RecursiveGetChildFilesAsync(IGoogleDriveFolder parent, int start, CancellationToken ct = default(CancellationToken));
+    Task<IDictionary<IGoogleDriveFile, int>> RecursiveGetChildFilesAsync(IGoogleDriveFolder parent, int start, string filenameQuery = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task<IReadOnlyList<IGoogleDriveFile>> GetFilesAsync(string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 

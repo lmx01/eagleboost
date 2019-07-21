@@ -398,11 +398,11 @@ namespace eagleboost.googledrive.Services
       return Task.Run(() => DoGetChildFilesAsync(parent, query, ct, progress), ct);
     }
 
-    public Task<IDictionary<IGoogleDriveFile, int>> RecursiveGetChildFilesAsync(IGoogleDriveFolder parent, int start, CancellationToken ct = default(CancellationToken))
+    public Task<IDictionary<IGoogleDriveFile, int>> RecursiveGetChildFilesAsync(IGoogleDriveFolder parent, int start, string filenameQuery = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
     {
       return Task.Run(async () =>
       {
-        var items = await DoRecursiveGetChildFilesAsync(parent, start, ct).ConfigureAwait(false);
+        var items = await DoRecursiveGetChildFilesAsync(parent, start, filenameQuery, ct, progress).ConfigureAwait(false);
         return (IDictionary<IGoogleDriveFile, int>)items.ToDictionary(i => i.Item1, i => i.Item2);
       }, ct);
     }
@@ -542,14 +542,15 @@ namespace eagleboost.googledrive.Services
       return DoGetGoogleDriveFilesAsync(parent, q, ct, progress);
     }
 
-    private async Task<IReadOnlyCollection<Tuple<IGoogleDriveFile, int>>> DoRecursiveGetChildFilesAsync(IGoogleDriveFile file, int start, CancellationToken ct)
+    private async Task<IReadOnlyCollection<Tuple<IGoogleDriveFile, int>>> DoRecursiveGetChildFilesAsync(IGoogleDriveFile file, int start, string filenameQuery, CancellationToken ct, IProgress<string> progress)
     {
       var folder = file as IGoogleDriveFolder;
       if (folder != null)
       {
         var result = new List<Tuple<IGoogleDriveFile, int>> { Tuple.Create(file, start++) };
         var q = string.Format(CommonQueries.LiveFileFormat, folder.Id);
-        var files = await DoRecursiveGetChildFilesAsync(folder, q, start, ct).ConfigureAwait(false);
+        progress.TryReport("Recursively load files in " + folder + ", FileName: " + filenameQuery);
+        var files = await DoRecursiveGetChildFilesAsync(folder, q, start, filenameQuery, ct, progress).ConfigureAwait(false);
         result.AddRange(files);
         return result;
       }
@@ -557,17 +558,31 @@ namespace eagleboost.googledrive.Services
       return new[] { Tuple.Create(file, start) };
     }
 
-    private async Task<IReadOnlyCollection<Tuple<IGoogleDriveFile, int>>> DoRecursiveGetChildFilesAsync(IGoogleDriveFolder parent, string query, int start, CancellationToken ct)
+    private async Task<IReadOnlyCollection<Tuple<IGoogleDriveFile, int>>> DoRecursiveGetChildFilesAsync(IGoogleDriveFolder parent, string query, int start, string filenameQuery, CancellationToken ct, IProgress<string> progress)
     {
-      var files = await DoGetFilesAsync(query, ct, null).ConfigureAwait(false);
+      var newQuery = query;
+      if (filenameQuery.HasValue())
+      {
+        var fileOrFolder = CommonQueries.IsFolder + " or (" + filenameQuery + " and " + CommonQueries.IsNotFolder + ")";
+        newQuery = newQuery + " and (" + fileOrFolder + ")";
+      }
+
+      var files = await DoGetFilesAsync(newQuery, ct, progress).ConfigureAwait(false);
       var gFiles = files.Select(f => CreateDriveFile(f, parent, ct, null)).ToArray();
 
       var result = new List<Tuple<IGoogleDriveFile, int>>();
       foreach (var file in gFiles)
       {
-        var children = await DoRecursiveGetChildFilesAsync(file, start, ct).ConfigureAwait(false);
-        start += children.Count;
-        result.AddRange(children);
+        if (file is IGoogleDriveFolder)
+        {
+          var children = await DoRecursiveGetChildFilesAsync(file, start, filenameQuery, ct, progress).ConfigureAwait(false);
+          start += children.Count;
+          result.AddRange(children);
+        }
+        else
+        {
+          result.Add(Tuple.Create(file, start++));
+        }
       }
       return result;
     }
