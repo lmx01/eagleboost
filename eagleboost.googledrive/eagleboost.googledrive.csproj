@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\GoogleDriveFileIcon.cs" />
+    <Compile Include="Behaviors\GoogleDriveFrequentFolder.cs" />
     <Compile Include="Contracts\IGoogleDriveFile.cs" />
     <Compile Include="Contracts\IGoogleDriveFolder.cs" />
     <Compile Include="Contracts\IGoogleDriveFolderOperations.cs" />

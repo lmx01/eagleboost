@@ -157,6 +157,13 @@ namespace eagleboost.core.Collections
     #endregion ISelectionContainer
 
     #region Protected Methods
+    protected void EnsureSelectedItems()
+    {
+      if (SelectedItems != null)
+      {
+      }
+    }
+
     protected bool IsSelected(T item)
     {
       if (item == null)

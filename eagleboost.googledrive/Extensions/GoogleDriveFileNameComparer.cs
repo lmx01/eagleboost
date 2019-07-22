@@ -4,8 +4,8 @@
 
 namespace eagleboost.googledrive.Extensions
 {
-  using System;
   using eagleboost.core.Collections;
+  using eagleboost.core.Extensions;
   using eagleboost.googledrive.Contracts;
   using eagleboost.presentation.Controls.TreeView;
 
@@ -30,10 +30,10 @@ namespace eagleboost.googledrive.Extensions
       var xFile = (IGoogleDriveFile) x.DataItem;
       var yFile = (IGoogleDriveFile) y.DataItem;
 
-      var r = string.Compare(xFile.Name, yFile.Name, StringComparison.Ordinal);
+      var r = xFile.Name.CompareNoCase(yFile.Name);
       if (r == 0)
       {
-        return string.Compare(xFile.Id, yFile.Id, StringComparison.Ordinal);
+        return xFile.Id.CompareNoCase(yFile.Id);
       }
 
       return r;

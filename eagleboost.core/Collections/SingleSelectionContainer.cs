@@ -22,10 +22,12 @@ namespace eagleboost.core.Collections
     #region ctors
     public SingleSelectionContainer()
     {
+      EnsureSelectedItems();
     }
 
     public SingleSelectionContainer(T selected) : base(selected)
     {
+      EnsureSelectedItems();
     }
     #endregion ctors
 

@@ -7,6 +7,7 @@ namespace eagleboost.googledrive.Views
   using System;
   using System.Collections.Generic;
   using System.ComponentModel;
+  using eagleboost.core.Extensions;
   using eagleboost.googledrive.Contracts;
   using eagleboost.googledrive.Extensions;
   using eagleboost.presentation.Controls.DataGrids;
@@ -54,7 +55,7 @@ namespace eagleboost.googledrive.Views
 
       if (x.IsFolder() && y.IsFolder())
       {
-        return DirectionFlag * string.Compare(x.Name, y.Name, StringComparison.InvariantCultureIgnoreCase);
+        return DirectionFlag * x.Name.CompareNoCase(y.Name);
       }
 
       if (x.IsFolder())

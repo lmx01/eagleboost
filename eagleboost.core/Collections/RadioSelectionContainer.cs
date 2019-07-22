@@ -16,10 +16,12 @@ namespace eagleboost.core.Collections
     #region ctors
     public RadioSelectionContainer()
     {
+      EnsureSelectedItems();
     }
 
     public RadioSelectionContainer(T selected) : base(selected)
     {
+      EnsureSelectedItems();
     }
     #endregion ctors
 

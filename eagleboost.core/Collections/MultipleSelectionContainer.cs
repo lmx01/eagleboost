@@ -5,6 +5,7 @@
 namespace eagleboost.core.Collections
 {
   using System.Collections.Generic;
+  using System.Linq;
 
   /// <summary>
   /// MultipleSelectionContainer
@@ -20,10 +21,12 @@ namespace eagleboost.core.Collections
     #region ctors
     public MultipleSelectionContainer()
     {
+      EnsureSelectedItems();
     }
 
     public MultipleSelectionContainer(ICollection<T> selected) : base((selected))
     {
+      EnsureSelectedItems();
     }
     #endregion ctors
 

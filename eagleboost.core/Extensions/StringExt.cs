@@ -43,5 +43,10 @@ namespace eagleboost.core.Extensions
 
       return str;
     }
+
+    public static int CompareNoCase(this string l, string r)
+    {
+      return string.Compare(l, r, StringComparison.InvariantCultureIgnoreCase);
+    }
   }
 }

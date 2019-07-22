@@ -61,6 +61,7 @@ namespace eagleboost.googledrive.ViewModels
     public GoogleDriveTreeViewModel()
     {
       _dispatcher = new DispatcherProvider();
+      FrequentFileContainer = new MultipleSelectionContainer<string>();
     }
     #endregion ctors
 
@@ -77,6 +78,7 @@ namespace eagleboost.googledrive.ViewModels
         foreach (var frequency in frequencies)
         {
           _fileFrequency[frequency.Id] = frequency;
+          FrequentFileContainer.Select(frequency.Id);
         }
       }
     }
@@ -89,6 +91,8 @@ namespace eagleboost.googledrive.ViewModels
 
     #region Public Properties
     public bool UpdateFrequentFolder { get; set; }
+
+    public MultipleSelectionContainer<string> FrequentFileContainer { get; private set; }
     #endregion Public Properties
 
     #region Init
@@ -289,6 +293,7 @@ namespace eagleboost.googledrive.ViewModels
       {
         _fileFrequency[f.Id] = new FileFrequency(f.Id, 1);
       }
+      FrequentFileContainer.Select(f.Id);
     }
 
     private int GetPriority(TreeNodeContainer n)

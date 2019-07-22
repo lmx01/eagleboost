@@ -32,7 +32,12 @@
               <behaviors1:GoogleDriveFileIcon File="{Binding DataItem}"/>
             </i:Interaction.Behaviors>
           </Image>
-          <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4" />
+          <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4">
+            <i:Interaction.Behaviors>
+              <behaviors1:GoogleDriveFrequentFolder SelectionContainer="{Binding DataContext.FrequentFileContainer, RelativeSource={RelativeSource AncestorType=TreeView}}" 
+                                                    DataItem="{Binding DataItem}"/>
+            </i:Interaction.Behaviors>
+          </TextBlock>        
         </Grid>
         <HierarchicalDataTemplate.Triggers>
           <DataTrigger Binding="{Binding DataItem.OwnedByMe}" Value="False">
