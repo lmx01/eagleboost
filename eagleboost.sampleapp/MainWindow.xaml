@@ -18,7 +18,7 @@
   <Window.Resources>
 
   </Window.Resources>
-  <TabControl SelectedIndex="3">
+  <TabControl SelectedIndex="2">
     <TabControl.Items>
       <TabItem Header="StaThreadContainer">
         <StackPanel>
@@ -68,7 +68,7 @@
               </Border>
             </Popup>
           </Grid>
-          <views:WindowsShellTreeView Grid.Row="1"/>
+          <!--<views:WindowsShellTreeView Grid.Row="1"/>-->
         </Grid>
       </TabItem>
 

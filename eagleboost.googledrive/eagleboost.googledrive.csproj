@@ -172,6 +172,8 @@
     <Compile Include="Views\GoogleDriveHistoryControl.xaml.cs">
       <DependentUpon>GoogleDriveHistoryControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GoogleDrivePopupTreeControl.cs" />
+    <Compile Include="Views\GoogleDrivePopupTreeParams.cs" />
     <Compile Include="Views\GoogleDriveTreeView.xaml.cs">
       <DependentUpon>GoogleDriveTreeView.xaml</DependentUpon>
     </Compile>
@@ -220,6 +222,10 @@
     <ProjectReference Include="..\eagleboost.shell\eagleboost.shell.csproj">
       <Project>{4515aa2f-b031-4018-afe9-29fe3e34255f}</Project>
       <Name>eagleboost.shell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eagleboost.UserExperience\eagleboost.userexperience.csproj">
+      <Project>{D4A1C4F6-833B-4F0E-9BD0-5DDE39F45C59}</Project>
+      <Name>eagleboost.userexperience</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
