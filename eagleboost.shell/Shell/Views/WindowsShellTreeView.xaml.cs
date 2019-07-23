@@ -20,6 +20,7 @@
       ShellTree.SelectedItemChanged += HandleSelectedShellTreeItemChanged;
       this.SetupLoaded(() =>
       {
+        DataContext = _viewModel;
         if (BindingOperations.GetBinding(this, OptionsProperty) == null)
         {
           Options = new WindowsShellTreeViewOptions();
@@ -73,11 +74,12 @@
     {
       _viewModel.InitializeAsync(false);
       ShellTree.ItemsSource = _viewModel.ItemsView;
+      SetBinding(SelectedItemProperty, new Binding("SelectedItem") {Source = _viewModel, Mode = BindingMode.TwoWay});
     }
 
     private void HandleSelectedShellTreeItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
-      SelectedItem = (ITreeNode) e.NewValue;
+      SetCurrentValue(SelectedItemProperty, (ITreeNode) e.NewValue);
     }
 
     private void OnSelectedPathChanged()

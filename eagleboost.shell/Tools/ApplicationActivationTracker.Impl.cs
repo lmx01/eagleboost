@@ -115,8 +115,11 @@ namespace eagleboost.shell.Tools
             var hwndSource = HwndSource.FromHwnd(hwnd);
             if (hwndSource != null)
             {
-              var window = (Window) hwndSource.RootVisual;
-              RaiseActivated(window);
+              var window = hwndSource.RootVisual as Window;
+              if (window != null)
+              {
+                RaiseActivated(window);
+              }
             }
             else
             {

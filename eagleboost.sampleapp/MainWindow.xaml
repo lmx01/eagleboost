@@ -9,6 +9,9 @@
         xmlns:views="clr-namespace:eagleboost.shell.Shell.Views;assembly=eagleboost.shell"
         xmlns:sampleapp="clr-namespace:eagleboost.sampleapp"
         xmlns:selectionContainerSample="clr-namespace:eagleboost.sampleapp.SelectionContainerSample"
+        xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+        xmlns:shellPopup="clr-namespace:eagleboost.sampleapp.ShellPopup"
+        xmlns:controls1="clr-namespace:eagleboost.sampleapp.Controls"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:ViewModel}"
         Title="MainWindow" Height="350" Width="525">
 
@@ -25,7 +28,7 @@
           <TextBlock Text="{Binding FullName}"></TextBlock>
           <TextBlock Text="{Binding Error}"></TextBlock>
           <Button Command="{Binding OkCommand}">Ok</Button>
-          <controls:StaThreadContainer ThreadName="ABC" DataContextType="{x:Type viewModels:ViewModel}" Height="100"/>
+          <controls1:StaThreadTextBlock ThreadName="ABC" InitializationParams="abc" Height="100"/>
         </StackPanel>
       </TabItem>
       
@@ -43,7 +46,30 @@
       </TabItem>
 
       <TabItem Header="Shell Tree">
-        <views:WindowsShellTreeView Options="{Binding }"/>
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+          <Grid x:Name="PopupGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ToggleButton Grid.Column="0" x:Name="SelectFolderButton" IsChecked="{Binding IsOpen, ElementName=FolderPopup, Mode=TwoWay}"
+                          MinWidth="45" Content="Popup"/>
+            <TextBlock Grid.Column="1" Text="{Binding State, ElementName=PopupShellTree}" VerticalAlignment="Center"/>
+            <Popup x:Name="FolderPopup" AllowsTransparency="False" StaysOpen="True" PlacementTarget="{Binding ElementName=SelectFolderButton}"
+                   MinWidth="{Binding ActualWidth, ElementName=PopupGrid}">
+              <Border Background="WhiteSmoke" CornerRadius="2" >
+                <Grid>
+                  <shellPopup:StaThreadShellTree x:Name="PopupShellTree" ThreadName="Popup" InitializationParams="abc" MinHeight="400" MinWidth="{Binding ActualWidth, ElementName=SelectFolderButton}"/>
+                </Grid>
+              </Border>
+            </Popup>
+          </Grid>
+          <views:WindowsShellTreeView Grid.Row="1"/>
+        </Grid>
       </TabItem>
 
       <TabItem Header="SelectionContainer">

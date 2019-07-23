@@ -8,64 +8,69 @@ namespace eagleboost.UserExperience.Controls
   using System.AddIn.Pipeline;
   using System.Windows;
   using System.Windows.Controls;
+  using eagleboost.presentation.Extensions;
   using eagleboost.UserExperience.Threading;
 
   /// <summary>
   /// StaThreadContainer
   /// </summary>
-  public class StaThreadContainer : ContentControl
+  public abstract class StaThreadContainer : ContentControl
   {
-    #region ctors
-    public StaThreadContainer()
-    {
-      DataContextChanged += HandleDataContextChanged;
-    }
-    #endregion ctors
-
     #region Dependency Properties
-    #region ContentStyle
-    public static readonly DependencyProperty ContentStyleProperty = DependencyProperty.Register(
-      "ContentStyle", typeof(Style), typeof(StaThreadContainer), new PropertyMetadata(OnContentStyleChanged));
+    #region InitializationParams
+    public static readonly DependencyProperty InitializationParamsProperty = DependencyProperty.Register(
+      "InitializationParams", typeof(object), typeof(StaThreadContainer), new PropertyMetadata(OnInitializationParamsChanged));
 
-    public Style ContentStyle
+    public object InitializationParams
     {
-      get { return (Style) GetValue(ContentStyleProperty); }
-      set { SetValue(ContentStyleProperty, value); }
+      get { return GetValue(InitializationParamsProperty); }
+      set { SetValue(InitializationParamsProperty, value); }
     }
 
-    private static void OnContentStyleChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+    private static void OnInitializationParamsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-      ((StaThreadContainer)obj).OnContentStyleChanged();
+      ((StaThreadContainer)obj).OnInitializationParamsChanged(e.NewValue);
     }
-    #endregion ContentStyle
+    #endregion InitializationParams
+
+    #region State
+    public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
+      "State", typeof(object), typeof(StaThreadContainer));
+
+    public object State
+    {
+      get { return GetValue(StateProperty); }
+      set { SetValue(StateProperty, value); }
+    }
+    #endregion State
     #endregion Dependency Properties
 
     #region Public Properties
-    public Type DataContextType { get; set; }
-
     public string ThreadName { get; set; }
     #endregion Public Properties
 
     #region Event Handlers
-    private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+    private void OnInitializationParamsChanged(object initParams)
     {
-      var context = e.NewValue;
-      //if (DataContextType.IsInstanceOfType(context))
+      this.SetupDataContextChanged(e =>
       {
-        DispatcherViewFactory.CreateViewContract(ThreadName, () => new TextBlock{Text = string.Format("I'm running on thread '{0}", ThreadName)}).ContinueWith(t =>
+        DispatcherViewFactory.CreateViewContract(ThreadName, () => CreateControl(initParams)).ContinueWith(t =>
         {
-          var element = FrameworkElementAdapters.ContractToViewAdapter(t.Result);
-          element.DataContext = context;
-          Content = element; 
+          Content = FrameworkElementAdapters.ContractToViewAdapter(t.Result);
         }, UiThread.Current.TaskScheduler);
-      }
+      });
     }
     #endregion Event Handlers
 
-    #region Private Methods
-    private void OnContentStyleChanged()
+    #region Protected Methods
+    protected void UpdateState(object state)
     {
+      Dispatcher.CheckedInvoke(() => SetCurrentValue(StateProperty, state));
     }
-    #endregion Private Methods
+    #endregion Protected Methods
+
+    #region Virtuals
+    protected abstract FrameworkElement CreateControl(object initParams);
+    #endregion Virtuals
   }
 }
