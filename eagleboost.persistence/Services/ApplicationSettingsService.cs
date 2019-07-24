@@ -47,7 +47,7 @@ namespace eagleboost.persistence.Services
     private ApplicationSettingsService(string appName = null)
     {
       _appName = appName ?? "Default";
-      _application = Application.Current; ;
+      _application = Application.Current;
       _application.Startup += HandleApplicationStartup;
       _application.Exit += HandleApplicationExit;
     }

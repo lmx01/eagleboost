@@ -3,15 +3,9 @@ using System.Windows;
 
 namespace eagleboost.sampleapp
 {
-  using System.Linq.Expressions;
-  using eagleboost.component.Extensions;
-  using eagleboost.core.ComponentModel.AutoNotify;
   using eagleboost.presentation.Behaviors;
-  using eagleboost.presentation.Controls;
-  using eagleboost.presentation.Extensions;
   using eagleboost.sharedcomponents.ViewModels;
   using eagleboost.shell.Tools;
-  using eagleboost.UserExperience.Threading;
   using Unity;
   using Unity.Interception.ContainerIntegration;
 
@@ -23,8 +17,6 @@ namespace eagleboost.sampleapp
     public MainWindow()
     {
       InitializeComponent();
-
-      UiThread.Initialize();
 
       var container = new UnityContainer();
       container.AddNewExtension<Interception>();

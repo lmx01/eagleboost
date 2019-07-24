@@ -4,7 +4,6 @@
 
 namespace eagleboost.UserExperience.Controls
 {
-  using System;
   using System.AddIn.Pipeline;
   using System.Windows;
   using System.Windows.Controls;
@@ -14,32 +13,32 @@ namespace eagleboost.UserExperience.Controls
   /// <summary>
   /// StaThreadContainer
   /// </summary>
-  public abstract class StaThreadContainer : ContentControl
+  public abstract class StaThreadContainer<TParams, TState> : ContentControl
   {
     #region Dependency Properties
     #region InitializationParams
     public static readonly DependencyProperty InitializationParamsProperty = DependencyProperty.Register(
-      "InitializationParams", typeof(object), typeof(StaThreadContainer), new PropertyMetadata(OnInitializationParamsChanged));
+      "InitializationParams", typeof(TParams), typeof(StaThreadContainer<TParams, TState>), new PropertyMetadata(OnInitializationParamsChanged));
 
-    public object InitializationParams
+    public TParams InitializationParams
     {
-      get { return GetValue(InitializationParamsProperty); }
+      get { return (TParams)GetValue(InitializationParamsProperty); }
       set { SetValue(InitializationParamsProperty, value); }
     }
 
     private static void OnInitializationParamsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-      ((StaThreadContainer)obj).OnInitializationParamsChanged(e.NewValue);
+      ((StaThreadContainer<TParams, TState>)obj).OnInitializationParamsChanged((TParams)e.NewValue);
     }
     #endregion InitializationParams
 
     #region State
     public static readonly DependencyProperty StateProperty = DependencyProperty.Register(
-      "State", typeof(object), typeof(StaThreadContainer));
+      "State", typeof(TState), typeof(StaThreadContainer<TParams, TState>));
 
-    public object State
+    public TState State
     {
-      get { return GetValue(StateProperty); }
+      get { return (TState)GetValue(StateProperty); }
       set { SetValue(StateProperty, value); }
     }
     #endregion State
@@ -50,27 +49,29 @@ namespace eagleboost.UserExperience.Controls
     #endregion Public Properties
 
     #region Event Handlers
-    private void OnInitializationParamsChanged(object initParams)
+    private void OnInitializationParamsChanged(TParams initParams)
     {
-      this.SetupDataContextChanged(e =>
-      {
-        DispatcherViewFactory.CreateViewContract(ThreadName, () => CreateControl(initParams)).ContinueWith(t =>
-        {
-          Content = FrameworkElementAdapters.ContractToViewAdapter(t.Result);
-        }, UiThread.Current.TaskScheduler);
-      });
+      DispatcherViewFactory.CreateViewContract(ThreadName, () => CreateControl(initParams)).ContinueWith(
+        t => Content = FrameworkElementAdapters.ContractToViewAdapter(t.Result), UiThread.Current.TaskScheduler);
     }
     #endregion Event Handlers
 
     #region Protected Methods
-    protected void UpdateState(object state)
+    protected void UpdateState(TState state)
     {
       Dispatcher.CheckedInvoke(() => SetCurrentValue(StateProperty, state));
     }
     #endregion Protected Methods
 
     #region Virtuals
-    protected abstract FrameworkElement CreateControl(object initParams);
+    protected abstract FrameworkElement CreateControl(TParams initParams);
     #endregion Virtuals
+  }
+
+  /// <summary>
+  /// StaThreadContainer
+  /// </summary>
+  public abstract class StaThreadContainer : StaThreadContainer<object, object>
+  {
   }
 }
