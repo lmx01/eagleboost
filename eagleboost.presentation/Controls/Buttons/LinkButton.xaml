@@ -5,7 +5,7 @@
 
   <ControlTemplate TargetType="{x:Type controls:LinkButton}" x:Key="LinkButtonControlTemplate">
     <TextBlock>
-      <Hyperlink x:Name="PART_Hyperlink" NavigateUri="{TemplateBinding Link}">
+      <Hyperlink x:Name="PART_Hyperlink">
         <Run Text="{TemplateBinding Content}" />
       </Hyperlink>
     </TextBlock>

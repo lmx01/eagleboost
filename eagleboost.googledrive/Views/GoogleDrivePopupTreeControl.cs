@@ -97,7 +97,7 @@ namespace eagleboost.googledrive.Views
           UpdateState();
           _viewModel.RefreshCurrent();
         }
-        _treeView.Visibility = Visibility.Collapsed;
+        _treeView.Visibility = Visibility.Hidden;
       }
     }
     #endregion Event Handlers

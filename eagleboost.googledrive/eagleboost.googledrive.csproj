@@ -173,8 +173,12 @@
       <DependentUpon>GoogleDriveHistoryControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GoogleDrivePopupTreeControl.cs" />
-    <Compile Include="Views\GoogleDrivePopupTreeParams.cs" />
-    <Compile Include="Views\GoogleDrivePopupTreeState.cs" />
+    <Compile Include="Views\GoogleDrivePopupTreeParams.cs">
+      <DependentUpon>GoogleDrivePopupTreeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GoogleDrivePopupTreeState.cs">
+      <DependentUpon>GoogleDrivePopupTreeControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\GoogleDriveTreeView.xaml.cs">
       <DependentUpon>GoogleDriveTreeView.xaml</DependentUpon>
     </Compile>

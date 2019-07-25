@@ -10,6 +10,7 @@ namespace eagleboost.presentation.Controls.Buttons
   using System.Windows.Controls;
   using System.Windows.Documents;
   using System.Windows.Navigation;
+  using eagleboost.core.Extensions;
   using eagleboost.presentation.Extensions;
 
   /// <summary>
@@ -38,22 +39,34 @@ namespace eagleboost.presentation.Controls.Buttons
 
     #region Link
     public static readonly DependencyProperty LinkProperty = DependencyProperty.Register(
-      "Link", typeof(Uri), typeof(LinkButton));
+      "Link", typeof(string), typeof(LinkButton), new PropertyMetadata(OnLinkChanged));
 
-    public Uri Link
+    public string Link
     {
-      get { return (Uri) GetValue(LinkProperty); }
+      get { return (string) GetValue(LinkProperty); }
       set { SetValue(LinkProperty, value); }
+    }
+
+    private static void OnLinkChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+    {
+      ((LinkButton)obj).OnLinkChanged();
     }
     #endregion Link
     #endregion Dependency Properties
+
+    #region Private Properties
+    private Hyperlink Hyperlink
+    {
+      get { return GetTemplateChild("PART_Hyperlink") as Hyperlink; }
+    }
+    #endregion Private Properties
 
     #region Overrides
     public override void OnApplyTemplate()
     {
       base.OnApplyTemplate();
 
-      var hyperlink = GetTemplateChild("PART_Hyperlink") as Hyperlink;
+      var hyperlink = Hyperlink;
       if (hyperlink != null)
       {
         hyperlink.RequestNavigate += HandleRequestNavigate;
@@ -66,5 +79,18 @@ namespace eagleboost.presentation.Controls.Buttons
       e.Handled = true;
     }
     #endregion Overrides
+
+    #region Private Methods
+
+    private void OnLinkChanged()
+    {
+      var link = Link;
+      var hyperlink = Hyperlink;
+      if (link != null && hyperlink != null)
+      {
+        hyperlink.NavigateUri = new Uri(link);
+      }
+    }
+    #endregion Private Methods
   }
 }
