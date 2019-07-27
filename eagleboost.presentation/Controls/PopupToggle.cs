@@ -36,11 +36,11 @@ namespace eagleboost.presentation.Controls
     #region Dependency Properties
     #region IsChecked
     public static readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register(
-      "IsChecked", typeof(bool?), typeof(PopupToggle), new PropertyMetadata(OnIsCheckedChanged));
+      "IsChecked", typeof(bool), typeof(PopupToggle), new PropertyMetadata(OnIsCheckedChanged));
 
-    public bool? IsChecked
+    public bool IsChecked
     {
-      get { return (bool?) GetValue(IsCheckedProperty); }
+      get { return (bool) GetValue(IsCheckedProperty); }
       set { SetValue(IsCheckedProperty, value); }
     }
 
@@ -89,7 +89,7 @@ namespace eagleboost.presentation.Controls
 
     private void OnIsCheckedChanged()
     {
-      var isChecked = IsChecked.GetValueOrDefault();
+      var isChecked = IsChecked;
       if (isChecked)
       {
         OnChecked();
@@ -102,7 +102,7 @@ namespace eagleboost.presentation.Controls
 
     private void HandleWindowPreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
-      if (!IsChecked.GetValueOrDefault() || IsMouseOver)
+      if (!IsChecked || IsMouseOver)
       {
         return;
       }
@@ -162,7 +162,7 @@ namespace eagleboost.presentation.Controls
     {
       base.OnIsKeyboardFocusWithinChanged(e);
 
-      if (IsChecked.GetValueOrDefault(false) && !IsKeyboardFocusWithin)
+      if (IsChecked && !IsKeyboardFocusWithin)
       {
         var focusedElement = Keyboard.FocusedElement as DependencyObject;
         if (focusedElement == null)

@@ -56,6 +56,9 @@ namespace eagleboost.googledrive.Contracts
     #endregion Events
   }
 
+  /// <summary>
+  /// GoogldDriveFileCreatedEventArgs
+  /// </summary>
   public class GoogldDriveFileCreatedEventArgs : EventArgs
   {
     public readonly IGoogleDriveFile File;
