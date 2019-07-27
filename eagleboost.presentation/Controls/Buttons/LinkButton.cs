@@ -10,7 +10,6 @@ namespace eagleboost.presentation.Controls.Buttons
   using System.Windows.Controls;
   using System.Windows.Documents;
   using System.Windows.Navigation;
-  using eagleboost.core.Extensions;
   using eagleboost.presentation.Extensions;
 
   /// <summary>

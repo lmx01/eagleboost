@@ -5,6 +5,7 @@
   using System.Windows;
   using System.Windows.Data;
   using System.Windows.Media;
+  using eagleboost.core.Extensions;
 
   public static class DependencyObjectExt
   {
@@ -66,6 +67,11 @@
 
     public static T FindParent<T>(this DependencyObject d) where T : DependencyObject
     {
+      return d.FindParent<T>(null);
+    }
+
+    public static T FindParent<T>(this DependencyObject d, Predicate<T> filter) where T : DependencyObject
+    {
       if (d == null)
       {
         throw new ArgumentNullException("d");
@@ -73,7 +79,7 @@
 
       DependencyObject dpo = VisualTreeHelper.GetParent(d);
 
-      while (dpo != null && !(dpo is T))
+      while (dpo != null && (dpo.IsNot<T>() || filter != null && !filter((T) dpo)))
       {
         DependencyObject parent = VisualTreeHelper.GetParent(dpo);
         if (parent != null)
@@ -86,6 +92,7 @@
           {
             break;
           }
+
           dpo = (dpo as FrameworkElement).Parent;
         }
       }
@@ -100,7 +107,7 @@
         throw new ArgumentNullException("d");
       }
 
-      DependencyObject dpo = VisualTreeHelper.GetParent(d);
+      var dpo = VisualTreeHelper.GetParent(d);
 
       while (dpo != null && !type.IsInstanceOfType(dpo))
       {

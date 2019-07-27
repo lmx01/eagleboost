@@ -184,6 +184,7 @@
     <Compile Include="Controls\Progress\ProgressViewOptions.cs" />
     <Compile Include="Controls\Selectors\SelectorItemDoubleClick.cs" />
     <Compile Include="Controls\TabContentPreservation.cs" />
+    <Compile Include="Controls\PopupToggle.cs" />
     <Compile Include="Controls\TreeView\BringSelectedTreeViewItemIntoView.cs" />
     <Compile Include="Controls\TreeView\ITreeNodeContainer.cs" />
     <Compile Include="Controls\TreeView\NonScrollTreeViewItem.cs" />
@@ -238,6 +239,10 @@
     <Compile Include="Win32\NativeMethods.WindowStyle.cs">
       <DependentUpon>NativeMethods.cs</DependentUpon>
     </Compile>
+    <Page Include="Controls\PopupToggle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

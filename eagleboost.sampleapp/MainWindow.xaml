@@ -4,14 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:eagleboost.sharedcomponents.ViewModels;assembly=eagleboost.sharedcomponents"
-        xmlns:controls="clr-namespace:eagleboost.UserExperience.Controls;assembly=eagleboost.UserExperience"
         xmlns:indicators="clr-namespace:eagleboost.presentation.Controls.Indicators;assembly=eagleboost.presentation"
-        xmlns:views="clr-namespace:eagleboost.shell.Shell.Views;assembly=eagleboost.shell"
-        xmlns:sampleapp="clr-namespace:eagleboost.sampleapp"
         xmlns:selectionContainerSample="clr-namespace:eagleboost.sampleapp.SelectionContainerSample"
-        xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+        xmlns:ebui="http://www.eagleboost.com/xaml/presentation"
+        xmlns:controls="clr-namespace:eagleboost.sampleapp.Controls"
         xmlns:shellPopup="clr-namespace:eagleboost.sampleapp.ShellPopup"
-        xmlns:controls1="clr-namespace:eagleboost.sampleapp.Controls"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:ViewModel}"
         Title="MainWindow" Height="350" Width="525">
 
@@ -28,7 +25,7 @@
           <TextBlock Text="{Binding FullName}"></TextBlock>
           <TextBlock Text="{Binding Error}"></TextBlock>
           <Button Command="{Binding OkCommand}">Ok</Button>
-          <controls1:StaThreadTextBlock ThreadName="ABC" InitializationParams="abc" Height="100"/>
+          <controls:StaThreadTextBlock ThreadName="ABC" InitializationParams="abc" Height="100"/>
         </StackPanel>
       </TabItem>
       
@@ -56,10 +53,13 @@
               <ColumnDefinition Width="Auto"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ToggleButton Grid.Column="0" x:Name="SelectFolderButton" IsChecked="{Binding IsOpen, ElementName=FolderPopup, Mode=TwoWay}"
-                          MinWidth="45" Content="Popup"/>
+            <ebui:PopupToggle x:Name="SelectFolderButton" MinWidth="45" Content="Popup">
+            </ebui:PopupToggle>
+            <!--<ToggleButton Grid.Column="0" x:Name="SelectFolderButton" IsChecked="{Binding IsOpen, ElementName=FolderPopup, Mode=TwoWay}"
+                          MinWidth="45" Content="Popup"/>-->
             <TextBlock Grid.Column="1" Text="{Binding State, ElementName=PopupShellTree}" VerticalAlignment="Center"/>
-            <Popup x:Name="FolderPopup" AllowsTransparency="False" StaysOpen="True" PlacementTarget="{Binding ElementName=SelectFolderButton}"
+            <Popup x:Name="FolderPopup" AllowsTransparency="False" PlacementTarget="{Binding ElementName=SelectFolderButton}"
+                   IsOpen="{Binding IsChecked, ElementName=SelectFolderButton}"
                    MinWidth="{Binding ActualWidth, ElementName=PopupGrid}">
               <Border Background="WhiteSmoke" CornerRadius="2" >
                 <Grid>

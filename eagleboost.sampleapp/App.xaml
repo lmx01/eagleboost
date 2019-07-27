@@ -8,6 +8,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml" />
         <ResourceDictionary Source="/eagleboost.presentation;component/Controls/CheckMark.xaml" />
+        <ResourceDictionary Source="/eagleboost.presentation;component/Controls/PopupToggle.xaml" />
         <ResourceDictionary Source="/eagleboost.style;component/TextBox.xaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
