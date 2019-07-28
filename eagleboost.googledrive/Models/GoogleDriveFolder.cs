@@ -21,12 +21,12 @@ namespace eagleboost.googledrive.Models
   public class GoogleDriveFolder : FileBase<GoogleDriveFolder, IGoogleDriveFolder>, IGoogleDriveFolder
   {
     #region Declarations
-    private readonly Func<GoogleDriveFolder, Task<IReadOnlyList<IGoogleDriveFile>>> _filesFunc;
+    private readonly Func<GoogleDriveFolder, Task<IReadOnlyCollection<IGoogleDriveFile>>> _filesFunc;
     private readonly File _file;
     #endregion Declarations
 
     #region ctors
-    public GoogleDriveFolder(File file, IGoogleDriveFolder parent, Func<GoogleDriveFolder, Task<IReadOnlyList<IGoogleDriveFile>>> filesFunc) : base(parent)
+    public GoogleDriveFolder(File file, IGoogleDriveFolder parent, Func<GoogleDriveFolder, Task<IReadOnlyCollection<IGoogleDriveFile>>> filesFunc) : base(parent)
     {
       _file = file;
       _filesFunc = filesFunc;
@@ -156,7 +156,7 @@ namespace eagleboost.googledrive.Models
     #endregion IGoogleDriveFile
 
     #region IGoogleDriveFolder
-    public async Task<IReadOnlyList<IFile>> GetFilesAsync(CancellationToken ct = new CancellationToken())
+    public async Task<IReadOnlyCollection<IFile>> GetFilesAsync(CancellationToken ct = new CancellationToken())
     {
       return await _filesFunc(this).ConfigureAwait(false);
     }

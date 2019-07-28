@@ -147,7 +147,58 @@
     <Compile Include="Services\GoogleDriveService.CommonQueries.cs">
       <DependentUpon>GoogleDriveService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\GoogleDriveService.CreateFolderAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\GoogleDriveService.cs" />
+    <Compile Include="Services\GoogleDriveService.CopyAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.DeleteAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.DownloadAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.AddToSharedAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.Core.Folder.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.Core.File.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.GetActivityFilesAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.ObserveActivities.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.ObserveChanges.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.GetFilesAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.RecursiveGetChildFilesAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.GetFullPathAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.GetFileAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.GetTeamDrivesAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.GetChildFilesAsync.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.GetChildFilesObservable.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\UserCredentialProvider.cs" />
     <Compile Include="Types\FolderProperties.cs" />
     <Compile Include="Types\MimeType.cs" />

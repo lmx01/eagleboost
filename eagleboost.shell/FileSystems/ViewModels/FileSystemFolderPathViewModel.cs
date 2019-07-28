@@ -26,7 +26,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #region Declarations
     private IFileSystemTreeViewModel _treeViewModel;
     private IFileSystemCollectionViewModel<TFile, TFolder> _gridViewModel;
-    private IReadOnlyList<IFileSystemFolderOperations> _selectedFolders;
+    private IReadOnlyCollection<IFileSystemFolderOperations> _selectedFolders;
     private DisposeManager _gridSelectionToken;
     #endregion Declarations
 
@@ -40,7 +40,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #endregion IFileSystemFolderPathViewModel
 
     #region IGoogleDriveFolderPathViewModel
-    public IReadOnlyList<IFileSystemFolderOperations> SelectedFolders
+    public IReadOnlyCollection<IFileSystemFolderOperations> SelectedFolders
     {
       get { return _selectedFolders; }
       private set { SetValue(ref _selectedFolders, value); }

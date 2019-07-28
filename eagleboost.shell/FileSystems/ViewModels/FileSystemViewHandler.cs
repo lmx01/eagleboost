@@ -7,6 +7,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
   using System.ComponentModel;
   using System.Diagnostics;
   using System.Linq;
+  using System.Threading;
   using eagleboost.core.Extensions;
   using eagleboost.core.Threading;
   using eagleboost.presentation.Controls.Indicators;
@@ -122,8 +123,8 @@ namespace eagleboost.shell.FileSystems.ViewModels
     {
       if (folderNode != null)
       {
-        BusyStatusReceiver.AutoReset("Loading...", () => _setFolderHandler.ExecuteAsync(ct => ListViewModel.SetFolderAsync(folderNode, ct), Timeout))
-          .ConfigureAwait(true);
+        var cts = new CancellationTokenSource();
+        ListViewModel.SetFolderAsync(folderNode, cts.Token);
       }
     }
     #endregion Private Methods

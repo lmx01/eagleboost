@@ -16,13 +16,13 @@ namespace eagleboost.googledrive.Models
   public class GoogleTeamDriveFolder : FileBase<GoogleTeamDriveFolder, IGoogleDriveFolder>, IGoogleDriveFolder
   {
     #region Declarations
-    private readonly Func<GoogleTeamDriveFolder, Task<IReadOnlyList<IGoogleDriveFile>>> _filesFunc;
+    private readonly Func<GoogleTeamDriveFolder, Task<IReadOnlyCollection<IGoogleDriveFile>>> _filesFunc;
     private readonly TeamDrive _teamDrive;
     private readonly IDictionary<string, string> _appProperties;
     #endregion Declarations
 
     #region ctors
-    public GoogleTeamDriveFolder(TeamDrive teamDrive, IGoogleDriveFolder parent, Func<GoogleTeamDriveFolder, Task<IReadOnlyList<IGoogleDriveFile>>> filesFunc) : base(parent)
+    public GoogleTeamDriveFolder(TeamDrive teamDrive, IGoogleDriveFolder parent, Func<GoogleTeamDriveFolder, Task<IReadOnlyCollection<IGoogleDriveFile>>> filesFunc) : base(parent)
     {
       _appProperties = new Dictionary<string, string>();
       _teamDrive = teamDrive;
@@ -134,7 +134,7 @@ namespace eagleboost.googledrive.Models
     #endregion IGoogleDriveFile
 
     #region IGoogleDriveFolder
-    public async Task<IReadOnlyList<IFile>> GetFilesAsync(CancellationToken ct = new CancellationToken())
+    public async Task<IReadOnlyCollection<IFile>> GetFilesAsync(CancellationToken ct = new CancellationToken())
     {
       return await _filesFunc(this).ConfigureAwait(false);
     }

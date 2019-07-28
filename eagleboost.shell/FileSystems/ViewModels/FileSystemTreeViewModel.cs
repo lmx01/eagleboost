@@ -136,7 +136,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       return DoCreateChildAsync(childDataItem, parent);
     }
 
-    public Task<IReadOnlyList<ITreeNode>> CreateChildrenAsync(object parentDataItem, ITreeNodeContainer parent)
+    public Task<IReadOnlyCollection<ITreeNode>> CreateChildrenAsync(object parentDataItem, ITreeNodeContainer parent)
     {
       return DoCreateChildrenAsync(parentDataItem, parent);
     }
@@ -223,7 +223,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       return root;
     }
 
-    protected async Task<IReadOnlyList<ITreeNode>> DoCreateChildrenAsync(object parentItem, ITreeNodeContainer parent)
+    protected async Task<IReadOnlyCollection<ITreeNode>> DoCreateChildrenAsync(object parentItem, ITreeNodeContainer parent)
     {
       var folder = parentItem as IFolder;
       if (folder != null)

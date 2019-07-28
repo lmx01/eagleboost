@@ -14,7 +14,7 @@ namespace eagleboost.presentation.Controls.TreeView
 
     Task<ITreeNode> CreateChildAsync(object childDataItem, ITreeNodeContainer parent);
 
-    Task<IReadOnlyList<ITreeNode>> CreateChildrenAsync(object parentDataItem, ITreeNodeContainer parent);
+    Task<IReadOnlyCollection<ITreeNode>> CreateChildrenAsync(object parentDataItem, ITreeNodeContainer parent);
 
     bool Filter(ITreeNode item);
     #endregion Methods    

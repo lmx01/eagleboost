@@ -41,7 +41,7 @@ namespace eagleboost.shell.Shell.ViewModels
     #endregion Overrides
 
     #region Private Methods
-    private Task<IReadOnlyList<IWindowsShellFile>> GetFilesAsync(WindowsShellFolder parent, IEnumerable<ShellObject> shellObjects)
+    private Task<IReadOnlyCollection<IWindowsShellFile>> GetFilesAsync(WindowsShellFolder parent, IEnumerable<ShellObject> shellObjects)
     {
       var result = new List<IWindowsShellFile>();
       ////shellObjects can't be enumerated in Task.Run, otherwise Drives would be lost.
@@ -54,7 +54,7 @@ namespace eagleboost.shell.Shell.ViewModels
         result.Add(item);
       }
 
-      return Task.FromResult((IReadOnlyList<IWindowsShellFile>)result);
+      return Task.FromResult((IReadOnlyCollection<IWindowsShellFile>)result);
     }
     #endregion Private Methods
   }

@@ -76,9 +76,7 @@
       <DataGridTemplateColumn Header="Name" CellTemplate="{StaticResource NameTemplate}" SortMemberPath="Name"/>
       <DataGridTemplateColumn Header="Size" CellTemplate="{StaticResource FileSizeTemplate}" SortMemberPath="FileSize"/>
       <ebui:DataGridCheckMarkColumn Header="Copied" Binding="{Binding IsChildrenCopied, Mode=OneWay}"/>
-      <ebui:DataGridCheckMarkColumn Header="Owned by me" Binding="{Binding OwnedByMe, Mode=OneWay}"/>
       <DataGridTextColumn Header="Owners" Binding="{Binding Owners, Mode=OneWay}"/>
-      <DataGridTextColumn Header="Created" Binding="{Binding CreatedTime, Mode=OneWay, StringFormat=\{0:MMM dd\, yyyy\}}"/>
       <DataGridTextColumn Header="Modified" Binding="{Binding ModifiedTime, Mode=OneWay, StringFormat=\{0:MMM dd\, yyyy\}}"/>
       <DataGridTemplateColumn Header="WebView" CellTemplate="{StaticResource WebViewLinkTemplate}" SortMemberPath="WebView"/>
     </DataGrid.Columns>

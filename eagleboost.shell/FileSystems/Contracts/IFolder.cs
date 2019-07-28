@@ -14,7 +14,7 @@ namespace eagleboost.shell.FileSystems.Contracts
   public interface IFolder : IFile
   {
     #region Methods
-    Task<IReadOnlyList<IFile>> GetFilesAsync(CancellationToken ct = default(CancellationToken));
+    Task<IReadOnlyCollection<IFile>> GetFilesAsync(CancellationToken ct = default(CancellationToken));
     #endregion Methods
   }
 }

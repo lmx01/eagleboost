@@ -21,12 +21,12 @@ namespace eagleboost.shell.Shell.Models
   public class WindowsShellFolder :  FileBase<WindowsShellFolder, IWindowsShellFolder>, IWindowsShellFolder
   {
     #region Declarations
-    private readonly Func<WindowsShellFolder, Task<IReadOnlyList<IWindowsShellFile>>> _filesFunc;
+    private readonly Func<WindowsShellFolder, Task<IReadOnlyCollection<IWindowsShellFile>>> _filesFunc;
     private readonly ShellContainer _folder;
     #endregion Declarations
 
     #region ctors
-    public WindowsShellFolder(ShellContainer folder, IWindowsShellFolder parent, Func<WindowsShellFolder, Task<IReadOnlyList<IWindowsShellFile>>> filesFunc) : base(parent)
+    public WindowsShellFolder(ShellContainer folder, IWindowsShellFolder parent, Func<WindowsShellFolder, Task<IReadOnlyCollection<IWindowsShellFile>>> filesFunc) : base(parent)
     {
       _folder = folder;
       _filesFunc = filesFunc;
@@ -39,7 +39,7 @@ namespace eagleboost.shell.Shell.Models
       get { return _folder; }
     }
 
-    public async Task<IReadOnlyList<IFile>> GetFilesAsync(CancellationToken ct = default(CancellationToken))
+    public async Task<IReadOnlyCollection<IFile>> GetFilesAsync(CancellationToken ct = default(CancellationToken))
     {
       return await _filesFunc(this).ConfigureAwait(false);
     }

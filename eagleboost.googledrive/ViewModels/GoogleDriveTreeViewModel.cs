@@ -318,50 +318,50 @@ namespace eagleboost.googledrive.ViewModels
       return 0;
     }
 
-    private Task<IReadOnlyList<IGoogleDriveFile>> GetRootsAsync(GoogleDriveFolder parent)
+    private Task<IReadOnlyCollection<IGoogleDriveFile>> GetRootsAsync(GoogleDriveFolder parent)
     {
-      IReadOnlyList<IGoogleDriveFile> roots = new IGoogleDriveFile[] {_myDriveFolder, _teamDriveFolder, _activityFolder, _adhocFolder, _searchResultFolder };
+      IReadOnlyCollection<IGoogleDriveFile> roots = new IGoogleDriveFile[] {_myDriveFolder, _teamDriveFolder, _activityFolder, _adhocFolder, _searchResultFolder };
       return Task.FromResult(roots);
     }
 
-    private Task<IReadOnlyList<IGoogleDriveFile>> GetFilesAsync(GoogleDriveFolder parent)
+    private Task<IReadOnlyCollection<IGoogleDriveFile>> GetFilesAsync(GoogleDriveFolder parent)
     {
       return _gService.GetChildFilesAsync(parent, progress: BusyStatusReceiver);
     }
 
-    private Task<IReadOnlyList<IGoogleDriveFile>> GetTeamDrivesAsync(GoogleDriveFolder parent)
+    private Task<IReadOnlyCollection<IGoogleDriveFile>> GetTeamDrivesAsync(GoogleDriveFolder parent)
     {
       return _gService.GetTeamDrivesAsync(parent, progress: BusyStatusReceiver);
     }
 
-    private Task<IReadOnlyList<IGoogleDriveFile>> GetActivityFilesAsync(GoogleDriveFolder parent)
+    private Task<IReadOnlyCollection<IGoogleDriveFile>> GetActivityFilesAsync(GoogleDriveFolder parent)
     {
       return _gService.GetActivityFilesAsync(parent, progress: BusyStatusReceiver);
     }
 
-    private Task<IReadOnlyList<IGoogleDriveFile>> GetAdhocFilesAsync(GoogleDriveFolder parent)
+    private Task<IReadOnlyCollection<IGoogleDriveFile>> GetAdhocFilesAsync(GoogleDriveFolder parent)
     {
       var adhocNode = AdhocNode as TreeNodeContainer;
       if (adhocNode != null && !adhocNode.HasDummyChild)
       {
-        IReadOnlyList<IGoogleDriveFile> files = adhocNode.Children.Select(i => i.DataItem).Cast<IGoogleDriveFile>().ToArray();
+        IReadOnlyCollection<IGoogleDriveFile> files = adhocNode.Children.Select(i => i.DataItem).Cast<IGoogleDriveFile>().ToArray();
         return Task.FromResult(files);
       }
 
-      IReadOnlyList<IGoogleDriveFile> emptyFiles = Array<IGoogleDriveFile>.Empty;;
+      IReadOnlyCollection<IGoogleDriveFile> emptyFiles = Array<IGoogleDriveFile>.Empty;;
       return Task.FromResult(emptyFiles);
     }
 
-    private Task<IReadOnlyList<IGoogleDriveFile>> GetSearchResultAsync(GoogleDriveFolder parent)
+    private Task<IReadOnlyCollection<IGoogleDriveFile>> GetSearchResultAsync(GoogleDriveFolder parent)
     {
       var searchResultNode = SearchResultNode as TreeNodeContainer;
       if (searchResultNode != null && !searchResultNode.HasDummyChild)
       {
-        IReadOnlyList<IGoogleDriveFile> files = searchResultNode.Children.Select(i => i.DataItem).Cast<IGoogleDriveFile>().ToArray();
+        IReadOnlyCollection<IGoogleDriveFile> files = searchResultNode.Children.Select(i => i.DataItem).Cast<IGoogleDriveFile>().ToArray();
         return Task.FromResult(files);
       }
 
-      IReadOnlyList<IGoogleDriveFile> emptyFiles = Array<IGoogleDriveFile>.Empty;;
+      IReadOnlyCollection<IGoogleDriveFile> emptyFiles = Array<IGoogleDriveFile>.Empty;;
       return Task.FromResult(emptyFiles);
     }
     #endregion Private Methods

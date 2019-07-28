@@ -14,7 +14,7 @@ namespace eagleboost.shell.FileSystems.Models
     where TFile : IFile
     where TFolder : IFolder
   {
-    public FolderCacheEntry(TFolder folder, IReadOnlyList<TFile> files)
+    public FolderCacheEntry(TFolder folder, IReadOnlyCollection<TFile> files)
     {
       Folder = folder;
       Files = files;
@@ -22,7 +22,7 @@ namespace eagleboost.shell.FileSystems.Models
 
     public TFolder Folder { get; private set; }
 
-    public IReadOnlyList<TFile> Files { get; private set; }
+    public IReadOnlyCollection<TFile> Files { get; private set; }
 
     public bool NeedsRefresh { get; set; }
   }

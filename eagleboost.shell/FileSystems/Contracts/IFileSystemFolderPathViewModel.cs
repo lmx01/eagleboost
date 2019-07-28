@@ -14,7 +14,7 @@ namespace eagleboost.shell.FileSystems.Contracts
     where TFolder : IFolder
   {
     #region Properties
-    IReadOnlyList<IFileSystemFolderOperations> SelectedFolders { get; }
+    IReadOnlyCollection<IFileSystemFolderOperations> SelectedFolders { get; }
     #endregion Properties
 
     #region Methods

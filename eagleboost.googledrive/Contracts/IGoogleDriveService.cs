@@ -22,19 +22,21 @@ namespace eagleboost.googledrive.Contracts
     #endregion Properties
 
     #region Methods
-    Task<IReadOnlyList<IGoogleDriveFile>> GetActivityFilesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+    Task<IReadOnlyCollection<IGoogleDriveFile>> GetActivityFilesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     IObservable<IReadOnlyCollection<GoogleDriveActivity>> ObserveChanges(string startPageToken);
 
     IObservable<IReadOnlyCollection<GoogleDriveActivity>> ObserveActivities(CancellationToken ct = default(CancellationToken));
 
-    Task<IReadOnlyList<IGoogleDriveFile>> GetTeamDrivesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+    IObservable<IReadOnlyCollection<IGoogleDriveFile>> GetChildFilesObservable(IGoogleDriveFolder parent, string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
-    Task<IReadOnlyList<IGoogleDriveFile>> GetChildFilesAsync(IGoogleDriveFolder parent, string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+    Task<IReadOnlyCollection<IGoogleDriveFile>> GetTeamDrivesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+
+    Task<IReadOnlyCollection<IGoogleDriveFile>> GetChildFilesAsync(IGoogleDriveFolder parent, string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task<IDictionary<IGoogleDriveFile, int>> RecursiveGetChildFilesAsync(IGoogleDriveFolder parent, int start, string filenameQuery = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
-    Task<IReadOnlyList<IGoogleDriveFile>> GetFilesAsync(string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+    Task<IReadOnlyCollection<IGoogleDriveFile>> GetFilesAsync(string query = null, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task<IGoogleDriveFile> GetFileAsync(string id, IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 

@@ -45,32 +45,30 @@ namespace eagleboost.shell.FileSystems.ViewModels
       private set { SetValue(ref _currentFolder, value); }
     }
 
-    async Task<IReadOnlyList<IFile>> IFileSystemCollectionViewModel.SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct)
+    async Task<IReadOnlyCollection<IFile>> IFileSystemCollectionViewModel.SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct)
     {
       return await SetFolderAsync(folderNode, ct).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
+    public async Task<IReadOnlyCollection<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
     {
       CurrentFolderNode = folderNode;
       var folder = (TFolder) folderNode.DataItem;
       CurrentFolder = folder;
 
-      Items.Clear();
-      var result = await GetFilesAsync(folderNode, ct);
-      Items.AddRange(result);
+      var result = await PopulateFolderAsync(folderNode, ct);
 
       RaiseFilesPopulated();
 
       return result;
     }
 
-    async Task<IReadOnlyList<IFile>> IFileSystemCollectionViewModel.SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyList<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken))
+    async Task<IReadOnlyCollection<IFile>> IFileSystemCollectionViewModel.SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyCollection<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken))
     {
       return await SetFilesAsync(folderNode, fileFunc, ct).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<TFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyList<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken))
+    public async Task<IReadOnlyCollection<TFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyCollection<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken))
     {
       CurrentFolderNode = folderNode;
       var folder = (TFolder)folderNode.DataItem;
@@ -127,18 +125,26 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #endregion IFileSystemCollectionViewModel
 
     #region Virtuals
+    protected virtual async Task<IReadOnlyCollection<TFile>> PopulateFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
+    {
+      Items.Clear();
+      var result = await GetFilesAsync(folderNode, ct);
+      Items.AddRange(result);
+      return result;
+    }
+
     protected virtual void OnFolderCacheLoaded(FolderCacheEntry<TFile, TFolder> cacheEntry)
     {
     }
 
-    protected virtual FolderCacheEntry<TFile, TFolder> CreateFolderCache(TFolder folder, IReadOnlyList<TFile> files)
+    protected virtual FolderCacheEntry<TFile, TFolder> CreateFolderCache(TFolder folder, IReadOnlyCollection<TFile> files)
     {
       return new FolderCacheEntry<TFile, TFolder>(folder, files);
     }
     #endregion Virtuals
 
     #region Private Methods
-    private async Task<IReadOnlyList<TFile>> GetFilesAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
+    private async Task<IReadOnlyCollection<TFile>> GetFilesAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
     {
       var folder = (TFolder)folderNode.DataItem;
       FolderCacheEntry<TFile, TFolder> cacheEntry;

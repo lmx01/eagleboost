@@ -17,7 +17,7 @@ namespace eagleboost.presentation.Controls.TreeView
   public class TreeNodeContainer : TreeNode, ITreeNodeContainer
   {
     #region Declarations
-    private TaskCompletionSource<IReadOnlyList<ITreeNode>> _childrenLoadedTcs;
+    private TaskCompletionSource<IReadOnlyCollection<ITreeNode>> _childrenLoadedTcs;
     private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
     #endregion Declarations
 
@@ -82,7 +82,7 @@ namespace eagleboost.presentation.Controls.TreeView
 
       if (_childrenLoadedTcs == null)
       {
-        _childrenLoadedTcs = new TaskCompletionSource<IReadOnlyList<ITreeNode>>();
+        _childrenLoadedTcs = new TaskCompletionSource<IReadOnlyCollection<ITreeNode>>();
         if (!HasDummyChild)
         {
           _childrenLoadedTcs.TrySetResult(new ITreeNode[0]);
@@ -122,7 +122,7 @@ namespace eagleboost.presentation.Controls.TreeView
     #endregion Overrides
 
     #region Private Methods
-    private Task<IReadOnlyList<ITreeNode>> DoLoadChildrenAsync()
+    private Task<IReadOnlyCollection<ITreeNode>> DoLoadChildrenAsync()
     {
       return TreeNodesOperation.CreateChildrenAsync(DataItem, this);
     }
