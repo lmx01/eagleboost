@@ -56,8 +56,6 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
       var result = await PopulateFolderAsync(folderNode, ct, progress);
 
-      RaiseFilesPopulated();
-
       return result;
     }
 
@@ -128,6 +126,9 @@ namespace eagleboost.shell.FileSystems.ViewModels
       Items.Clear();
       var result = await GetFilesAsync(folderNode, ct);
       Items.AddRange(result);
+
+      RaiseFilesPopulated();
+
       return result;
     }
     #endregion Virtuals

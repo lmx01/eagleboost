@@ -58,7 +58,7 @@ namespace eagleboost.googledrive.ViewModels
           var observable = _gService.GetChildFilesObservable(parent, ct: ct);
           observable.Buffer(TimeSpan.FromMilliseconds(400))
             .ObserveOn(SynchronizationContext.Current)
-            .Subscribe(lf => Items.AddRange(lf.SelectMany(i => i)));
+            .Subscribe(lf => Items.AddRange(lf.SelectMany(i => i)), RaiseFilesPopulated);
 
           return Task.FromResult(Empty);
         }

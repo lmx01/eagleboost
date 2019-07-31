@@ -47,7 +47,7 @@ namespace eagleboost.googledrive.Services
       var newQuery = query;
       if (filenameQuery.HasValue())
       {
-        var fileOrFolder = CommonQueries.IsFolder + " or (" + filenameQuery + " and " + CommonQueries.IsNotFolder + ")";
+        var fileOrFolder = CommonQueries.IsFolder + " or ((" + filenameQuery + ") and " + CommonQueries.IsNotFolder + ")";
         newQuery = newQuery + " and (" + fileOrFolder + ")";
       }
 

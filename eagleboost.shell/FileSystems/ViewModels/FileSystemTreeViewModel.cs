@@ -33,7 +33,6 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     #region Declarations
     private readonly ObservableCollection<ITreeNode> _items = new ObservableCollection<ITreeNode>();
-    private readonly Dictionary<IFile, ITreeNode> _itemsNodesMap = new Dictionary<IFile, ITreeNode>();
     private ICollectionView _itemsView;
     private ITreeNode _selectedItem;
     private ITreeNodeContainer _root;
@@ -196,12 +195,6 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #region Protected Methods
     protected ITreeNode FindNode(IFile file)
     {
-      ITreeNode result;
-      if (_itemsNodesMap.TryGetValue(file, out result))
-      {
-        return result;
-      }
-
       return null;
     }
     #endregion Protected Methods
@@ -243,25 +236,12 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     private ITreeNode CreateTreeNode(IFile f, ITreeNodeContainer parent)
     {
-      ITreeNode result;
-      if (_itemsNodesMap.TryGetValue(f, out result))
-      {
-        Logger.Info("Node for " + f + "already exists");
-        return result;
-      }
-
       if (f is IFolder)
       {
-        result = CreateContainerNode(f, parent);
-      }
-      else
-      {
-        result = CreateDataNode(f, parent);
+        return CreateContainerNode(f, parent);
       }
 
-      _itemsNodesMap.Add(f, result);
-
-      return result;
+      return CreateDataNode(f, parent);
     }
     #endregion Private Methods
   }
