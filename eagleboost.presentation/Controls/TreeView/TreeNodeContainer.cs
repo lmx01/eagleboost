@@ -9,6 +9,7 @@ namespace eagleboost.presentation.Controls.TreeView
   using System.Linq;
   using System.Threading.Tasks;
   using System.Windows.Threading;
+  using eagleboost.core.Collections;
   using eagleboost.presentation.Extensions;
 
   /// <summary>
@@ -17,7 +18,7 @@ namespace eagleboost.presentation.Controls.TreeView
   public class TreeNodeContainer : TreeNode, ITreeNodeContainer
   {
     #region Declarations
-    private TaskCompletionSource<IReadOnlyCollection<ITreeNode>> _childrenLoadedTcs;
+    private TaskCompletionSource<IReadOnlyCollection<ITreeNode>> _childrenTcs = new TaskCompletionSource<IReadOnlyCollection<ITreeNode>>();
     private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
     #endregion Declarations
 
@@ -29,12 +30,17 @@ namespace eagleboost.presentation.Controls.TreeView
     #endregion ctors
 
     #region ITreeNodeContainer
+    public Task<IReadOnlyCollection<ITreeNode>> ChildrenTask
+    {
+      get { return _childrenTcs.Task; }
+    }
+
     public async Task RefreshAsync()
     {
       if (IsExpanded || !HasDummyChild)
       {
         IsExpanded = false;
-        _childrenLoadedTcs = null;
+        _childrenTcs = null;
         Children.Clear();
         Children.Add(DummyChild);
         await ExpandAsync();
@@ -80,12 +86,12 @@ namespace eagleboost.presentation.Controls.TreeView
     {
       _dispatcher.VerifyAccess();
 
-      if (_childrenLoadedTcs == null)
+      if (_childrenTcs == null)
       {
-        _childrenLoadedTcs = new TaskCompletionSource<IReadOnlyCollection<ITreeNode>>();
+        _childrenTcs = new TaskCompletionSource<IReadOnlyCollection<ITreeNode>>();
         if (!HasDummyChild)
         {
-          _childrenLoadedTcs.TrySetResult(new ITreeNode[0]);
+          _childrenTcs.TrySetResult(Array<ITreeNode>.Empty);
         }
       }
 
@@ -100,12 +106,12 @@ namespace eagleboost.presentation.Controls.TreeView
           {
             Children.AddRange(items);
             IsBeingExpanded = false;
-            _childrenLoadedTcs.TrySetResult(items);
+            _childrenTcs.TrySetResult(items);
           });
         });
       }
 
-      return _childrenLoadedTcs.Task;
+      return _childrenTcs.Task;
     }
     #endregion Public Methods
 

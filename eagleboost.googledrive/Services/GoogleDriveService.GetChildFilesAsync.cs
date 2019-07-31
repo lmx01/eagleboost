@@ -6,14 +6,10 @@ namespace eagleboost.googledrive.Services
 {
   using System;
   using System.Collections.Generic;
-  using System.Linq;
   using System.Reactive.Subjects;
-  using System.Reactive.Threading.Tasks;
   using System.Threading;
   using System.Threading.Tasks;
-  using eagleboost.core.Extensions;
   using eagleboost.googledrive.Contracts;
-  using Google.Apis.Drive.v3.Data;
 
   /// <summary>
   /// GoogleDriveService
@@ -27,11 +23,17 @@ namespace eagleboost.googledrive.Services
 
     private Task<IReadOnlyCollection<IGoogleDriveFile>> DoGetChildFilesAsync(IGoogleDriveFolder parent, string query, CancellationToken ct, IProgress<string> progress)
     {
-      var childFilesSubject = new Subject<IReadOnlyCollection<IGoogleDriveFile>>();
+      var tcs = new TaskCompletionSource<IReadOnlyCollection<IGoogleDriveFile>>();
 
-      Task.Run(() => QueryObservableChildFilesAsync(childFilesSubject, parent, query, ct, progress), ct);
+      Task.Run(() =>
+      {
+        var result = new List<IGoogleDriveFile>();
+        var observer = new Subject<IReadOnlyCollection<IGoogleDriveFile>>();
+        observer.Subscribe(files => result.AddRange(files), () => tcs.TrySetResult(result));
+        return QueryObservableChildFilesAsync(observer, parent, query, ct, progress);
+      }, ct);
 
-      return childFilesSubject.ToTask(ct);
+      return tcs.Task;
     }
   }
 }

@@ -25,7 +25,6 @@ namespace eagleboost.shell.FileSystems.ViewModels
     where TFolder : IFolder
   {
     #region Declarations
-    private readonly CancellableTaskHandler _setFolderHandler = new CancellableTaskHandler();
     private readonly CancellableTaskHandler _loadFileInfoHandler = new CancellableTaskHandler();
     #endregion Declarations
 
@@ -124,7 +123,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
       if (folderNode != null)
       {
         var cts = new CancellationTokenSource();
-        ListViewModel.SetFolderAsync(folderNode, cts.Token);
+        ListViewModel.SetFolderAsync(folderNode, cts.Token, BusyStatusReceiver);
       }
     }
     #endregion Private Methods

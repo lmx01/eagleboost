@@ -13,7 +13,7 @@ namespace eagleboost.googledrive.ViewModels
   using eagleboost.core.Collections;
   using eagleboost.core.Extensions;
   using eagleboost.googledrive.Contracts;
-  using eagleboost.googledrive.Models;
+  using eagleboost.googledrive.Extensions;
   using eagleboost.presentation.Controls.TreeView;
   using eagleboost.shell.FileSystems.Contracts;
   using eagleboost.shell.FileSystems.ViewModels;
@@ -46,22 +46,25 @@ namespace eagleboost.googledrive.ViewModels
     #endregion Public Methods
 
     #region Overrides
-    protected override Task<IReadOnlyCollection<IGoogleDriveFile>> PopulateFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
+    protected override Task<IReadOnlyCollection<IGoogleDriveFile>> PopulateFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct, IProgress<string> progress)
     {
-      var parent = folderNode.CastTo<TreeNodeContainer>().DataItem.CastTo<IGoogleDriveFolder>();
-      if (parent.File is GoogleMyDrive || parent.File is GoogleTeamDrive)
+      if (!folderNode.ChildrenTask.IsCompleted)
       {
-        Items.Clear();
+        var parent = folderNode.CastTo<TreeNodeContainer>().DataItem.CastTo<IGoogleDriveFolder>();
+        if (parent.IsMyDriveFile() || parent.IsTeamDriveFile())
+        {
+          Items.Clear();
 
-        var observable = _gService.GetChildFilesObservable(parent, ct: ct);
-        observable.Buffer(TimeSpan.FromSeconds(1))
-          .ObserveOn(SynchronizationContext.Current)
-          .Subscribe(lf => Items.AddRange(lf.SelectMany(i => i)));
+          var observable = _gService.GetChildFilesObservable(parent, ct: ct);
+          observable.Buffer(TimeSpan.FromMilliseconds(400))
+            .ObserveOn(SynchronizationContext.Current)
+            .Subscribe(lf => Items.AddRange(lf.SelectMany(i => i)));
 
-        return Task.FromResult(Empty);
+          return Task.FromResult(Empty);
+        }
       }
 
-      return base.PopulateFolderAsync(folderNode, ct);
+      return base.PopulateFolderAsync(folderNode, ct, progress);
     }
     #endregion Overrides
   }

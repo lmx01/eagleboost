@@ -40,9 +40,9 @@ namespace eagleboost.shell.FileSystems.Contracts
     #endregion Properties
 
     #region Methods
-    Task<IReadOnlyCollection<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken));
+    Task<IReadOnlyCollection<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
-    Task<IReadOnlyCollection<TFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyCollection<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken));
+    Task<IReadOnlyCollection<TFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyCollection<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task<TFile> SetSelectedAsync(TFile file, CancellationToken ct = default(CancellationToken));
     #endregion Methods

@@ -16,7 +16,6 @@ namespace eagleboost.shell.FileSystems.ViewModels
   using eagleboost.presentation.Collections;
   using eagleboost.presentation.Controls.TreeView;
   using eagleboost.shell.FileSystems.Contracts;
-  using eagleboost.shell.FileSystems.Models;
 
   /// <summary>
   /// FileSystemCollectionViewModel
@@ -33,7 +32,6 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     #region Declarations
     private TFolder _currentFolder;
-    private readonly Dictionary<string, FolderCacheEntry<TFile, TFolder>> _folderCache = new Dictionary<string, FolderCacheEntry<TFile, TFolder>>();
     #endregion Declarations
 
     #region IFileSystemCollectionViewModel
@@ -50,25 +48,25 @@ namespace eagleboost.shell.FileSystems.ViewModels
       return await SetFolderAsync(folderNode, ct).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
+    public async Task<IReadOnlyCollection<TFile>> SetFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
     {
       CurrentFolderNode = folderNode;
       var folder = (TFolder) folderNode.DataItem;
       CurrentFolder = folder;
 
-      var result = await PopulateFolderAsync(folderNode, ct);
+      var result = await PopulateFolderAsync(folderNode, ct, progress);
 
       RaiseFilesPopulated();
 
       return result;
     }
 
-    async Task<IReadOnlyCollection<IFile>> IFileSystemCollectionViewModel.SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyCollection<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken))
+    async Task<IReadOnlyCollection<IFile>> IFileSystemCollectionViewModel.SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyCollection<IFile>>> fileFunc, CancellationToken ct)
     {
       return await SetFilesAsync(folderNode, fileFunc, ct).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<TFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyCollection<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken))
+    public async Task<IReadOnlyCollection<TFile>> SetFilesAsync(ITreeNodeContainer folderNode, Func<CancellationToken, Task<IReadOnlyCollection<IFile>>> fileFunc, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
     {
       CurrentFolderNode = folderNode;
       var folder = (TFolder)folderNode.DataItem;
@@ -125,45 +123,21 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #endregion IFileSystemCollectionViewModel
 
     #region Virtuals
-    protected virtual async Task<IReadOnlyCollection<TFile>> PopulateFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
+    protected virtual async Task<IReadOnlyCollection<TFile>> PopulateFolderAsync(ITreeNodeContainer folderNode, CancellationToken ct, IProgress<string> progress)
     {
       Items.Clear();
       var result = await GetFilesAsync(folderNode, ct);
       Items.AddRange(result);
       return result;
     }
-
-    protected virtual void OnFolderCacheLoaded(FolderCacheEntry<TFile, TFolder> cacheEntry)
-    {
-    }
-
-    protected virtual FolderCacheEntry<TFile, TFolder> CreateFolderCache(TFolder folder, IReadOnlyCollection<TFile> files)
-    {
-      return new FolderCacheEntry<TFile, TFolder>(folder, files);
-    }
     #endregion Virtuals
 
     #region Private Methods
     private async Task<IReadOnlyCollection<TFile>> GetFilesAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
     {
-      var folder = (TFolder)folderNode.DataItem;
-      FolderCacheEntry<TFile, TFolder> cacheEntry;
-      if (_folderCache.TryGetValue(folder.Id, out cacheEntry))
-      {
-        if (folderNode.Children.Count == cacheEntry.Files.Count)
-        {
-          OnFolderCacheLoaded(cacheEntry);
-          if (!cacheEntry.NeedsRefresh)
-          {
-            return cacheEntry.Files;
-          }
-        }
-      }
-
-      var files = await folder.GetFilesAsync(ct: ct).ConfigureAwait(true);
-      var result = files.Cast<TFile>().ToArray();
-      _folderCache[folder.Id] = CreateFolderCache(folder, result);
-      return result;
+      var children = await folderNode.ChildrenTask;
+      var loadedFiles = children.Select(i => i.DataItem.CastTo<TFile>()).ToArray();
+      return loadedFiles;
     }
     #endregion Private Methods
 

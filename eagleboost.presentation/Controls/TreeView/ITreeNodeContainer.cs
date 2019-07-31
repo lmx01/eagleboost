@@ -4,6 +4,7 @@
 
 namespace eagleboost.presentation.Controls.TreeView
 {
+  using System.Collections.Generic;
   using System.Threading.Tasks;
 
   /// <summary>
@@ -11,6 +12,10 @@ namespace eagleboost.presentation.Controls.TreeView
   /// </summary>
   public interface ITreeNodeContainer : ITreeNode
   {
+    #region Properties
+    Task<IReadOnlyCollection<ITreeNode>> ChildrenTask { get; }
+    #endregion Properties
+
     #region Methods
     Task ExpandAsync();
 
@@ -23,6 +28,6 @@ namespace eagleboost.presentation.Controls.TreeView
     void RemoveData(object dataItem);
 
     void Clear();
-    #endregion Methods 
+    #endregion Methods
   }
 }
