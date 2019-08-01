@@ -46,6 +46,8 @@ namespace eagleboost.googledrive.Contracts
 
     Task DeleteAsync(string id, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
+    Task MoveToTrashAsync(string id, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+
     Task DownloadAsync(string id, Stream stream, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     Task AddToSharedAsync(string fileId, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
