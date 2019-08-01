@@ -172,6 +172,7 @@
     <Compile Include="Controls\InputBoxes\InputBox.xaml.cs">
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MessageBoxes\MessageBoxViewModel.cs" />
     <Compile Include="Controls\OverlayAdorner.cs" />
     <Compile Include="Controls\Progress\ProgressTaskView.xaml.cs">
       <DependentUpon>ProgressTaskView.xaml</DependentUpon>

@@ -85,6 +85,7 @@
     <Compile Include="Activities\IAsyncActivity.cs" />
     <Compile Include="Common\InputBoxActivity.cs" />
     <Compile Include="Common\DataItemChooserActivity.cs" />
+    <Compile Include="Common\MessageBoxActivity.cs" />
     <Compile Include="Common\ProgressViewActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
