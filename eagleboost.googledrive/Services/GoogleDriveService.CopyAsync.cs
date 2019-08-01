@@ -22,26 +22,26 @@ namespace eagleboost.googledrive.Services
   /// </summary>
   public partial class GoogleDriveService
   {
-    public Task<IGoogleDriveFile> CopyAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, PauseToken pt = default(PauseToken), CancellationToken ct = default(CancellationToken), IProgress<GoogleDriveProgress> progress = null, GoogleDriveProgress progressPayload = null)
+    public Task<IGoogleDriveFile> CopyAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, string newName = null, PauseToken pt = default(PauseToken), CancellationToken ct = default(CancellationToken), IProgress<GoogleDriveProgress> progress = null, GoogleDriveProgress progressPayload = null)
     {
       return Task.Run(async () =>
       {
         var payload = progressPayload ?? new GoogleDriveProgress();
-        var result = await DoCopyAsync(from, toFolder, pt, ct, progress, payload).ConfigureAwait(false);
+        var result = await DoCopyAsync(from, toFolder, newName, pt, ct, progress, payload).ConfigureAwait(false);
         progress.TryReport(() => payload);
         return result;
       }, ct);
     }
 
-    public Task<IGoogleDriveFile> DoCopyAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, PauseToken pt, CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
+    public Task<IGoogleDriveFile> DoCopyAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, string newName, PauseToken pt, CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
     {
       var folder = from as IGoogleDriveFolder;
       return folder != null
-        ? DoCopyFolderAsync(folder, toFolder, pt, ct, progress, progressPayload)
-        : DoCopyFileAsync(from, toFolder, pt, ct, progress, progressPayload);
+        ? DoCopyFolderAsync(folder, toFolder, newName, pt, ct, progress, progressPayload)
+        : DoCopyFileAsync(from, toFolder, newName, pt, ct, progress, progressPayload);
     }
 
-    private async Task<IGoogleDriveFile> DoCopyFileAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, PauseToken pt, CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
+    private async Task<IGoogleDriveFile> DoCopyFileAsync(IGoogleDriveFile from, IGoogleDriveFolder toFolder, string newName, PauseToken pt, CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
     {
       var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
       progressPayload.Count++;
@@ -50,7 +50,7 @@ namespace eagleboost.googledrive.Services
       progress.TryReport(() => progressPayload);
 
       await pt.WaitWhilePausedAsync().ConfigureAwait(false);
-      var toFile = new File { Parents = new List<string> { toFolder.Id } };
+      var toFile = new File {Parents = new List<string> {toFolder.Id}, Name = newName};
       var copyRequest = driveService.Files.Copy(toFile, from.Id);
       copyRequest.SupportsTeamDrives = true;
       var resp = await copyRequest.ExecuteAsync(ct).ConfigureAwait(false);
@@ -59,10 +59,11 @@ namespace eagleboost.googledrive.Services
       return result;
     }
 
-    private async Task<IGoogleDriveFile> DoCopyFolderAsync(IGoogleDriveFolder from, IGoogleDriveFolder toFolder, PauseToken pt, CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
+    private async Task<IGoogleDriveFile> DoCopyFolderAsync(IGoogleDriveFolder from, IGoogleDriveFolder toFolder, string newName, PauseToken pt, CancellationToken ct, IProgress<GoogleDriveProgress> progress, GoogleDriveProgress progressPayload)
     {
       await pt.WaitWhilePausedAsync().ConfigureAwait(false);
-      var getOrCreateFolder = await GetOrCreateFolderAsync(from.Name, toFolder, ct, progress, progressPayload).ConfigureAwait(false);
+      var name = newName.HasValue() ? newName : from.Name;
+      var getOrCreateFolder = await GetOrCreateFolderAsync(name, toFolder, ct, progress, progressPayload).ConfigureAwait(false);
       var fromFolderCopy = getOrCreateFolder.Folder;
       if (fromFolderCopy.IsChildrenCopied.GetValueOrDefault())
       {
@@ -79,7 +80,7 @@ namespace eagleboost.googledrive.Services
       IReadOnlyCollection<IGoogleDriveFile> childFilesOfCopy = null;
       if (!getOrCreateFolder.IsNew)
       {
-        progressPayload.Status = string.Format("Loading files under target folder '{0}'", from.Name);
+        progressPayload.Status = string.Format("Loading files under target folder '{0}'", fromFolderCopy.Name);
         progress.TryReport(() => progressPayload);
         childFilesOfCopy = await DoGetChildFilesAsync(fromFolderCopy, null, ct, null).ConfigureAwait(false);
       }
@@ -96,7 +97,7 @@ namespace eagleboost.googledrive.Services
           {
             try
             {
-              await DoCopyAsync(file, fromFolderCopy, pt, ct, progress, progressPayload).ConfigureAwait(false);
+              await DoCopyAsync(file, fromFolderCopy, null, pt, ct, progress, progressPayload).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
