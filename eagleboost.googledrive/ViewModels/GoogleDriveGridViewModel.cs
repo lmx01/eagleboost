@@ -14,6 +14,7 @@ namespace eagleboost.googledrive.ViewModels
   using eagleboost.core.Extensions;
   using eagleboost.googledrive.Contracts;
   using eagleboost.googledrive.Extensions;
+  using eagleboost.googledrive.Models;
   using eagleboost.presentation.Controls.TreeView;
   using eagleboost.shell.FileSystems.Contracts;
   using eagleboost.shell.FileSystems.ViewModels;
@@ -51,7 +52,7 @@ namespace eagleboost.googledrive.ViewModels
       if (!folderNode.ChildrenTask.IsCompleted)
       {
         var parent = folderNode.CastTo<TreeNodeContainer>().DataItem.CastTo<IGoogleDriveFolder>();
-        if (parent.IsMyDriveFile() || parent.IsTeamDriveFile())
+        if (parent.IsMyDriveFile() || (parent.File.IsNot<GoogleTeamDrive>() && parent.IsTeamDriveFile()))
         {
           Items.Clear();
 

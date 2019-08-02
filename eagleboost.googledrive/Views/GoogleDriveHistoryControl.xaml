@@ -24,7 +24,8 @@
 
   <StackPanel Orientation="Horizontal">
     <Button Command="{Binding History.BackCommand}" x:Name="BackwardButton">Back</Button>
-    <ebui:PopupToggle IsEnabled="{Binding IsEnabled, ElementName=BackwardButton}" ebui:ToggleDropdownMenu.IsOpenProperty="{x:Static ebui:PopupToggle.IsCheckedProperty}">
+    <ebui:PopupToggle IsEnabled="{Binding IsEnabled, ElementName=BackwardButton}"
+                      ebui:ToggleDropdownMenu.IsOpenProperty="{x:Static ebui:PopupToggle.IsCheckedProperty}">
       <ebui:ToggleDropdownMenu.Menu>
         <ContextMenu ItemsSource="{Binding History.BackwardHistoryView, Converter={ebui:CollectionReverseConverter}}" ItemContainerStyle="{StaticResource MenuItemStyle}"/>
       </ebui:ToggleDropdownMenu.Menu>
@@ -36,7 +37,8 @@
         </Path>
       </ebui:PopupToggle.Content>
     </ebui:PopupToggle>
-    <ebui:PopupToggle IsEnabled="{Binding IsEnabled, ElementName=ForwardButton}">
+    <ebui:PopupToggle IsEnabled="{Binding IsEnabled, ElementName=ForwardButton}"
+                      ebui:ToggleDropdownMenu.IsOpenProperty="{x:Static ebui:PopupToggle.IsCheckedProperty}">
       <ebui:ToggleDropdownMenu.Menu>
         <ContextMenu ItemsSource="{Binding History.ForwardHistoryView}" ItemContainerStyle="{StaticResource MenuItemStyle}"/>
       </ebui:ToggleDropdownMenu.Menu>
