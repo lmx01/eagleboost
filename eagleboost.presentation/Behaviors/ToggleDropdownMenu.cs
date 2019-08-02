@@ -13,6 +13,23 @@ namespace eagleboost.presentation.Behaviors
   public class ToggleDropdownMenu
   {
     #region Attached Properties
+    public static readonly DependencyProperty IsOpenPropertyProperty = DependencyProperty.RegisterAttached(
+      "IsOpenProperty", typeof(DependencyProperty), typeof(ToggleDropdownMenu), new PropertyMetadata(OnIsOpenPropertyChanged));
+
+    public static DependencyProperty GetIsOpenProperty(DependencyObject obj)
+    {
+      return (DependencyProperty)obj.GetValue(IsOpenPropertyProperty);
+    }
+
+    public static void SetIsOpenProperty(DependencyObject obj, DependencyProperty menu)
+    {
+      obj.SetValue(IsOpenPropertyProperty, menu);
+    }
+
+    private static void OnIsOpenPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+    {
+      TrySetupMenu(obj);
+    }
     #region Menu
     public static readonly DependencyProperty MenuProperty = DependencyProperty.RegisterAttached(
       "Menu", typeof(ContextMenu), typeof(ToggleDropdownMenu), new PropertyMetadata(OnToggleDropdownMenuChanged));
@@ -29,16 +46,26 @@ namespace eagleboost.presentation.Behaviors
 
     private static void OnToggleDropdownMenuChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-      var menu = e.NewValue as ContextMenu;
-      if (menu != null)
-      {
-        var toggleButton = ArgValidation.ThrowIfMismatch<ToggleButton>(obj, "obj");
-        menu.PlacementTarget = toggleButton;
-        menu.Placement = PlacementMode.Bottom;
-        menu.SetBinding(ContextMenu.IsOpenProperty, new Binding(ToggleButton.IsCheckedProperty.Name) {Source = toggleButton, Mode = BindingMode.TwoWay});
-      }
+      TrySetupMenu(obj);
     }
     #endregion Menu
-    #endregion Attached Properties  
+    #endregion Attached Properties
+
+    #region Private Methods
+
+    private static void TrySetupMenu(DependencyObject obj)
+    {
+      var property = GetIsOpenProperty(obj);
+      var menu = GetMenu(obj);
+      if (menu != null && property != null)
+      {
+        var toggle = ArgValidation.ThrowIfMismatch<FrameworkElement>(obj, "obj");
+        menu.PlacementTarget = toggle;
+        menu.Placement = PlacementMode.Bottom;
+        menu.SetBinding(ContextMenu.IsOpenProperty, new Binding(property.Name) { Source = toggle, Mode = BindingMode.OneWay });
+        ContextMenuService.SetContextMenu(toggle, menu);
+      }
+    }
+    #endregion Private Methods
   }
 }

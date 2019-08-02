@@ -24,30 +24,30 @@
 
   <StackPanel Orientation="Horizontal">
     <Button Command="{Binding History.BackCommand}" x:Name="BackwardButton">Back</Button>
-    <ToggleButton IsEnabled="{Binding IsEnabled, ElementName=BackwardButton}">
+    <ebui:PopupToggle IsEnabled="{Binding IsEnabled, ElementName=BackwardButton}" ebui:ToggleDropdownMenu.IsOpenProperty="{x:Static ebui:PopupToggle.IsCheckedProperty}">
       <ebui:ToggleDropdownMenu.Menu>
         <ContextMenu ItemsSource="{Binding History.BackwardHistoryView, Converter={ebui:CollectionReverseConverter}}" ItemContainerStyle="{StaticResource MenuItemStyle}"/>
       </ebui:ToggleDropdownMenu.Menu>
-      <ToggleButton.Content>
+      <ebui:PopupToggle.Content>
         <Path Fill="Black" Data="M 0 4 L 4 0 L 8 4 Z">
           <Path.LayoutTransform>
             <RotateTransform Angle="180"/>
           </Path.LayoutTransform>
         </Path>
-      </ToggleButton.Content>
-    </ToggleButton>
-    <ToggleButton IsEnabled="{Binding IsEnabled, ElementName=ForwardButton}">
+      </ebui:PopupToggle.Content>
+    </ebui:PopupToggle>
+    <ebui:PopupToggle IsEnabled="{Binding IsEnabled, ElementName=ForwardButton}">
       <ebui:ToggleDropdownMenu.Menu>
         <ContextMenu ItemsSource="{Binding History.ForwardHistoryView}" ItemContainerStyle="{StaticResource MenuItemStyle}"/>
       </ebui:ToggleDropdownMenu.Menu>
-      <ToggleButton.Content>
+      <ebui:PopupToggle.Content>
         <Path Fill="Black" Data="M 0 4 L 4 0 L 8 4 Z">
           <Path.LayoutTransform>
             <RotateTransform Angle="180"/>
           </Path.LayoutTransform>
         </Path>
-      </ToggleButton.Content>
-    </ToggleButton>
+      </ebui:PopupToggle.Content>
+    </ebui:PopupToggle>
     <Button Command="{Binding History.ForwardCommand}" x:Name="ForwardButton">Forward</Button>
   </StackPanel>
 

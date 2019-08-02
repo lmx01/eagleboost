@@ -123,6 +123,12 @@ namespace eagleboost.presentation.Controls
         _hookWindow = () => window.PreviewMouseDown += HandleWindowPreviewMouseDown;
         _unhookWindow = () => window.PreviewMouseDown -= HandleWindowPreviewMouseDown;
       }
+
+      var menu = ContextMenuService.GetContextMenu(this);
+      if (menu != null)
+      {
+        menu.Closed += HandleMenuClosed;
+      }
     }
 
     private void OnChecked()
@@ -156,7 +162,14 @@ namespace eagleboost.presentation.Controls
       }
     }
     #endregion Private Methods
-    
+
+    #region Event Handlers
+    private void HandleMenuClosed(object sender, RoutedEventArgs e)
+    {
+      SetCurrentValue(IsCheckedProperty, false);
+    }
+    #endregion Event Handlers
+
     #region Overrides
     protected override void OnIsKeyboardFocusWithinChanged(DependencyPropertyChangedEventArgs e)
     {
