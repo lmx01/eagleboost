@@ -61,14 +61,13 @@ namespace eagleboost.googledrive.Views
       var tree = _treeView = new GoogleDriveTreeView {DataContext = vm};
       tree.SetBinding(GoogleDriveTreeView.ItemsSourceProperty, new Binding(vm.Property(v => v.ItemsView)));
       tree.SetBinding(GoogleDriveTreeView.SelectedItemProperty, new Binding(vm.Property(v => v.SelectedItem)) {Mode = BindingMode.TwoWay});
-
-      tree.Dispatcher.BeginInvoke(async () =>
+      tree.SetupLoaded(() => tree.Dispatcher.BeginInvoke(async () =>
       {
         await vm.InitializeAsync(false).ConfigureAwait(true);
         var path = param.Path;
         await vm.SelectAsync(path.Split(',')).ConfigureAwait(true);
         UpdateState();
-      }, DispatcherPriority.Background);
+      }, DispatcherPriority.DataBind));
 
       return tree;
     }
