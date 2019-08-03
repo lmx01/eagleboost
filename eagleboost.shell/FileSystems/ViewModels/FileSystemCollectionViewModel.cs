@@ -131,14 +131,27 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
       return result;
     }
+
+    protected virtual bool ShouldUseChildrenTask(ITreeNodeContainer node)
+    {
+      return true;
+    }
     #endregion Virtuals
 
     #region Private Methods
     private async Task<IReadOnlyCollection<TFile>> GetFilesAsync(ITreeNodeContainer folderNode, CancellationToken ct = default(CancellationToken))
     {
-      var children = await folderNode.ChildrenTask;
-      var loadedFiles = children.Select(i => i.DataItem.CastTo<TFile>()).ToArray();
-      return loadedFiles;
+      if (ShouldUseChildrenTask(folderNode))
+      {
+        var children = await folderNode.ChildrenTask;
+        var loadedFiles = children.Select(i => i.DataItem.CastTo<TFile>()).ToArray();
+        return loadedFiles;
+      }
+
+      var folder = (TFolder)folderNode.DataItem;
+      var files = await folder.GetFilesAsync(ct: ct).ConfigureAwait(true);
+      var result = files.Cast<TFile>().ToArray();
+      return result;
     }
     #endregion Private Methods
 

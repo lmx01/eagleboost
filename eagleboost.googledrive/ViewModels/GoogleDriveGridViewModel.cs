@@ -67,6 +67,12 @@ namespace eagleboost.googledrive.ViewModels
 
       return base.PopulateFolderAsync(folderNode, ct, progress);
     }
+
+    protected override bool ShouldUseChildrenTask(ITreeNodeContainer node)
+    {
+      var folder = (IGoogleDriveFolder)node.DataItem;
+      return folder.File.IsNot<GoogleAdhocDrive>();
+    }
     #endregion Overrides
   }
 }
