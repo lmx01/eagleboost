@@ -71,7 +71,7 @@ namespace eagleboost.googledrive.ViewModels
     protected override bool ShouldUseChildrenTask(ITreeNodeContainer node)
     {
       var folder = (IGoogleDriveFolder)node.DataItem;
-      return folder.File.IsNot<GoogleAdhocDrive>();
+      return folder.File.IsNot<GoogleAdhocDrive>() && folder.File.IsNot<GoogleSearchResultDrive>();
     }
     #endregion Overrides
   }
