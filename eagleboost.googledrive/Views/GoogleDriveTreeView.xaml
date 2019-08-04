@@ -65,8 +65,13 @@
               <behaviors1:GoogleDriveFileIcon File="{Binding DataItem}"/>
             </i:Interaction.Behaviors>
           </Image>
-          <TextBlock x:Name="NameBlock" Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4">
-          </TextBlock>        
+          <TextBlock x:Name="NameBlock" Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4"/>        
+          <i:Interaction.Behaviors>
+            <behaviors:SelectedItemEffect SelectionContainer="{Binding DataContext.EmptyFolderContainer, RelativeSource={RelativeSource AncestorType=TreeView}}" 
+                                          DataItem="{Binding DataItem}">
+              <Setter Property="TextElement.Foreground" Value="Red" />
+            </behaviors:SelectedItemEffect>
+          </i:Interaction.Behaviors>
         </Grid>
         <HierarchicalDataTemplate.Triggers>
           <DataTrigger Binding="{Binding DataItem.OwnedByMe}" Value="False">

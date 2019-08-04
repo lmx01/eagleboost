@@ -62,6 +62,7 @@ namespace eagleboost.googledrive.ViewModels
     {
       _dispatcher = new DispatcherProvider();
       FrequentFileContainer = new MultipleSelectionContainer<string>();
+      EmptyFolderContainer = new MultipleSelectionContainer<string>();
     }
     #endregion ctors
 
@@ -93,6 +94,8 @@ namespace eagleboost.googledrive.ViewModels
     public bool UpdateFrequentFolder { get; set; }
 
     public MultipleSelectionContainer<string> FrequentFileContainer { get; private set; }
+    
+    public MultipleSelectionContainer<string> EmptyFolderContainer { get; private set; }
     #endregion Public Properties
 
     #region Init
@@ -232,6 +235,19 @@ namespace eagleboost.googledrive.ViewModels
       if (c != null)
       {
         c.ChildrenView.Refresh();
+      }
+    }
+
+    public void ClearEmptyFolders()
+    {
+      EmptyFolderContainer.Clear();
+    }
+
+    public void SetEmptyFolder(IGoogleDriveFolder folder)
+    {
+      if (folder != null)
+      {
+        EmptyFolderContainer.Select(folder.Id);
       }
     }
     #endregion Public Methods
