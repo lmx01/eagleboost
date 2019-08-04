@@ -16,7 +16,7 @@ namespace eagleboost.shell.FileSystems.Models
   /// </summary>
   /// <typeparam name="T"></typeparam>
   /// <typeparam name="TFolder"></typeparam>
-  public abstract class FileBase<T, TFolder> : IFile, IComparer, IComparer<T>, IEquatable<T>
+  public abstract class FileBase<T, TFolder> : NotifyPropertyChangedBase, IFile, IComparer, IComparer<T>, IEquatable<T>
     where T : FileBase<T, TFolder>
     where TFolder : class, IFolder
   {
