@@ -191,7 +191,21 @@ namespace eagleboost.googledrive.ViewModels
       }
     }
 
-    public async void SetSearchResultAsync(IEnumerable<IGoogleDriveFile> files)
+    public void ClearSearchResult()
+    {
+      var node = SearchResultNode as TreeNodeContainer;
+      if (node != null)
+      {
+        if (node.HasDummyChild)
+        {
+          return;
+        }
+
+        node.Clear();
+      }
+    }
+    
+    public async void AddSearchResultAsync(IEnumerable<IGoogleDriveFile> files)
     {
       var node = SearchResultNode as TreeNodeContainer;
       if (node != null)
@@ -203,7 +217,6 @@ namespace eagleboost.googledrive.ViewModels
 
         _dispatcher.CheckedInvoke(() =>
         {
-          node.Clear();
           foreach (var file in files)
           {
             node.AddData(file);

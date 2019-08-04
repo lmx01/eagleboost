@@ -6,6 +6,7 @@ namespace eagleboost.googledrive.Contracts
 {
   using System.Collections.Generic;
   using eagleboost.shell.FileSystems.Contracts;
+  using Google.Apis.Drive.v3.Data;
 
   /// <summary>
   /// IGoogleDriveFile
@@ -13,6 +14,9 @@ namespace eagleboost.googledrive.Contracts
   /// </summary>
   public interface IGoogleDriveFile : IFile
   {
+    #region Properties
+    File File { get; }
+
     bool OwnedByMe { get; }
 
     string Owners { get; }
@@ -32,5 +36,6 @@ namespace eagleboost.googledrive.Contracts
     string ThumbnailLink { get; }
 
     IDictionary<string, string> AppProperties { get; }
+    #endregion Properties
   }
 }

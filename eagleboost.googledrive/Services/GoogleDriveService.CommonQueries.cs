@@ -16,6 +16,7 @@ namespace eagleboost.googledrive.Services
       public static readonly string IsNotFolder = "mimeType != '" + MimeType.Folder + "'";
       public static readonly string RootLiveFolder = IsRoot + " and " + IsLive + " and " + IsFolder;
       public static readonly string LiveFileFormat = "'{0}' in parents" + " and " + IsLive;
+      public static readonly string LiveFolderFormat = IsFolder + " and " + LiveFileFormat;
       public static readonly string FolderByNameFormat = "name = '{0}'" + " and " + IsLive + " and " + IsFolder;
     }
   }

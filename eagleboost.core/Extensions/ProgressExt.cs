@@ -16,6 +16,14 @@ namespace eagleboost.core.Extensions
       }
     }
 
+    public static void TryReport(this IProgress<string> progress, string status)
+    {
+      if (progress != null)
+      {
+        progress.Report(status);
+      }
+    }
+
     public static void TryReport(this IProgress<string> progress, string format, params object[] values)
     {
       if (progress != null)
