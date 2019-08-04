@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Behaviors\PopupBottomPlacement.cs" />
     <Compile Include="Behaviors\ReturnCommandBehavior.cs" />
+    <Compile Include="Behaviors\SelectedItemEffect.cs" />
     <Compile Include="Behaviors\SelectionContainer\SelectionContainerListBoxSync.cs" />
     <Compile Include="Behaviors\SelectionContainer\SelectionContainerSync.cs" />
     <Compile Include="Behaviors\SelectionContainer\SelectionContainerToggleButton.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Converters\HasTextConverter.cs" />
     <Compile Include="Converters\LeftMarginMultiplierConverter .cs" />
     <Compile Include="Converters\StatefulConverterMarkupExtension.cs" />
+    <Compile Include="Converters\TypeEqualityConverter.cs" />
     <Compile Include="Converters\ValueEqualityConverter.cs" />
     <Compile Include="Controls\NormalOrLastItemTemplateSelector.cs" />
     <Compile Include="Extensions\BusyStatusExt.cs" />

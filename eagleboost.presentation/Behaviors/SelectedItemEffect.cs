@@ -1,29 +1,30 @@
-﻿// // Author   : Shuo Zhang
+// // Author   : Shuo Zhang
 // // E-MAIL   : eagleboost@msn.com
-// // Creation : 21 9:35 PM
+// // Creation : Aug 4 10:46 AM
 
-namespace eagleboost.googledrive.Behaviors
+namespace eagleboost.presentation.Behaviors
 {
   using System.Linq;
   using System.Windows;
-  using System.Windows.Controls.Primitives;
-  using System.Windows.Data;
-  using System.Windows.Documents;
   using System.Windows.Interactivity;
-  using System.Windows.Media;
+  using System.Windows.Markup;
   using eagleboost.core.Collections;
-  using eagleboost.googledrive.Contracts;
-  using eagleboost.presentation.Behaviors.SelectionContainer;
+  using eagleboost.core.ComponentModel;
 
   /// <summary>
-  /// GoogleDriveFrequentFolder
+  /// SelectedItemEffect
   /// </summary>
-  public class GoogleDriveFrequentFolder : Behavior<FrameworkElement>
+  [ContentProperty("Setters")]
+  public class SelectedItemEffect : Behavior<FrameworkElement>
   {
+    #region Declarations
+    private SetterBaseCollection _setters = new SetterBaseCollection();
+    #endregion Declarations
+    
     #region Dependency Properties
     #region SelectionContainer
     public static readonly DependencyProperty SelectionContainerProperty = DependencyProperty.Register(
-      "SelectionContainer", typeof(ISelectionContainer), typeof(GoogleDriveFrequentFolder), new PropertyMetadata(OnSelectionContainerChanged));
+      "SelectionContainer", typeof(ISelectionContainer), typeof(SelectedItemEffect), new PropertyMetadata(OnSelectionContainerChanged));
 
     public ISelectionContainer SelectionContainer
     {
@@ -33,29 +34,35 @@ namespace eagleboost.googledrive.Behaviors
 
     private static void OnSelectionContainerChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-      ((GoogleDriveFrequentFolder)obj).OnSelectionContainerChanged();
+      ((SelectedItemEffect)obj).OnSelectionContainerChanged();
     }
     #endregion SelectionContainer
 
     #region DataItem
     public static readonly DependencyProperty DataItemProperty = DependencyProperty.Register(
-      "DataItem", typeof(IGoogleDriveFile), typeof(GoogleDriveFrequentFolder), new PropertyMetadata(OnDataItemChanged));
+      "DataItem", typeof(object), typeof(SelectedItemEffect), new PropertyMetadata(OnDataItemChanged));
 
-    public IGoogleDriveFile DataItem
+    public IItem DataItem
     {
-      get { return (IGoogleDriveFile)GetValue(DataItemProperty); }
+      get { return (IItem)GetValue(DataItemProperty); }
       set { SetValue(DataItemProperty, value); }
     }
 
     private static void OnDataItemChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
     {
-      ((GoogleDriveFrequentFolder)obj).UpdateFrequentItem();
+      ((SelectedItemEffect)obj).UpdateFrequentItem();
     }
     #endregion DataItem
     #endregion Dependency Properties
 
+    #region Public Properties
+    public SetterBaseCollection Setters
+    {
+      get { return _setters; }
+    }
+    #endregion Public Properties
+    
     #region Event Handlers
-
     private void OnSelectionContainerChanged()
     {
       var c = SelectionContainer;
@@ -68,7 +75,7 @@ namespace eagleboost.googledrive.Behaviors
 
     private void HandleItemsSelected(object sender, ItemsSelectedEventArgs e)
     {
-      var item = e.Items.OfType<IGoogleDriveFile>().FirstOrDefault();
+      var item = e.Items.OfType<IItem>().FirstOrDefault();
       if (item != null)
       {
         UpdateFrequentItem();
@@ -87,7 +94,10 @@ namespace eagleboost.googledrive.Behaviors
 
       if (c[dataItem.Id])
       {
-        TextElement.SetForeground(element, Brushes.Red);
+        foreach (var setter in _setters.Cast<Setter>())
+        {
+          element.SetValue(setter.Property, setter.Value);
+        }
       }
     }
     #endregion Event Handlers

@@ -114,7 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\GoogleDriveFileIcon.cs" />
-    <Compile Include="Behaviors\GoogleDriveFrequentFolder.cs" />
     <Compile Include="Contracts\IGoogleDriveFile.cs" />
     <Compile Include="Contracts\IGoogleDriveFolder.cs" />
     <Compile Include="Contracts\IGoogleDriveFolderOperations.cs" />
@@ -197,6 +196,9 @@
       <DependentUpon>GoogleDriveService.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\GoogleDriveService.GetChildFilesObservable.cs">
+      <DependentUpon>GoogleDriveService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GoogleDriveService.GetEmptyFoldersObservable.cs">
       <DependentUpon>GoogleDriveService.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\UserCredentialProvider.cs" />

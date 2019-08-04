@@ -58,7 +58,7 @@ namespace eagleboost.googledrive.Views
         vm.SetFrequentFiles(param.FrequentFiles);
       }
       vm.PropertyChanged += HandleViewModelPropertyChanged;
-      var tree = _treeView = new GoogleDriveTreeView {DataContext = vm};
+      var tree = _treeView = new GoogleDriveTreeView {EnableFrequentFiles = true, DataContext = vm};
       tree.SetBinding(GoogleDriveTreeView.ItemsSourceProperty, new Binding(vm.Property(v => v.ItemsView)));
       tree.SetBinding(GoogleDriveTreeView.SelectedItemProperty, new Binding(vm.Property(v => v.SelectedItem)) {Mode = BindingMode.TwoWay});
       tree.SetupLoaded(() => tree.Dispatcher.BeginInvoke(async () =>

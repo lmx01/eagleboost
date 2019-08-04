@@ -18,6 +18,39 @@
         <ResourceDictionary Source="/eagleboost.presentation;component/Controls/TreeView/TreeViewResources.xaml"/>
       </ResourceDictionary.MergedDictionaries>
 
+      <HierarchicalDataTemplate x:Key="TreeItemDataTemplateWithFrequency" ItemsSource="{Binding ChildrenView}" DataType="{x:Type treeView:TreeNode}">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Viewbox x:Name="BusyIndicator" Grid.Column="0" Height="16" Width="16" Visibility="Collapsed">
+            <indicators:CircularProgressBar/>
+          </Viewbox>
+          <Image x:Name="Thumbnail" Grid.Column="0" Height="16" Width="16" Source="..\Resources\Folder.png">
+            <i:Interaction.Behaviors>
+              <behaviors1:GoogleDriveFileIcon File="{Binding DataItem}"/>
+            </i:Interaction.Behaviors>
+          </Image>
+          <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4"/>
+          <i:Interaction.Behaviors>
+            <behaviors:SelectedItemEffect SelectionContainer="{Binding DataContext.FrequentFileContainer, RelativeSource={RelativeSource AncestorType=TreeView}}" 
+                                          DataItem="{Binding DataItem}">
+              <Setter Property="TextElement.Foreground" Value="Red" />
+            </behaviors:SelectedItemEffect>
+          </i:Interaction.Behaviors>
+        </Grid>
+        <HierarchicalDataTemplate.Triggers>
+          <DataTrigger Binding="{Binding DataItem.OwnedByMe}" Value="False">
+            <Setter TargetName="Thumbnail" Property="Source" Value="..\Resources\FolderLink.png"/>
+          </DataTrigger>
+          <DataTrigger Binding="{Binding IsBeingExpanded}" Value="True">
+            <Setter TargetName="BusyIndicator" Property="Visibility" Value="Visible"/>
+            <Setter TargetName="Thumbnail" Property="Visibility" Value="Collapsed"/>
+          </DataTrigger>
+        </HierarchicalDataTemplate.Triggers>
+      </HierarchicalDataTemplate>
+      
       <HierarchicalDataTemplate x:Key="TreeItemDataTemplate" ItemsSource="{Binding ChildrenView}" DataType="{x:Type treeView:TreeNode}">
         <Grid>
           <Grid.ColumnDefinitions>
@@ -32,11 +65,7 @@
               <behaviors1:GoogleDriveFileIcon File="{Binding DataItem}"/>
             </i:Interaction.Behaviors>
           </Image>
-          <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4">
-            <i:Interaction.Behaviors>
-              <behaviors1:GoogleDriveFrequentFolder SelectionContainer="{Binding DataContext.FrequentFileContainer, RelativeSource={RelativeSource AncestorType=TreeView}}" 
-                                                    DataItem="{Binding DataItem}"/>
-            </i:Interaction.Behaviors>
+          <TextBlock x:Name="NameBlock" Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="4">
           </TextBlock>        
         </Grid>
         <HierarchicalDataTemplate.Triggers>
@@ -53,8 +82,7 @@
   </UserControl.Resources>
 
   <Grid>
-    <TreeView x:Name="DriveTree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" 
-              ItemTemplate="{StaticResource TreeItemDataTemplate}"
+    <TreeView x:Name="DriveTree" ItemContainerStyle="{StaticResource TreeViewItemStyle}"
               ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=views:GoogleDriveTreeView}}">
       <i:Interaction.Behaviors>
         <behaviors:TreeViewSelectionChanging/>

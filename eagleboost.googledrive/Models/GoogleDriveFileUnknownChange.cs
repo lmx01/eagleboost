@@ -64,6 +64,12 @@ namespace eagleboost.googledrive.Models
     #endregion Overrides
 
     #region IGoogleDriveFile
+
+    public File File
+    {
+      get { return null; }
+    }
+
     public bool OwnedByMe
     {
       get { return false; }
