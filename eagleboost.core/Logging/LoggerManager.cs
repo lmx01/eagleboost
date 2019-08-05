@@ -4,12 +4,18 @@
 
 namespace eagleboost.core.Logging
 {
+  using System.Diagnostics;
+
   public static class LoggerManager
   {
     public static ILoggerFacade GetLogger<T>()
     {
-      var instance =  FileLogger<T>.Instance;
-      return instance;
+      if (Debugger.IsAttached)
+      {
+        return CompositeLogger<T>.Instance;
+      }
+      
+      return FileLogger<T>.Instance;
     }
   }
 }
