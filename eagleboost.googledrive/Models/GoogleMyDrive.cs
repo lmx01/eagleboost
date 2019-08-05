@@ -12,10 +12,10 @@ namespace eagleboost.googledrive.Models
     #region ctors
     public GoogleMyDrive(File file)
     {
-      Id = file.Id;
-      Name = file.Name;
-      OwnedByMe = file.OwnedByMe;
-      WebViewLink = file.WebViewLink;
+      foreach (var p in typeof(File).GetProperties())
+      {
+        p.SetValue(this, p.GetValue(file));
+      }
     }
     #endregion ctors 
   }
