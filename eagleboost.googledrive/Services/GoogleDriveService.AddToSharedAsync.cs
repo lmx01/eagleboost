@@ -24,7 +24,7 @@ namespace eagleboost.googledrive.Services
     private async Task DoAddToSharedAsync(string fileId, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
     {
       var driveService = await GetDriveServiceAsync().ConfigureAwait(false);
-      var sharedFolder = await GetOrCreateFolderAsync("_Shared", _rootFolder, ct);
+      var sharedFolder = await GetOrCreateFolderAsync("_Shared", null, ct);
       var sharedFolderId = sharedFolder.Folder.Id;
       var file = await DoGetGoogleDriveFileAsync(fileId, null, ct, progress);
       if (file.OwnedByMe)

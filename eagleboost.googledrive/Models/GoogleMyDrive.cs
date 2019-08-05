@@ -10,11 +10,12 @@ namespace eagleboost.googledrive.Models
   public sealed class GoogleMyDrive : File, IGoogleRootFile
   {
     #region ctors
-    public GoogleMyDrive()
+    public GoogleMyDrive(File file)
     {
-      Id = "root";
-      Name = "My Drive";
-      OwnedByMe = true;
+      Id = file.Id;
+      Name = file.Name;
+      OwnedByMe = file.OwnedByMe;
+      WebViewLink = file.WebViewLink;
     }
     #endregion ctors 
   }

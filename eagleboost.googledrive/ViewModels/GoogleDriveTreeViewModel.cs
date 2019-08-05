@@ -148,17 +148,17 @@ namespace eagleboost.googledrive.ViewModels
       return false;
     }
 
-    protected override ITreeNodeContainer CreateRootNode()
+    protected override async Task<ITreeNodeContainer> CreateRootNodeAsync()
     {
       var root = new GoogleDriveRoot();
-      var myDrive = new GoogleMyDrive();
+      var myDriveFolder = await _gService.GetMyDriveAsync();
       var teamDrive = new GoogleTeamDrive();
       var activityDrive = new GoogleActivityDrive();
       var adhocDrive = new GoogleAdhocDrive();
       var searchResultDrive = new GoogleSearchResultDrive();
 
       _rootFolder = new GoogleDriveFolder(root, null, GetRootsAsync);
-      _myDriveFolder = new GoogleDriveFolder(myDrive, _rootFolder, GetFilesAsync);
+      _myDriveFolder = new GoogleDriveFolder(myDriveFolder.File, _rootFolder, GetFilesAsync);
       _teamDriveFolder = new GoogleDriveFolder(teamDrive, _rootFolder, GetTeamDrivesAsync);
       _activityFolder = new GoogleDriveFolder(activityDrive, _rootFolder, GetActivityFilesAsync);
       _adhocFolder = new GoogleDriveFolder(adhocDrive, _rootFolder, GetAdhocFilesAsync);

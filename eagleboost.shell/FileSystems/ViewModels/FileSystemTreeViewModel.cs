@@ -158,7 +158,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
 
     protected abstract bool DoFilter(ITreeNode item);
 
-    protected abstract ITreeNodeContainer CreateRootNode();
+    protected abstract Task<ITreeNodeContainer> CreateRootNodeAsync();
 
     protected virtual TreeNodeContainer CreateContainerNode(IFile f, ITreeNodeContainer parent)
     {
@@ -206,7 +206,7 @@ namespace eagleboost.shell.FileSystems.ViewModels
     #region Private Methods
     private async Task<ITreeNode> DoCreateRootAsync(bool isSingleRoot)
     {
-      var root = _root = CreateRootNode();
+      var root = _root = await CreateRootNodeAsync();
       await root.ExpandAsync().ConfigureAwait(true);
       if (isSingleRoot)
       {

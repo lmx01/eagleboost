@@ -4,8 +4,10 @@
 
 namespace eagleboost.googledrive.Services
 {
+  using System;
   using System.Collections.Generic;
   using System.Reactive.Subjects;
+  using System.Threading;
   using System.Threading.Tasks;
   using eagleboost.core.Logging;
   using eagleboost.googledrive.Contracts;
@@ -36,7 +38,6 @@ namespace eagleboost.googledrive.Services
     private readonly object _driveActivityServiceTcsLock = new object();
     private Subject<IReadOnlyCollection<GoogleDriveActivity>> _changesSubject;
     private Subject<IReadOnlyCollection<GoogleDriveActivity>> _activitiesSubject;
-    private readonly IGoogleDriveFolder _rootFolder;
     #endregion Declarations
 
     #region ctors
@@ -53,7 +54,6 @@ namespace eagleboost.googledrive.Services
       _activityCredentialsFile = activityCredentialsFile;
       _activityCredentialTokenFile = activityCredentialTokenFile;
       _applicationName = applicationName;
-      _rootFolder = new GoogleDriveFolder(new GoogleMyDrive(), null, f => null);
     }
     #endregion ctors
 
@@ -62,6 +62,17 @@ namespace eagleboost.googledrive.Services
     #endregion Private Properties
 
     #region IGoogleDriveService
+    public Task<IGoogleDriveFolder> GetMyDriveAsync(CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
+    {
+      return Task.Run(() => DoGetMyDriveAsync(ct, progress));
+    }
+
+    private async Task<IGoogleDriveFolder> DoGetMyDriveAsync(CancellationToken ct = default(CancellationToken), IProgress<string> progress = null)
+    {
+      var file = await DoGetFileAsync("root", ct, progress);
+      return (IGoogleDriveFolder)CreateDriveFile(file, null, ct, progress);
+    }
+
     public event FileCreatedEventHandler FileCreated;
 
     protected virtual void RaiseFileCreated(IGoogleDriveFile file)

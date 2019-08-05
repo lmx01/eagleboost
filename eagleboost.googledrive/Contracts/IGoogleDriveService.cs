@@ -22,6 +22,8 @@ namespace eagleboost.googledrive.Contracts
     #endregion Properties
 
     #region Methods
+    Task<IGoogleDriveFolder> GetMyDriveAsync(CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
+    
     Task<IReadOnlyCollection<IGoogleDriveFile>> GetActivityFilesAsync(IGoogleDriveFolder parent, CancellationToken ct = default(CancellationToken), IProgress<string> progress = null);
 
     IObservable<IReadOnlyCollection<GoogleDriveActivity>> ObserveChanges(string startPageToken);
