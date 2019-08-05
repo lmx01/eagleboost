@@ -50,6 +50,8 @@ namespace eagleboost.googledrive.Extensions
       var request = driveService.Files.Get(id);
       var fields = fileFields.Any() ? fileFields : DefaultFileFields;
       request.Fields = string.Join(", ", fields);
+      request.SupportsAllDrives = true;
+      request.SupportsTeamDrives = true;
       return request;
     }
   }

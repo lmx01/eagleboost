@@ -109,9 +109,15 @@ namespace eagleboost.googledrive.ViewModels
     #region Overrides
     protected override IEnumerable<string> ProcessPaths(string[] paths)
     {
-      if (paths[0] != _rootFolder.Name)
+      var first = paths[0];
+      if (!_rootFolder.Match(first))
       {
         yield return _rootFolder.Name;
+      }
+
+      if (!_myDriveFolder.Match(first) && !_rootFolder.Match(first))
+      {
+        yield return _teamDriveFolder.Name;
       }
 
       foreach (var p in paths)

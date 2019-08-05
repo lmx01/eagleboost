@@ -112,7 +112,11 @@ namespace eagleboost.shell.FileSystems.ViewModels
         await node.LoadChildrenAsync().ConfigureAwait(true);
 
         var folder = folderStack.Pop();
-        var childNode = node.Children.FirstOrDefault(i => folder == i.DataItem.CastTo<IFile>().Name);
+        var childNode = node.Children.FirstOrDefault(i =>
+        {
+          var file = i.DataItem.CastTo<IFile>();
+          return folder == file.Name || folder == file.Id;
+        });
         if (childNode != null)
         {
           node = (ITreeNodeContainer)childNode;

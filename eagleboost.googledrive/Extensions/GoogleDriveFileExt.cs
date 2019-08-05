@@ -58,5 +58,10 @@ namespace eagleboost.googledrive.Extensions
       var root = file.RootFolder();
       return root != null && root.File is GoogleTeamDrive;
     }
+
+    public static bool Match(this IGoogleDriveFile file, string str)
+    {
+      return file.Name == str || file.Id == str;
+    }
   }
 }
