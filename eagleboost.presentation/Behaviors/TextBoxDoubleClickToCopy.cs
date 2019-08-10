@@ -8,13 +8,13 @@ namespace eagleboost.presentation.Behaviors
   using eagleboost.core.Extensions;
 
   /// <summary>
-  /// TextBoxClickToCopy
+  /// TextBoxDoubleClickToCopy
   /// </summary>
-  public class TextBoxClickToCopy
+  public class TextBoxDoubleClickToCopy
   {
     #region IsEnabled
     public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached(
-      "IsEnabled", typeof(bool), typeof(TextBoxClickToCopy), new PropertyMetadata(OnIsEnabledChanged));
+      "IsEnabled", typeof(bool), typeof(TextBoxDoubleClickToCopy), new PropertyMetadata(OnIsEnabledChanged));
 
     public static bool GetIsEnabled(DependencyObject obj)
     {
@@ -36,17 +36,17 @@ namespace eagleboost.presentation.Behaviors
 
       if ((bool)e.NewValue)
       {
-        t.MouseUp += HandleTextBoxMouseUp;
+        t.MouseDoubleClick += HandleTextMouseDoubleClick;
       }
       else
       {
-        t.MouseUp -= HandleTextBoxMouseUp;
+        t.MouseDoubleClick -= HandleTextMouseDoubleClick;
       }
     }
     #endregion IsEnabled
 
     #region Event Handlers
-    private static void HandleTextBoxMouseUp(object sender, MouseButtonEventArgs e)
+    private static void HandleTextMouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
       var t = (TextBox) sender;
       var text = t.Text;
