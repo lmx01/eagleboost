@@ -68,18 +68,18 @@
     <Compile Include="Collections\DelegateComparer.cs" />
     <Compile Include="Collections\PriorityComparer.cs" />
     <Compile Include="Collections\MultipleSelectionContainer.cs">
-      <DependentUpon>SelectionContainer.cs</DependentUpon>
+      <DependentUpon>ISelectionContainer.cs</DependentUpon>
     </Compile>
     <Compile Include="Collections\RadioSelectionContainer.cs">
-      <DependentUpon>SelectionContainer.cs</DependentUpon>
+      <DependentUpon>ISelectionContainer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Collections\SelectionContainer.cs" />
+    <Compile Include="Collections\ISelectionContainer.cs" />
     <Compile Include="Collections\SelectionContainerBase.cs">
-      <DependentUpon>SelectionContainer.cs</DependentUpon>
+      <DependentUpon>ISelectionContainer.cs</DependentUpon>
     </Compile>
     <Compile Include="Collections\SelectionContainerExt.cs" />
     <Compile Include="Collections\SingleSelectionContainer.cs">
-      <DependentUpon>SelectionContainer.cs</DependentUpon>
+      <DependentUpon>ISelectionContainer.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\NotifiableCommand.cs" />
     <Compile Include="Commands\NotifiableCommand.Generic.cs" />
@@ -107,6 +107,7 @@
     <Compile Include="Contracts\IInvalidatableCommand.cs" />
     <Compile Include="Contracts\IExternalPropertyChangeNotify.cs" />
     <Compile Include="Contracts\IStartable.cs" />
+    <Compile Include="Data\BooleanBoxes.cs" />
     <Compile Include="Data\DisposeManager.cs" />
     <Compile Include="Exceptions\InvalidTypeException.cs" />
     <Compile Include="Extensions\DictionaryExt.cs" />

@@ -109,7 +109,7 @@
     <Compile Include="Behaviors\RemoveWindowIcon.cs" />
     <Compile Include="Behaviors\SelectedItemSync.cs" />
     <Compile Include="Behaviors\TextBoxClearButtonBehavior.cs" />
-    <Compile Include="Behaviors\TextboxEx.cs" />
+    <Compile Include="Behaviors\TextBoxClickToCopy.cs" />
     <Compile Include="Behaviors\TextBoxSelectAll.cs" />
     <Compile Include="Behaviors\ToggleDropdownMenu.cs" />
     <Compile Include="Behaviors\TreeViewSelectedItems.cs" />
